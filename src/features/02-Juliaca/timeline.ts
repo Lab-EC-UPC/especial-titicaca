@@ -41,6 +41,11 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         }
     );
 
+    gsap.set(video, {
+        filter: "blur(0px)",
+        willChange: "filter",
+    });
+
     const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
@@ -79,12 +84,32 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
             scene.start
         );
 
+        tl.to(
+            video,
+            {
+                filter: "blur(2px)",
+                duration: fadeDuration,
+                ease: "power2.out",
+            },
+            scene.start
+        );
+
         // fade out
         tl.to(
             scene.element,
             {
                 autoAlpha: 0,
                 y: -20,
+                duration: fadeDuration,
+                ease: "power2.in",
+            },
+            Math.max(scene.end - fadeDuration, scene.start + 0.01)
+        );
+
+        tl.to(
+            video,
+            {
+                filter: "blur(0px)",
                 duration: fadeDuration,
                 ease: "power2.in",
             },
