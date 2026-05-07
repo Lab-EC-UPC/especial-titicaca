@@ -9,15 +9,10 @@ type Scene = {
     end: number;
 };
 
-const getScrollDistance = (sceneCount: number) => {
-    const viewportHeight = window.innerHeight || 0;
-    const sceneDistance = viewportHeight * Math.max(1.75, sceneCount * 0.75);
+const SCROLL_DISTANCE = 4000;
 
-    return Math.max(viewportHeight * 1.75, sceneDistance, 1600);
-};
-
-export function createScrollTimeline(container: HTMLElement, video: HTMLVideoElement) {
-    const scenes: Scene[] = Array.from(
+function getScenes(container: HTMLElement): Scene[] {
+    return Array.from(
         container.querySelectorAll<HTMLElement>("[data-start][data-end]")
     )
         .map((element) => ({
@@ -33,8 +28,10 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
                 scene.end <= 1 &&
                 scene.start < scene.end
         );
+}
 
-    const pinTarget = container;
+export function createScrollTimeline(container: HTMLElement, video: HTMLVideoElement): GSAPTimeline {
+    const scenes = getScenes(container);
 
     gsap.set(
         scenes.map((scene) => scene.element),
@@ -44,35 +41,34 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         }
     );
 
-    const syncVideo = (progress: number) => {
-        if (!Number.isFinite(video.duration) || video.duration <= 0) return;
-
-        const nextTime = progress * video.duration;
-        if (Math.abs(video.currentTime - nextTime) > 0.033) {
-            video.currentTime = nextTime;
-        }
-    };
-
-    const timeline = gsap.timeline({
+    const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
             trigger: container,
-            pin: pinTarget,
+            pin: true,
             scrub: 0.45,
             anticipatePin: 1,
             start: "top top",
-            end: () => `+=${getScrollDistance(scenes.length)}`,
-            onUpdate: (self) => {
-                syncVideo(self.progress);
-            },
+            end: `+=${SCROLL_DISTANCE}`,
         },
     });
+
+    // scrub video from start -> finish
+    tl.to(
+        video,
+        {
+            currentTime: video.duration,
+            duration: 1,
+            ease: "none",
+        },
+        0
+    );
 
     scenes.forEach((scene) => {
         const fadeDuration = 0.05;
 
         // fade in
-        timeline.to(
+        tl.to(
             scene.element,
             {
                 autoAlpha: 1,
@@ -84,7 +80,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         );
 
         // fade out
-        timeline.to(
+        tl.to(
             scene.element,
             {
                 autoAlpha: 0,
@@ -96,5 +92,5 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         );
     });
 
-    return timeline;
+    return tl;
 }
