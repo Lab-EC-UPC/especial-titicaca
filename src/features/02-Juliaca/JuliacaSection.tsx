@@ -1,35 +1,48 @@
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
 import { createScrollTimeline } from "./timeline";
 
 import videoSrc from "./assets/video.mp4";
+
+gsap.registerPlugin(useGSAP);
 
 export const JuliacaSection = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    useEffect(() => {
-        const section = sectionRef.current;
-        const video = videoRef.current;
-        if (!section || !video) return;
+    useGSAP(
+        (_context, contextSafe) => {
+            const section = sectionRef.current;
+            const video = videoRef.current;
+            if (!section || !video) return;
 
-        let timeline: ReturnType<typeof createScrollTimeline> | null = null;
+            let timeline: ReturnType<typeof createScrollTimeline> | null = null;
 
-        const setupTimeline = () => {
-            if (timeline) return;
-            timeline = createScrollTimeline(section, video);
-        };
+            const setupTimeline = contextSafe!(() => {
+                if (timeline) return;
+                timeline = createScrollTimeline(section, video);
+            });
 
-        if (video.readyState >= 1) {
-            setupTimeline();
-        } else {
-            video.addEventListener("loadedmetadata", setupTimeline, { once: true });
-        }
+            if (video.readyState >= 1) {
+                setupTimeline();
+            } else {
+                video.addEventListener("loadedmetadata", setupTimeline, { once: true });
+            }
 
-        return () => {
-            video.removeEventListener("loadedmetadata", setupTimeline);
-            timeline?.kill();
-        };
-    }, []);
+            const onVisibility = contextSafe!(() => {
+                if (document.hidden) video.pause();
+            });
+
+            document.addEventListener("visibilitychange", onVisibility);
+
+            return () => {
+                video.removeEventListener("loadedmetadata", setupTimeline);
+                document.removeEventListener("visibilitychange", onVisibility);
+            };
+        },
+        { scope: sectionRef },
+    );
 
     return (
         <div ref={sectionRef} className="relative isolate h-screen w-full overflow-hidden bg-black">
