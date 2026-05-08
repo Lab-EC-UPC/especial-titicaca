@@ -3,6 +3,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { createScrollTimeline } from "./timeline";
 import { ScrollMessage } from "./ScrollMessage";
+import "./juliaca.css";
 
 import videoSrc from "./assets/video.mp4";
 import metalesImage from "./assets/metales_titicaca.png";
