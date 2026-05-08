@@ -25,3 +25,19 @@ export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
         </div>
     );
 };
+
+type ScrollParagraphProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => (
+    <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">{children}</p>
+);
+
+type ScrollHeadingProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.Heading = ({ children }: ScrollHeadingProps) => (
+    <h2 className="mb-2 text-center text-4xl font-light leading-[1.4] tracking-[0.03em] text-white">{children}</h2>
+);

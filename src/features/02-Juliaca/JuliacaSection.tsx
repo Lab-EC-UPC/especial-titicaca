@@ -58,27 +58,25 @@ export const JuliacaSection = () => {
 
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.04)_45%,rgba(0,0,0,0.2))]" />
 
-            <ScrollMessage start={0.1} end={0.2}>
-                <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">
+            <ScrollMessage start={0.05} end={0.15}>
+                <ScrollMessage.Paragraph>
                     El olor fétido del río, la ausencia de peces y las enfermedades constantes revelan años de promesas
                     incumplidas.
-                </p>
+                </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.3} end={0.4}>
-                <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">
+            <ScrollMessage start={0.2} end={0.3}>
+                <ScrollMessage.Paragraph>
                     Lo que observas aquí es solo una parte del problema. Río arriba se acumulan residuos que continúan
                     avanzando por la cuenca.
-                </p>
+                </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.5} end={0.7}>
-                <h2 className="mb-2 text-center text-4xl font-extrabold leading-[1.4] tracking-[0.03em] text-white">
-                    CAP 1: JULIACA
-                </h2>
-                <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">
+            <ScrollMessage start={0.35} end={0.5}>
+                <ScrollMessage.Heading>CAP 1: JULIACA</ScrollMessage.Heading>
+                <ScrollMessage.Paragraph>
                     Juliaca concentra más del 80% de las aguas residuales que ingresan a la cuenca del Titicaca.
-                </p>
+                </ScrollMessage.Paragraph>
             </ScrollMessage>
         </div>
     );
