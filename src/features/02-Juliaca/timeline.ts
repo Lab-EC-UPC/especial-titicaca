@@ -70,7 +70,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
     );
 
     scenes.forEach((scene) => {
-        const fadeDuration = 0.05;
+        const fadeDuration = 0.02;
 
         // fade in
         tl.to(

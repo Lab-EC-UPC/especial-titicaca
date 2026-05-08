@@ -13,7 +13,7 @@ export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
             data-start={start}
             data-end={end}
         >
-            <div className="relative flex w-full max-w-[min(46ch,90vw)] items-center justify-center text-white">
+            <div className="relative flex w-full max-w-[min(58ch,92vw)] items-center justify-center text-white">
                 <div
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-[-3.5rem] -z-10 rounded-[999px] bg-black/35 blur-[52px] opacity-90"
