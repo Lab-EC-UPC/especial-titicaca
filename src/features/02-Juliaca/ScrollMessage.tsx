@@ -16,7 +16,7 @@ export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
             <div className="relative flex w-full max-w-[min(46ch,90vw)] items-center justify-center text-white">
                 <div
                     aria-hidden="true"
-                    className="pointer-events-none absolute inset-[-3.5rem] -z-10 rounded-[999px] bg-black/70 blur-[52px] opacity-95"
+                    className="pointer-events-none absolute inset-[-3.5rem] -z-10 rounded-[999px] bg-black/35 blur-[52px] opacity-90"
                 />
                 <div className="relative z-10 max-w-full drop-shadow-[0_16px_26px_rgba(0,0,0,0.92)] [&_img]:block [&_img]:max-w-full [&_img]:rounded-[1.25rem]">
                     {children}

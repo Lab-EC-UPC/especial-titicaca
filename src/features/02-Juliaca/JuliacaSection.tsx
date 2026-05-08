@@ -56,18 +56,28 @@ export const JuliacaSection = () => {
                 preload="auto"
             />
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.28),rgba(0,0,0,0.08)_45%,rgba(0,0,0,0.4))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.04)_45%,rgba(0,0,0,0.2))]" />
 
-            <ScrollMessage start={0.2} end={0.4}>
-                <h3 className="mb-2 text-[1.35rem] font-medium leading-tight">Lorem ipsum dolor sit amet</h3>
-                <p className="text-base leading-relaxed text-white/90">
-                    Iaculis massa nisl malesuada lacinia integer nunc posuere.
+            <ScrollMessage start={0.1} end={0.2}>
+                <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">
+                    El olor fétido del río, la ausencia de peces y las enfermedades constantes revelan años de promesas
+                    incumplidas.
                 </p>
             </ScrollMessage>
 
-            <ScrollMessage start={0.6} end={0.8}>
-                <p className="text-base leading-relaxed text-white/90">
-                    Nulla molestie mattis scelerisque maximus eget fermentum odio.
+            <ScrollMessage start={0.3} end={0.4}>
+                <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">
+                    Lo que observas aquí es solo una parte del problema. Río arriba se acumulan residuos que continúan
+                    avanzando por la cuenca.
+                </p>
+            </ScrollMessage>
+
+            <ScrollMessage start={0.5} end={0.7}>
+                <h2 className="mb-2 text-center text-4xl font-extrabold leading-[1.4] tracking-[0.03em] text-white">
+                    CAP 1: JULIACA
+                </h2>
+                <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">
+                    Juliaca concentra más del 80% de las aguas residuales que ingresan a la cuenca del Titicaca.
                 </p>
             </ScrollMessage>
         </div>

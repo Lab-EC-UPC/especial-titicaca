@@ -37,7 +37,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         scenes.map((scene) => scene.element),
         {
             autoAlpha: 0,
-            y: 30,
+            y: 20,
         }
     );
 
@@ -99,7 +99,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
             scene.element,
             {
                 autoAlpha: 0,
-                y: -20,
+                y: -10,
                 duration: fadeDuration,
                 ease: "power2.in",
             },
