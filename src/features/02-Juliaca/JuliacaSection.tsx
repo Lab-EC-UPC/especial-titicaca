@@ -5,6 +5,7 @@ import { createScrollTimeline } from "./timeline";
 import { ScrollMessage } from "./ScrollMessage";
 
 import videoSrc from "./assets/video.mp4";
+import metalesImage from "./assets/metales_titicaca.png";
 
 gsap.registerPlugin(useGSAP);
 
@@ -76,6 +77,25 @@ export const JuliacaSection = () => {
                 <ScrollMessage.Heading>CAP 1: JULIACA</ScrollMessage.Heading>
                 <ScrollMessage.Paragraph>
                     Juliaca concentra más del 80% de las aguas residuales que ingresan a la cuenca del Titicaca.
+                </ScrollMessage.Paragraph>
+            </ScrollMessage>
+
+            <ScrollMessage start={0.55} end={0.65}>
+                <ScrollMessage.Paragraph>
+                    El crecimiento urbano supera los sistemas de tratamiento y los residuos terminan recorriendo el río
+                    Coata.
+                </ScrollMessage.Paragraph>
+            </ScrollMessage>
+
+            <ScrollMessage start={0.7} end={0.8}>
+                <ScrollMessage.ImageHeading>Metales en el Lago Titicaca y sus cuencas</ScrollMessage.ImageHeading>
+                <ScrollMessage.Image src={metalesImage} alt="Metales en el Lago Titicaca y sus cuencas" />
+            </ScrollMessage>
+
+            <ScrollMessage start={0.85} end={0.95}>
+                <ScrollMessage.Paragraph>
+                    El río Coata concentra la mayor carga contaminante. Registra niveles de plomo y mercurio por encima
+                    de los límites permitidos.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
         </div>

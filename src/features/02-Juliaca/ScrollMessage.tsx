@@ -39,5 +39,22 @@ type ScrollHeadingProps = {
 };
 
 ScrollMessage.Heading = ({ children }: ScrollHeadingProps) => (
-    <h2 className="mb-2 text-center text-4xl font-light leading-[1.4] tracking-[0.03em] text-white">{children}</h2>
+    <h2 className="mb-2 text-center text-4xl font-extrabold leading-[1.4] tracking-[0.03em] text-white">{children}</h2>
+);
+
+type ScrollImageHeadingProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.ImageHeading = ({ children }: ScrollImageHeadingProps) => (
+    <h3 className="mb-6 text-center text-2xl leading-[1.4] tracking-[0.03em] text-white">{children}</h3>
+);
+
+type ScrollImageProps = {
+    src: string;
+    alt: string;
+};
+
+ScrollMessage.Image = ({ src, alt }: ScrollImageProps) => (
+    <img src={src} alt={alt} className="max-h-[50vh] w-auto mx-auto" />
 );
