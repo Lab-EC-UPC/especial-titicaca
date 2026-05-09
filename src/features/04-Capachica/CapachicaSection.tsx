@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-
 import { SceneRenderer } from "./SceneRenderer";
 import { CAPTIONS, TOTAL_FRAMES } from "./constants";
 import { clamp } from "./mathUtils";
@@ -7,93 +6,101 @@ import { clamp } from "./mathUtils";
 export const CapachicaSection: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
 
+  // current visible frame
   const [frameIndex, setFrameIndex] = useState(0);
 
+  // text fade effect
+  const [opacity, setOpacity] = useState(1);
+
   useEffect(() => {
-    // Updates current frame based on scroll progress
     const handleScroll = () => {
       const section = sectionRef.current;
 
       if (!section) return;
 
-      const scrollTop = -section.getBoundingClientRect().top;
+      const rect = section.getBoundingClientRect();
+      const scrollTop = -rect.top;
 
+      // total scroll distance
       const scrollableHeight =
         section.offsetHeight - window.innerHeight;
 
       if (scrollableHeight <= 0) return;
 
+      // normalized progress
       const progress = clamp(
         scrollTop / scrollableHeight,
         0,
-        1,
+        1
       );
 
-      setFrameIndex(
-        Math.round(progress * (TOTAL_FRAMES - 1)),
+      // frame based on scroll
+      const currentFrame = Math.round(
+        progress * (TOTAL_FRAMES - 1)
       );
+
+      setFrameIndex(currentFrame);
+
+      // smooth fade in/out
+      const nearStart = progress < 0.1 ? progress / 0.1 : 1;
+      const nearEnd = progress > 0.9 ? 1 - (progress - 0.9) / 0.1 : 1;
+
+      setOpacity(Math.min(nearStart, nearEnd));
     };
 
-    window.addEventListener(
-      "scroll",
-      handleScroll,
-      { passive: true },
-    );
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
 
     handleScroll();
 
     return () => {
-      window.removeEventListener(
-        "scroll",
-        handleScroll,
-      );
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
-  // Timeline progress (0 → 1)
   const timelineProgress =
     frameIndex / (TOTAL_FRAMES - 1);
 
-  // Active caption for current scene
+  // active caption
   const currentCaption =
     CAPTIONS.find(
-      (caption) =>
-        timelineProgress >= caption.lo &&
-        timelineProgress < caption.hi,
-    ) || CAPTIONS[CAPTIONS.length - 1];
+      (c) =>
+        timelineProgress >= c.lo &&
+        timelineProgress < c.hi
+    ) || CAPTIONS[0];
 
   return (
     <section
       ref={sectionRef}
       className="relative w-full"
       style={{
-        height: `${TOTAL_FRAMES * 90}px`,
+        // controls animation duration
+        height: `${TOTAL_FRAMES * 100}px`,
       }}
     >
-      {/* Sticky cinematic viewport */}
       <div className="sticky top-0 h-screen w-full overflow-hidden">
-        {/* Main animated scene */}
+        
+        {/* background frames */}
         <div className="absolute inset-0 z-0">
-          <SceneRenderer t={timelineProgress} />
+          <SceneRenderer frameIndex={frameIndex} />
         </div>
 
-        {/* Scene caption */}
-        <div className="absolute left-1/2 top-[12%] z-20 w-full max-w-3xl -translate-x-1/2 px-6 text-center">
-          <h4 className="font-serif text-3xl font-bold tracking-tight text-[#2d4a2d] drop-shadow-md transition-all duration-500 md:text-5xl">
-            {currentCaption.title}
-          </h4>
+        {/* overlay content */}
+        <div className="relative z-10 flex h-full items-start justify-center px-6 pt-[15vh] text-center">
+          <div
+            className="transition-all duration-500"
+            style={{ opacity }}
+          >
+            <h2 className="text-3xl font-medium leading-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)] sm:text-4xl md:text-5xl lg:text-6xl tracking-tight">
+              {currentCaption.title}
+            </h2>
 
-          <p className="mx-auto mt-4 max-w-xl font-serif text-base leading-relaxed text-[#4a3a30] drop-shadow-sm md:text-lg">
-            {currentCaption.desc}
-          </p>
-        </div>
-
-        {/* Initial scroll hint */}
-        {frameIndex < 2 && (
-          <div className="absolute bottom-10 left-1/2 z-20 -translate-x-1/2 animate-bounce text-xs uppercase tracking-[0.3em] text-[#2d4a2d]/40">
-            Scroll
+            <p className="mx-auto mt-6 max-w-2xl text-base font-light leading-relaxed text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.4)] sm:text-lg md:text-xl lg:text-2xl">
+              {currentCaption.desc}
+            </p>
           </div>
-        )}
+        </div>
       </div>
     </section>
   );
