@@ -2,7 +2,7 @@ import "./index.css";
 import { HeaderSection } from "./features/01-Header/HeaderSection";
 import { JuliacaSection } from "./features/02-Juliaca/JuliacaSection";
 import { FloraFaunaSection } from "./features/03-FloraFauna/FloraFaunaSection";
-import { CapachicaSection } from "./features/04-Capachica/CapachicaSection";
+import { CapachicaSection } from "./features/04-Capachica/pages/CapachicaSection";
 import { DenunciasSection } from "./features/05-Denuncias/DenunciasSection";
 
 import { FooterSection } from "./features/06-Footer/FooterSection";
