@@ -1,4 +1,5 @@
-import { LifecycleGallery } from "../components/LifecycleGallery";
+import { LifecycleGallery } from "./components/lifecycle/LifecycleGallery";
+
 
 export const CapachicaSection = () => (
   <section id="capachica">

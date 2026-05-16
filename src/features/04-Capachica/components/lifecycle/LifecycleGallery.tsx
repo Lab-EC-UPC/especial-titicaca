@@ -1,5 +1,5 @@
-import { useLifecycle } from "../hooks/useLifecycle";
-import { LIFECYCLE_SCENES } from "../constants/lifecycle.constants";
+import { useLifecycle } from "../../hooks/useLifecycle";
+import { LIFECYCLE_SCENES } from "../../constants/lifecycle.constants";
 import { LifecycleSceneCard } from "./LifecycleSceneCard";
 import { LifecycleNav } from "./LifecycleNav";
 

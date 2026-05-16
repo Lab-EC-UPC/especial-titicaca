@@ -1,4 +1,4 @@
-import type { LifecycleScene } from "../constants/lifecycle.constants";
+import type { LifecycleScene } from "../../constants/lifecycle.constants";
 
 interface LifecycleNavProps {
   scenes: LifecycleScene[];
