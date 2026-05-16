@@ -34,6 +34,10 @@ export const TotoraSection = () => {
   }, [sliderX]);
 
   useEffect(() => {
+    measureJoin();
+  }, [measureJoin]);
+
+  useEffect(() => {
     window.addEventListener("resize", measureJoin);
     return () => window.removeEventListener("resize", measureJoin);
   }, [measureJoin]);
