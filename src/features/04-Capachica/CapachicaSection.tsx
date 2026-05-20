@@ -66,37 +66,43 @@ export const CapachicaSection = () => {
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.18),rgba(0,0,0,0.08)_28%,rgba(0,0,0,0.22))]" />
 
             <ScrollMessage start={0.03} end={0.12}>
-                <div className="flex flex-col items-center gap-6 text-center">
+                <div className="flex flex-col items-center gap-8 text-center md:gap-10">
                     <ScrollMessage.Heading>El deterioro de la totora</ScrollMessage.Heading>
                     <ScrollMessage.Image src={detTotora} alt="El deterioro de la totora" />
                 </div>
             </ScrollMessage>
 
             <ScrollMessage.Wide start={0.17} end={0.37}>
-                <div className="mx-auto w-full max-w-6xl space-y-10 text-center">
-                    <ScrollMessage.Heading>
+                <div className="mx-auto w-full max-w-6xl space-y-12 text-center md:space-y-16">
+                    <ScrollMessage.Heading className="mb-6 md:mb-8">
                         Esta reducción afecta la pesca, la alimentación y la economía local
                     </ScrollMessage.Heading>
 
-                    <div className="grid gap-6 text-white md:grid-cols-2 md:gap-10 lg:px-6">
+                    <div className="grid gap-8 text-white md:grid-cols-2 md:gap-10 lg:px-6">
                         <ScrollMessage.Paragraph>¿Qué no muestran las redes sociales?</ScrollMessage.Paragraph>
                         <ScrollMessage.Paragraph>Detrás de lo que se comparte en redes</ScrollMessage.Paragraph>
                     </div>
 
-                    <div className="grid gap-6 md:grid-cols-3 lg:gap-8">
+                    <div className="grid gap-8 md:grid-cols-3 lg:gap-10">
                         <figure className="space-y-3 text-center">
                             <ScrollMessage.Image src={capachica21} alt="Capachica 2 1" />
-                            <figcaption className="text-base text-white/85 sm:text-lg">description</figcaption>
+                            <figcaption className="text-base text-white/85 sm:text-lg">
+                                Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus.
+                            </figcaption>
                         </figure>
 
                         <figure className="space-y-3 text-center">
                             <ScrollMessage.Image src={capachica22} alt="Capachica 2 2" />
-                            <figcaption className="text-base text-white/85 sm:text-lg">description</figcaption>
+                            <figcaption className="text-base text-white/85 sm:text-lg">
+                                Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus.
+                            </figcaption>
                         </figure>
 
                         <figure className="space-y-3 text-center">
                             <ScrollMessage.Image src={capachica23} alt="Capachica 2 3" />
-                            <figcaption className="text-base text-white/85 sm:text-lg">description</figcaption>
+                            <figcaption className="text-base text-white/85 sm:text-lg">
+                                Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus.
+                            </figcaption>
                         </figure>
                     </div>
                 </div>
