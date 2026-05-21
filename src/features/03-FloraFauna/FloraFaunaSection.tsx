@@ -1,9 +1,9 @@
-import { Flora } from "./Flora";
+import { Fauna } from "./Fauna";
 import { TotoraSection } from "./Totora";
 
 export const FloraFaunaSection = () => (
   <>
-    <Flora />
+    <Fauna />
     <TotoraSection />
   </>
 );
