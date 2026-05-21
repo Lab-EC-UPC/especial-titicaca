@@ -14,8 +14,8 @@ export const LifecycleSceneCard = ({
   <div
     className={`
       transition-opacity duration-700
-      ${isActive ? "relative block w-full" : "hidden"}
-      md:block md:absolute md:inset-0
+      ${isActive ? "relative block w-full md:block md:absolute" : "hidden md:hidden md:absolute"}
+      md:inset-0
       ${isActive ? "md:opacity-100" : "md:opacity-0"}
     `}
   >

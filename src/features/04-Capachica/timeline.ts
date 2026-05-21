@@ -7,6 +7,8 @@ type Scene = {
     element: HTMLElement;
     start: number;
     end: number;
+    pauseVideo?: boolean;
+    interactive?: boolean;
 };
 
 const SCROLL_DISTANCE = 9000;
@@ -17,6 +19,8 @@ function getScenes(container: HTMLElement): Scene[] {
             element,
             start: Number(element.dataset.start),
             end: Number(element.dataset.end),
+            pauseVideo: element.dataset.pauseVideo === "true",
+            interactive: element.dataset.interactive === "true",
         }))
         .filter(
             (scene) =>
@@ -34,11 +38,13 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
     gsap.set(scenes.map((scene) => scene.element), {
         autoAlpha: 0,
         y: 10,
+        pointerEvents: "none",
     });
 
     gsap.set(video, {
         filter: "blur(0px)",
         willChange: "filter",
+        opacity: 1,
     });
 
     const tl = gsap.timeline({
@@ -65,6 +71,26 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
 
     scenes.forEach((scene) => {
         const fadeDuration = 0.02;
+
+        if (scene.interactive) {
+            tl.to(
+                scene.element,
+                {
+                    pointerEvents: "auto",
+                    duration: 0,
+                },
+                scene.start,
+            );
+
+            tl.to(
+                scene.element,
+                {
+                    pointerEvents: "none",
+                    duration: 0,
+                },
+                scene.end,
+            );
+        }
 
         tl.to(
             scene.element,
@@ -107,6 +133,46 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
             },
             Math.max(scene.end - fadeDuration, scene.start + 0.01),
         );
+        
+        if (scene.pauseVideo) {
+            const pauseFade = 0.08;
+
+            tl.to(
+                video,
+                {
+                    opacity: 0,
+                    duration: pauseFade,
+                    ease: "power2.out",
+                },
+                scene.start,
+            );
+
+            tl.call(() => {
+                try {
+                    video.pause();
+                } catch {
+                    /* ignore */
+                }
+            }, undefined, scene.start + pauseFade + 0.001);
+
+            tl.to(
+                video,
+                {
+                    opacity: 1,
+                    duration: pauseFade,
+                    ease: "power2.in",
+                },
+                scene.end,
+            );
+
+            tl.call(() => {
+                try {
+                    if (video.paused) video.play();
+                } catch {
+                    /* ignore */
+                }
+            }, undefined, scene.end + pauseFade + 0.001);
+        }
     });
 
     return tl;

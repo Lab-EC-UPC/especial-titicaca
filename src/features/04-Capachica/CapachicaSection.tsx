@@ -7,6 +7,7 @@ import { ScrollMessage } from "./ScrollMessage";
 import "./capachica.css";
 
 import capachicaVideo from "../../assets/backgrounds/capachica.mp4";
+import { LifecycleGallery } from "./components/lifecycle/LifecycleGallery";
 import detTotora from "./assets/deterioro_totora.png";
 import capachica21 from "./assets/capachica_2_1.png";
 import capachica22 from "./assets/capachica_2_2.png";
@@ -72,7 +73,7 @@ export const CapachicaSection = () => {
                 </div>
             </ScrollMessage>
 
-            <ScrollMessage.Wide start={0.17} end={0.37}>
+            <ScrollMessage.Wide start={0.17} end={0.35}>
                 <div className="mx-auto w-full max-w-6xl space-y-12 text-center md:space-y-16">
                     <ScrollMessage.Heading className="mb-6 md:mb-8">
                         Esta reducción afecta la pesca, la alimentación y la economía local
@@ -108,14 +109,14 @@ export const CapachicaSection = () => {
                 </div>
             </ScrollMessage.Wide>
 
-            <ScrollMessage start={0.44} end={0.54}>
+            <ScrollMessage start={0.4} end={0.45}>
                 <ScrollMessage.Paragraph>
                     Entre los totorales, el recorrido continúa hacia Capachica. Allí, los efectos de la contaminación
                     empiezan a reflejarse en la salud de las familias.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.58} end={0.72}>
+            <ScrollMessage start={0.5} end={0.6}>
                 <ScrollMessage.Paragraph>
                     Salimos del lago y avanzamos entre los totorales hacia Capachica. Al alejarnos del agua, la
                     contaminación deja de ser solo ambiental y empieza a impactar en las comunidades. En Capachica, los
@@ -123,12 +124,24 @@ export const CapachicaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.76} end={0.86}>
+            <ScrollMessage start={0.65} end={0.75}>
                 <ScrollMessage.Heading>CAP 3: SALUD</ScrollMessage.Heading>
                 <ScrollMessage.Paragraph>
                     Las comunidades dependen del lago, pero el lago ya no es seguro.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
+
+            <div
+                className="absolute inset-0 z-20 opacity-0 pointer-events-none"
+                data-start="0.76"
+                data-end="0.88"
+                data-pause-video="true"
+                data-interactive="true"
+            >
+                <div className="relative h-full w-full overflow-hidden">
+                    <LifecycleGallery />
+                </div>
+            </div>
         </section>
     );
 };
