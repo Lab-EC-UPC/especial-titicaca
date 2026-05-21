@@ -15,7 +15,7 @@ export const TestimonialPersonView = ({
   onClose,
   onToggleAudio,
 }: TestimonialPersonViewProps) => (
-  <div className="w-screen h-screen relative overflow-hidden">
+  <div className="w-full h-screen relative overflow-hidden">
     <img
       src={testimonial.backgroundImage}
       alt={testimonial.name}

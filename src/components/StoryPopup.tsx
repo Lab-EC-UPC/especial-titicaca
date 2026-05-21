@@ -1,10 +1,11 @@
 import { useState } from "react";
 
-export default function StoryPopup() {
-  const [open, setOpen] = useState(true);
-  const [expanded, setExpanded] = useState(false);
+interface StoryPopupProps {
+  onClose: () => void;
+}
 
-  if (!open) return null;
+export default function StoryPopup({ onClose }: StoryPopupProps) {
+  const [expanded, setExpanded] = useState(false);
 
   // ── Expanded / Full story popup ──
   if (expanded) {
@@ -13,7 +14,7 @@ export default function StoryPopup() {
         className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
         onClick={() => {
           setExpanded(false);
-          setOpen(false);
+          onClose();
         }}
       >
         <div
@@ -135,7 +136,7 @@ export default function StoryPopup() {
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      onClick={() => setOpen(false)}
+      onClick={() => onClose()}
     >
       <div
         className="relative mx-4 flex w-full max-w-[440px] flex-col items-center rounded-[20px] px-8 pb-8 pt-16"
