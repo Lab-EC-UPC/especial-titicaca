@@ -7,7 +7,7 @@ export const LifecycleGallery = () => {
   const { current, goTo } = useLifecycle();
 
   return (
-    <div className="w-full h-full overflow-x-hidden overflow-y-hidden relative">
+    <div className="relative w-full h-full overflow-hidden">
       {LIFECYCLE_SCENES.map((scene, index) => (
         <LifecycleSceneCard
           key={scene.id}
