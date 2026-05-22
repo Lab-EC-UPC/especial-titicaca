@@ -5,9 +5,9 @@ import {
 } from "../../constants/testimonial.constants";
 
 const TOOLTIP_STYLES: string[] = [
-  "bg-yellow-400 text-yellow-900",
-  "bg-purple-600 text-white",
-  "bg-green-500 text-white",
+  "bg-[#0EA483] text-white",
+  "bg-[#1A3932] text-white",
+  "bg-[#8AB1BD] text-white",
 ];
 
 interface TooltipState {
