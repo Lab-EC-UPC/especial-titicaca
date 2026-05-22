@@ -10,11 +10,7 @@ export default function StoryPopup() {
   if (expanded) {
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-        onClick={() => {
-          setExpanded(false);
-          setOpen(false);
-        }}
+        className="absolute inset-0 z-50 flex items-center justify-center bg-black/40"
       >
         <div
           className="relative mx-4 flex w-full max-w-[420px] flex-col px-8 pb-8 pt-6"
@@ -134,8 +130,7 @@ export default function StoryPopup() {
   // ── Preview / Initial card popup ──
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
-      onClick={() => setOpen(false)}
+      className="absolute inset-0 z-50 flex items-center justify-center bg-black/40"
     >
       <div
         className="relative mx-4 flex w-full max-w-[440px] flex-col items-center rounded-[20px] px-8 pb-8 pt-16"
@@ -153,7 +148,7 @@ export default function StoryPopup() {
           style={{ backgroundColor: "#929292" }}
         >
           <img
-            src="/src/assets/campesino.png"
+            src="/src/assets/images/Capachica/TriangulacionSection/campesino.png"
             alt="Juan"
             className="h-full w-full object-cover"
           />
