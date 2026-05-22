@@ -155,14 +155,24 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
                 }
             }, undefined, scene.start + pauseFade + 0.001);
 
-            tl.to(
-                video,
-                {
-                    opacity: 1,
-                    duration: pauseFade,
-                    ease: "power2.in",
-                },
-                scene.end,
+            const fadeInStart = scene.end;
+            const fadeInDuration = Math.min(pauseFade, 1.0 - fadeInStart - 0.001);
+
+            if (fadeInDuration > 0) {
+                tl.to(
+                    video,
+                    {
+                        opacity: 1,
+                        duration: fadeInDuration,
+                        ease: "power2.in",
+                    },
+                    fadeInStart,
+                );
+            }
+
+            const playCallTime = Math.min(
+                fadeInStart + fadeInDuration + 0.001,
+                0.999
             );
 
             tl.call(() => {
@@ -171,7 +181,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
                 } catch {
                     /* ignore */
                 }
-            }, undefined, scene.end + pauseFade + 0.001);
+            }, undefined, playCallTime);
         }
     });
 

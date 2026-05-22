@@ -27,7 +27,7 @@ export const LifecycleSceneCard = ({
     <div
       className={`
         absolute inset-0
-        bg-gradient-to-b from-black/80 via-black/20 to-transparent
+        bg-linear-to-b from-black/80 via-black/20 to-transparent
         transition-opacity duration-700 delay-300
         ${isActive ? "opacity-100" : "opacity-0"}
       `}

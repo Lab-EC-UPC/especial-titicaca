@@ -26,7 +26,7 @@ const ScrollMessageFrame = ({ start, end, children, variant }: ScrollMessageFram
             >
                 <div
                     aria-hidden="true"
-                    className={`pointer-events-none absolute inset-[-3.5rem] -z-10 rounded-[999px] blur-[52px] opacity-90 ${isWide ? "bg-black/28" : "bg-black/35"}`}
+                    className={`pointer-events-none absolute -inset-4 -z-10 rounded-[999px] blur-[52px] opacity-90 ${isWide ? "bg-black/28" : "bg-black/35"}`}
                 />
                 <div className="relative z-10 max-w-full drop-shadow-[0_16px_26px_rgba(0,0,0,0.92)] [&_img]:block [&_img]:max-w-full [&_img]:rounded-[1.25rem]">
                     {children}
