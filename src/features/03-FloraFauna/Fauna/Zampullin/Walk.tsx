@@ -1,39 +1,11 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import type { CSSProperties } from "react";
+import { useBirdWalk } from "../useBirdWalk";
 
-export const ZampullinWalk = ({ style }: { style?: React.CSSProperties }) => {
-  const svgRef = useRef<SVGSVGElement>(null);
-
-  useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-
-    const piernaA = svg.querySelector<SVGGElement>("#pata-a-zam");
-    const piernaB = svg.querySelector<SVGGElement>("#pata-b-zam");
-    const cuerpo  = svg.querySelector<SVGGElement>("#cuerpo-zam");
-
-    if (!piernaA || !piernaB || !cuerpo) return;
-
-    gsap.set(piernaA, { svgOrigin: "111 210" });
-    gsap.set(piernaB, { svgOrigin: "91 210" });
-
-    const bob = gsap.to(cuerpo, {
-      y: 2,
-      duration: 0.7,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-
-    const walk = gsap.timeline({ repeat: -1 });
-    walk
-      .to(piernaA, { rotation:  6, duration: 0.35, ease: "sine.inOut" })
-      .to(piernaB, { rotation: -6, duration: 0.35, ease: "sine.inOut" }, "<")
-      .to(piernaA, { rotation: -6, duration: 0.35, ease: "sine.inOut" })
-      .to(piernaB, { rotation:  6, duration: 0.35, ease: "sine.inOut" }, "<");
-
-    return () => { bob.kill(); walk.kill(); };
-  }, []);
+export const ZampullinWalk = ({ style }: { style?: CSSProperties }) => {
+  const svgRef = useBirdWalk(
+    { legA: "#pata-a-zam", legB: "#pata-b-zam", body: "#cuerpo-zam" },
+    { pivotA: "111 178", pivotB: "91 178", rotation: 6, stepDuration: 0.7, bobDuration: 1.3, delay: 0.55 },
+  );
 
   return (
     <svg

@@ -1,39 +1,11 @@
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import type { CSSProperties } from "react";
+import { useBirdWalk } from "../useBirdWalk";
 
-export const FlamencoWalk = ({ style }: { style?: React.CSSProperties }) => {
-  const svgRef = useRef<SVGSVGElement>(null);
-
-  useEffect(() => {
-    const svg = svgRef.current;
-    if (!svg) return;
-
-    const piernaA = svg.querySelector<SVGGElement>("#pierna-a");
-    const piernaB = svg.querySelector<SVGGElement>("#pierna-b");
-    const cuerpo = svg.querySelector<SVGGElement>("#cuerpo-lat");
-
-    if (!piernaA || !piernaB || !cuerpo) return;
-
-    gsap.set(piernaA, { svgOrigin: "197 257" });
-    gsap.set(piernaB, { svgOrigin: "211 258" });
-
-    const bob = gsap.to(cuerpo, {
-      y: 2,
-      duration: 0.8,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-
-    const walk = gsap.timeline({ repeat: -1 });
-    walk
-      .to(piernaA, { rotation: 10, duration: 0.35, ease: "sine.inOut" })
-      .to(piernaB, { rotation: -10, duration: 0.35, ease: "sine.inOut" }, "<")
-      .to(piernaA, { rotation: -10, duration: 0.35, ease: "sine.inOut" })
-      .to(piernaB, { rotation: 10, duration: 0.35, ease: "sine.inOut" }, "<");
-
-    return () => { bob.kill(); walk.kill(); };
-  }, []);
+export const FlamencoWalk = ({ style }: { style?: CSSProperties }) => {
+  const svgRef = useBirdWalk(
+    { legA: "#pierna-a", legB: "#pierna-b", body: "#cuerpo-lat" },
+    { pivotA: "197 257", pivotB: "211 258", rotation: 10, stepDuration: 0.95, bobDuration: 1.7 },
+  );
 
   return (
     <svg
