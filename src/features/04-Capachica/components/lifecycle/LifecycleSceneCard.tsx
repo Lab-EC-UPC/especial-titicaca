@@ -13,30 +13,43 @@ export const LifecycleSceneCard = ({
 }: LifecycleSceneCardProps) => (
   <div
     className={`
-      transition-opacity duration-700
-      ${isActive ? "relative block w-full" : "hidden"}
-      md:block md:absolute md:inset-0
-      ${isActive ? "md:opacity-100" : "md:opacity-0"}
+      absolute inset-0
+      transition-opacity duration-1000 ease-out
+      ${isActive ? "opacity-100" : "opacity-0 pointer-events-none"}
     `}
   >
     <img
       src={src}
       alt={alt}
-      className="w-full h-auto md:h-full md:object-cover"
+      className="w-full h-full object-cover"
     />
 
-    <div className="
-      absolute top-0 left-0 right-0
-      px-6 pt-8 pb-20
-      md:px-12 md:pt-12 md:pb-24
-      bg-gradient-to-b from-black/70 via-black/30 to-transparent
-    ">
-      <p className="
-        text-white font-semibold text-center leading-snug
-        text-sm sm:text-base md:text-2xl
-        max-w-xl mx-auto
-        drop-shadow-md
-      ">
+    <div
+      className={`
+        absolute inset-0
+        bg-linear-to-b from-black/80 via-black/20 to-transparent
+        transition-opacity duration-700 delay-300
+        ${isActive ? "opacity-100" : "opacity-0"}
+      `}
+    />
+
+    <div
+      className={`
+        absolute top-0 left-0 right-0
+        px-6 pt-16 pb-20
+        md:px-12 md:pt-24 md:pb-24
+        transition-opacity duration-700 delay-500
+        ${isActive ? "opacity-100" : "opacity-0"}
+      `}
+    >
+      <p
+        className="
+          text-white font-semibold text-center leading-snug
+          text-sm sm:text-base md:text-2xl
+          max-w-2xl mx-auto
+          drop-shadow-lg
+        "
+      >
         {description}
       </p>
     </div>

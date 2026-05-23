@@ -5,9 +5,9 @@ import {
 } from "../../constants/testimonial.constants";
 
 const TOOLTIP_STYLES: string[] = [
-  "bg-yellow-400 text-yellow-900",
-  "bg-purple-600 text-white",
-  "bg-green-500 text-white",
+  "bg-[#0EA483] text-white",
+  "bg-[#1A3932] text-white",
+  "bg-[#8AB1BD] text-white",
 ];
 
 interface TooltipState {
@@ -21,14 +21,24 @@ interface TestimonialBackgroundProps {
   testimonials: Testimonial[];
   onSelectPerson: (id: number) => void;
 }
+
 export const TestimonialBackground = ({
   testimonials,
   onSelectPerson,
 }: TestimonialBackgroundProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
 
-  const handleMouseMove = (e: React.MouseEvent, text: string, colorClass: string) => {
-    setTooltip({ x: e.clientX, y: e.clientY, text, colorClass });
+  const handleMouseMove = (
+    e: React.MouseEvent,
+    text: string,
+    colorClass: string
+  ) => {
+    setTooltip({
+      x: e.clientX,
+      y: e.clientY,
+      text,
+      colorClass,
+    });
   };
 
   const handleMouseLeave = () => setTooltip(null);
@@ -46,7 +56,11 @@ export const TestimonialBackground = ({
           key={t.id}
           onClick={() => onSelectPerson(t.id)}
           onMouseMove={(e) =>
-            handleMouseMove(e, `Conocer testimonio de ${t.name}`, TOOLTIP_STYLES[i])
+            handleMouseMove(
+              e,
+              `Conocer testimonio de ${t.name}`,
+              TOOLTIP_STYLES[i]
+            )
           }
           onMouseLeave={handleMouseLeave}
           aria-label={`Ver testimonio de ${t.name}`}
@@ -66,10 +80,12 @@ export const TestimonialBackground = ({
             fixed z-50 pointer-events-none
             px-4 py-2 rounded-lg
             text-sm font-bold shadow-lg
-            transition-none
             ${tooltip.colorClass}
           `}
-          style={{ left: tooltip.x + 14, top: tooltip.y + 14 }}
+          style={{
+            left: tooltip.x + 14,
+            top: tooltip.y + 14,
+          }}
         >
           {tooltip.text}
         </div>

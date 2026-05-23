@@ -21,7 +21,12 @@ export const TestimonialPersonView = ({
       alt={testimonial.name}
       className="w-full h-full object-cover"
     />
-    <TestimonialAudioButton isPlaying={isPlaying} onToggle={onToggleAudio} />
+
+    <TestimonialAudioButton
+      isPlaying={isPlaying}
+      onToggle={onToggleAudio}
+    />
+
     <TestimonialCard
       name={testimonial.name}
       testimony={testimonial.testimony}

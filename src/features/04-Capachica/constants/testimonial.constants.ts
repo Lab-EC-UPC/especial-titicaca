@@ -22,7 +22,7 @@ export const TESTIMONIAL_BACKGROUND = bg;
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: 1,
-    name: "Nombre y Apellido 1",
+    name: "Feliciana",
     testimony:
       "Testimonio de máximo tres líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
     backgroundImage: person1Bg,
@@ -31,7 +31,7 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: 2,
-    name: "Nombre y Apellido 2",
+    name: "Victor Chata Grande",
     testimony:
       "Testimonio de máximo tres líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
     backgroundImage: person2Bg,
@@ -40,7 +40,7 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: 3,
-    name: "Nombre y Apellido 3",
+    name: "Juliana Churata",
     testimony:
       "Testimonio de máximo tres líneas. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.",
     backgroundImage: person3Bg,
