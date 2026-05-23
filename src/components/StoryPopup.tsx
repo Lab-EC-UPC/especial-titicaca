@@ -154,7 +154,7 @@ export default function StoryPopup({ onClose }: StoryPopupProps) {
           style={{ backgroundColor: "#929292" }}
         >
           <img
-            src="/src/assets/campesino.png"
+            src="/src/assets/images/Capachica/TriangulacionSection/campesino.png"
             alt="Juan"
             className="h-full w-full object-cover"
           />
