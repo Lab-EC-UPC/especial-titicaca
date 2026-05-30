@@ -44,11 +44,11 @@ export const TestimonialBackground = ({
   const handleMouseLeave = () => setTooltip(null);
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-red-500">
+    <div className="w-full relative overflow-hidden">
       <img
         src={TESTIMONIAL_BACKGROUND}
         alt="Testimonios"
-        className="w-full h-full object-cover"
+        className="w-full h-auto block"
       />
 
       {testimonials.map((t, i) => (

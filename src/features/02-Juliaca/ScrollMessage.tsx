@@ -1,0 +1,60 @@
+import type { ReactNode } from "react";
+
+type ScrollMessageProps = {
+    start: number;
+    end: number;
+    children: ReactNode;
+};
+
+export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
+    return (
+        <div
+            className="absolute inset-0 z-20 grid place-items-center px-4 opacity-0 pointer-events-none"
+            data-start={start}
+            data-end={end}
+        >
+            <div className="relative flex w-full max-w-[min(58ch,92vw)] items-center justify-center text-white">
+                <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-[-3.5rem] -z-10 rounded-[999px] bg-black/35 blur-[52px] opacity-90"
+                />
+                <div className="relative z-10 max-w-full drop-shadow-[0_16px_26px_rgba(0,0,0,0.92)] [&_img]:block [&_img]:max-w-full [&_img]:rounded-[1.25rem]">
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+type ScrollParagraphProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => (
+    <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">{children}</p>
+);
+
+type ScrollHeadingProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.Heading = ({ children }: ScrollHeadingProps) => (
+    <h2 className="mb-2 text-center text-4xl font-extrabold leading-[1.4] tracking-[0.03em] text-white">{children}</h2>
+);
+
+type ScrollImageHeadingProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.ImageHeading = ({ children }: ScrollImageHeadingProps) => (
+    <h3 className="mb-6 text-center text-2xl leading-[1.4] tracking-[0.03em] text-white">{children}</h3>
+);
+
+type ScrollImageProps = {
+    src: string;
+    alt: string;
+};
+
+ScrollMessage.Image = ({ src, alt }: ScrollImageProps) => (
+    <img src={src} alt={alt} className="max-h-[50vh] w-auto mx-auto" />
+);

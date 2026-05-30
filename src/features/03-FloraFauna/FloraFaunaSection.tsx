@@ -1,12 +1,11 @@
-export const FloraFaunaSection = () => {
+import { Fauna } from "./Fauna";
+import { TotoraSection } from "./Totora";
 
-  return (
-    <div id="florafauna" className="bg-yellow-100">
-      <div className="mx-auto container w-full h-screen">
-        <div className="flex items-center justify-center text-center h-full">
-          Flora y Fauna
-        </div>
-      </div>
-    </div>
-  )
-}
+export const FloraFaunaSection = () => (
+  <>
+    <Fauna />
+    <TotoraSection />
+  </>
+);
+
+export default FloraFaunaSection;

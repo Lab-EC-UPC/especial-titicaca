@@ -1,10 +1,13 @@
 import "./index.css";
 import { HeaderSection } from "./features/01-Header/HeaderSection";
 import { JuliacaSection } from "./features/02-Juliaca/JuliacaSection";
+import { MapaTiticacaSection } from "./features/02-Juliaca/MapaTiticacaSection";
 import { FloraFaunaSection } from "./features/03-FloraFauna/FloraFaunaSection";
+import { AnimacionCapachicaSection } from "./features/04-Capachica/AnimacionCapachicaSection";
 import { CapachicaSection } from "./features/04-Capachica/CapachicaSection";
+import { TestimoniosSection } from "./features/04-Capachica/TestimoniosSection";
+import { TriangulacionSection } from "./features/04-Capachica/TriangulacionSection";
 import { DenunciasSection } from "./features/05-Denuncias/DenunciasSection";
-
 import { FooterSection } from "./features/06-Footer/FooterSection";
 //import { CoordFinder } from "./components/CoordFinder";
 
@@ -36,10 +39,15 @@ function App() {
       <main>
         <div id="inicio">        <HeaderSection />       </div>
         <div id="juliaca">          <JuliacaSection />          </div>
+        <div id="mapatiti">          <MapaTiticacaSection />          </div>
         <div id="florafauna">          <FloraFaunaSection />          </div>
+        <div id="animacioncapa">          <AnimacionCapachicaSection />          </div>
         <div id="capachica">        <CapachicaSection />       </div>
+        <div id="testimonio">        <  TestimoniosSection />       </div>
+        <div id="triangulacion">        <TriangulacionSection />       </div>
         <div id="denuncias"> <DenunciasSection /> </div>
         <div id="footer">        <FooterSection />       </div>
+        
       </main>
     </div>
   );
