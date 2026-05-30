@@ -11,7 +11,7 @@ type Scene = {
     interactive?: boolean;
 };
 
-const SCROLL_DISTANCE = 9000;
+const SCROLL_DISTANCE = 5000;
 
 function getScenes(container: HTMLElement): Scene[] {
     return Array.from(container.querySelectorAll<HTMLElement>("[data-start][data-end]"))
