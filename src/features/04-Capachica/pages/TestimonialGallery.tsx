@@ -1,7 +1,7 @@
-import { useTestimonial } from "../../hooks/useTestimonial";
-import { TESTIMONIALS } from "../../constants/testimonial.constants";
-import { TestimonialBackground } from "./TestimonialBackground";
-import { TestimonialPersonView } from "./TestimonialPersonView";
+import { useTestimonial } from "../hooks/useTestimonial";
+import { TESTIMONIALS } from "../constants/testimonial.constants";
+import { TestimonialBackground } from "../components/testimonials/TestimonialBackground";
+import { TestimonialPersonView } from "../components/testimonials/TestimonialPersonView";
 
 export const TestimonialGallery = () => {
   const { selectedId, isPlaying, selectPerson, closePerson, toggleAudio } =

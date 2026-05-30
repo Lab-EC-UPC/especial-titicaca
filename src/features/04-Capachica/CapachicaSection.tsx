@@ -1,19 +1,17 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-
 import { createScrollTimeline } from "./timeline";
 import { ScrollMessage } from "./ScrollMessage";
 import "./capachica.css";
-
 import capachicaVideo from "../../assets/backgrounds/capachica.mp4";
-import { LifecycleGallery } from "./components/lifecycle/LifecycleGallery";
-import { TestimonialGallery } from "./components/testimonials/TestimonialGallery";
-
+import { TestimonialGallery } from "./pages/TestimonialGallery";
 import detTotora from "./assets/deterioro_totora.png";
 import capachica21 from "./assets/capachica_2_1.png";
 import capachica22 from "./assets/capachica_2_2.png";
 import capachica23 from "./assets/capachica_2_3.png";
+import { CapachicaAnimation1 } from "./pages/CapachicaAnimation1";
+import { LifecycleAnimation } from "./pages/LifecycleAnimation";
 
 gsap.registerPlugin(useGSAP);
 
@@ -167,38 +165,45 @@ export const CapachicaSection = () => {
 
             <ScrollMessage start={0.65} end={0.75}>
                 <ScrollMessage.Heading>
-                    CAP 3: SALUD
+                    CAPÍTULO III Riesgos de salud en las zonas ribereñas.
                 </ScrollMessage.Heading>
 
                 <ScrollMessage.Paragraph>
-                    Las comunidades dependen del lago, pero el lago ya no es
-                    seguro.
+                    En los distritos y comunidades adyacentes al río Coata y al litoral del Titicaca, la exposición a fuentes de agua contaminada coincide con la prevalencia de cuadros clínicos específicos en la población.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            {/* Lifecycle Gallery */}
             <div
-                className="absolute inset-0 z-20 opacity-0 pointer-events-none"
+                className="absolute inset-0 z-40 opacity-0 pointer-events-none"
                 data-start="0.76"
                 data-end="0.84"
-                data-pause-video="true"
-                data-interactive="true"
             >
                 <div className="relative h-full w-full overflow-hidden">
-                    <LifecycleGallery />
+                    <LifecycleAnimation />
                 </div>
             </div>
 
             {/* Testimonial Gallery */}
             <div
                 className="absolute inset-0 z-30 opacity-0 pointer-events-none"
-                data-start="0.85"
-                data-end="0.98"
+                data-start="0.84"
+                data-end="0.92"
                 data-pause-video="true"
                 data-interactive="true"
             >
                 <div className="relative h-full w-full overflow-hidden">
                     <TestimonialGallery />
+                </div>
+            </div>
+
+           {/* Animation 1 */}
+            <div
+                className="absolute inset-0 z-40 opacity-0 pointer-events-none"
+                data-start="0.92"
+                data-end="1"
+            >
+                <div className="relative h-full w-full overflow-hidden">
+                    <CapachicaAnimation1 />
                 </div>
             </div>
 

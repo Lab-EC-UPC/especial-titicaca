@@ -8,6 +8,7 @@ import { CapachicaSection } from "./features/04-Capachica/CapachicaSection";
 import { TriangulacionSection } from "./features/04-Capachica/TriangulacionSection";
 import { DenunciasSection } from "./features/05-Denuncias/DenunciasSection";
 import { FooterSection } from "./features/06-Footer/FooterSection";
+import { CapachicaAnimation2 } from "./features/04-Capachica/pages/CapachicaAnimation2";
 //import { CoordFinder } from "./components/CoordFinder";
 
 function App() {
@@ -43,6 +44,7 @@ function App() {
         <div id="animacioncapa">          <AnimacionCapachicaSection />          </div>
         <div id="capachica">        <CapachicaSection />       </div>
         <div id="triangulacion">        <TriangulacionSection />       </div>
+        <div id="capachica2"><CapachicaAnimation2/></div>
         <div id="denuncias"> <DenunciasSection /> </div>
         <div id="footer">        <FooterSection />       </div>
         
