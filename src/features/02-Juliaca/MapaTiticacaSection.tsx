@@ -1,16 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 
-const CUENCAS = [
-  { id: "azangaro",   name: "Cuenca Azángaro",   contaminant: "Mercurio", value: "2.15 mg/L",   excede: "2153 veces", level: "critical", x: "36%", y: "58%" },
-  { id: "lagunillas", name: "Cuenca Lagunillas",  contaminant: "Hierro",   value: "2.67 mg/L",   excede: "0.6 veces",  level: "sin",      x: "57%", y: "37%" },
-  { id: "pucara",     name: "Cuenca Pucará",      contaminant: "Hierro",   value: "128.07 mg/L", excede: "25.6 veces", level: "high",     x: "29%", y: "50%" },
-  { id: "ilave",      name: "Cuenca Ilave",       contaminant: "Arsénico", value: "0.03 mg/L",   excede: "3.4 veces",  level: "moderate", x: "50%", y: "56%" },
-  { id: "illpa",      name: "Cuenca Illpa",       contaminant: "Aluminio", value: "13.13 mg/L",  excede: "2.6 veces",  level: "moderate", x: "66%", y: "49%" },
-  { id: "suches",     name: "Cuencas Suches",     contaminant: "Aluminio", value: "40.28 mg/L",  excede: "5.0 veces",  level: "high",     x: "27%", y: "70%" },
-  { id: "ramis",      name: "Intercuenca Ramis",  contaminant: "Hierro",   value: "178.05 mg/L", excede: "35.6 veces", level: "critical", x: "49%", y: "72%" },
-  { id: "huancane",   name: "Cuenca Huancané",    contaminant: "Cobre",    value: "3.00 mg/L",   excede: "15 veces",   level: "high",     x: "61%", y: "74%" },
-];
-
 const LEVELS = {
   critical: { color: "#E91E8C", label: "CRÍTICO",        sub: "Relaves mineros, drenaje ácido" },
   high:     { color: "#F06292", label: "ALTO",            sub: "Daño bacteriológico" },
@@ -29,11 +18,36 @@ const ZOOM_TARGETS = {
   huancane:   { x: -14, y: -14 },
 };
 
+type LevelKey = keyof typeof LEVELS;
+type CuencaId = keyof typeof ZOOM_TARGETS;
+
+interface Cuenca {
+  id: CuencaId;
+  name: string;
+  contaminant: string;
+  value: string;
+  excede: string;
+  level: LevelKey;
+  x: string;
+  y: string;
+}
+
+const CUENCAS: Cuenca[] = [
+  { id: "azangaro",   name: "Cuenca Azángaro",   contaminant: "Mercurio", value: "2.15 mg/L",   excede: "2153 veces", level: "critical", x: "36%", y: "58%" },
+  { id: "lagunillas", name: "Cuenca Lagunillas",  contaminant: "Hierro",   value: "2.67 mg/L",   excede: "0.6 veces",  level: "sin",      x: "57%", y: "37%" },
+  { id: "pucara",     name: "Cuenca Pucará",      contaminant: "Hierro",   value: "128.07 mg/L", excede: "25.6 veces", level: "high",     x: "29%", y: "50%" },
+  { id: "ilave",      name: "Cuenca Ilave",       contaminant: "Arsénico", value: "0.03 mg/L",   excede: "3.4 veces",  level: "moderate", x: "50%", y: "56%" },
+  { id: "illpa",      name: "Cuenca Illpa",       contaminant: "Aluminio", value: "13.13 mg/L",  excede: "2.6 veces",  level: "moderate", x: "66%", y: "49%" },
+  { id: "suches",     name: "Cuencas Suches",     contaminant: "Aluminio", value: "40.28 mg/L",  excede: "5.0 veces",  level: "high",     x: "27%", y: "70%" },
+  { id: "ramis",      name: "Intercuenca Ramis",  contaminant: "Hierro",   value: "178.05 mg/L", excede: "35.6 veces", level: "critical", x: "49%", y: "72%" },
+  { id: "huancane",   name: "Cuenca Huancané",    contaminant: "Cobre",    value: "3.00 mg/L",   excede: "15 veces",   level: "high",     x: "61%", y: "74%" },
+];
+
 // ── Cambia este nombre al archivo que pongas en /public ──
 const MAP_IMAGE = "/mapa_titicaca.png"; // acepta .png, .jpg, .webp, .svg
 
 export const MapaTiticacaSection = () => {
-  const sectionRef = useRef(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [activeIdx, setActiveIdx] = useState(-1);
   const [zoom, setZoom] = useState({ scale: 1, tx: 0, ty: 0 });
 
@@ -184,7 +198,7 @@ export const MapaTiticacaSection = () => {
           transition: "opacity 0.4s, transform 0.4s",
           pointerEvents: "none",
         }}>
-          {active && (
+          {active && activeCfg && (
             <div style={{
               background: "rgba(13,21,23,0.95)",
               border: `1.5px solid ${activeCfg.color}`,
