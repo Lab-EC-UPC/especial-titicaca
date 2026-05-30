@@ -1,11 +1,13 @@
 import { useState, useEffect, useRef } from "react";
 
+// TIPO
+
 const LEVELS = {
   critical: { color: "#E91E8C", label: "CRÍTICO",        sub: "Relaves mineros, drenaje ácido" },
   high:     { color: "#F06292", label: "ALTO",            sub: "Daño bacteriológico" },
   moderate: { color: "#CE93D8", label: "MODERADO",        sub: "Excedencias menores de uso urbano" },
   sin:      { color: "#90A4AE", label: "SIN EXCEDENCIAS", sub: "No se registran excedencias" },
-};
+} as const;
 
 const ZOOM_TARGETS = {
   azangaro:   { x: 18,  y: 10  },
@@ -16,10 +18,10 @@ const ZOOM_TARGETS = {
   suches:     { x: 28,  y: -12 },
   ramis:      { x: 2,   y: -14 },
   huancane:   { x: -14, y: -14 },
-};
+} as const;
 
-type LevelKey = keyof typeof LEVELS;
-type CuencaId = keyof typeof ZOOM_TARGETS;
+type LevelKey  = keyof typeof LEVELS;
+type CuencaId  = keyof typeof ZOOM_TARGETS;
 
 interface Cuenca {
   id: CuencaId;
@@ -32,19 +34,22 @@ interface Cuenca {
   y: string;
 }
 
+// DATA
+
 const CUENCAS: Cuenca[] = [
-  { id: "azangaro",   name: "Cuenca Azángaro",   contaminant: "Mercurio", value: "2.15 mg/L",   excede: "2153 veces", level: "critical", x: "36%", y: "58%" },
-  { id: "lagunillas", name: "Cuenca Lagunillas",  contaminant: "Hierro",   value: "2.67 mg/L",   excede: "0.6 veces",  level: "sin",      x: "57%", y: "37%" },
-  { id: "pucara",     name: "Cuenca Pucará",      contaminant: "Hierro",   value: "128.07 mg/L", excede: "25.6 veces", level: "high",     x: "29%", y: "50%" },
-  { id: "ilave",      name: "Cuenca Ilave",       contaminant: "Arsénico", value: "0.03 mg/L",   excede: "3.4 veces",  level: "moderate", x: "50%", y: "56%" },
-  { id: "illpa",      name: "Cuenca Illpa",       contaminant: "Aluminio", value: "13.13 mg/L",  excede: "2.6 veces",  level: "moderate", x: "66%", y: "49%" },
-  { id: "suches",     name: "Cuencas Suches",     contaminant: "Aluminio", value: "40.28 mg/L",  excede: "5.0 veces",  level: "high",     x: "27%", y: "70%" },
-  { id: "ramis",      name: "Intercuenca Ramis",  contaminant: "Hierro",   value: "178.05 mg/L", excede: "35.6 veces", level: "critical", x: "49%", y: "72%" },
-  { id: "huancane",   name: "Cuenca Huancané",    contaminant: "Cobre",    value: "3.00 mg/L",   excede: "15 veces",   level: "high",     x: "61%", y: "74%" },
+  { id: "azangaro",   name: "Cuenca Azángaro",  contaminant: "Mercurio", value: "2.15 mg/L",   excede: "2153 veces", level: "critical", x: "36%", y: "58%" },
+  { id: "lagunillas", name: "Cuenca Lagunillas", contaminant: "Hierro",   value: "2.67 mg/L",   excede: "0.6 veces",  level: "sin",      x: "57%", y: "37%" },
+  { id: "pucara",     name: "Cuenca Pucará",     contaminant: "Hierro",   value: "128.07 mg/L", excede: "25.6 veces", level: "high",     x: "29%", y: "50%" },
+  { id: "ilave",      name: "Cuenca Ilave",      contaminant: "Arsénico", value: "0.03 mg/L",   excede: "3.4 veces",  level: "moderate", x: "50%", y: "56%" },
+  { id: "illpa",      name: "Cuenca Illpa",      contaminant: "Aluminio", value: "13.13 mg/L",  excede: "2.6 veces",  level: "moderate", x: "66%", y: "49%" },
+  { id: "suches",     name: "Cuencas Suches",    contaminant: "Aluminio", value: "40.28 mg/L",  excede: "5.0 veces",  level: "high",     x: "27%", y: "70%" },
+  { id: "ramis",      name: "Intercuenca Ramis", contaminant: "Hierro",   value: "178.05 mg/L", excede: "35.6 veces", level: "critical", x: "49%", y: "72%" },
+  { id: "huancane",   name: "Cuenca Huancané",   contaminant: "Cobre",    value: "3.00 mg/L",   excede: "15 veces",   level: "high",     x: "61%", y: "74%" },
 ];
 
-// ── Cambia este nombre al archivo que pongas en /public ──
-const MAP_IMAGE = "/mapa_titicaca.png"; // acepta .png, .jpg, .webp, .svg
+
+const MAP_IMAGE = "/mapa_titicaca.png";
+
 
 export const MapaTiticacaSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
@@ -77,7 +82,7 @@ export const MapaTiticacaSection = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const active = activeIdx >= 0 ? CUENCAS[activeIdx] : null;
+  const active    = activeIdx >= 0 ? CUENCAS[activeIdx] : null;
   const activeCfg = active ? LEVELS[active.level] : null;
 
   return (
@@ -91,12 +96,11 @@ export const MapaTiticacaSection = () => {
         {/* Imagen del mapa */}
         <img
           src={MAP_IMAGE}
-          alt="Mapa Titicaca"
+          alt="Mapa cuencas hidrográficas del Lago Titicaca"
           style={{
             position: "absolute", inset: 0,
             width: "100%", height: "100%",
-            objectFit: "cover",
-            objectPosition: "center",
+            objectFit: "cover", objectPosition: "center",
             transform: `scale(${zoom.scale}) translate(${zoom.tx}%, ${zoom.ty}%)`,
             transition: "transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
             transformOrigin: "center center",
@@ -113,23 +117,17 @@ export const MapaTiticacaSection = () => {
         {/* Leyenda — abajo derecha */}
         <div style={{
           position: "absolute", bottom: 32, right: 32, zIndex: 30,
-          background: "rgba(18,24,27,0.92)",
-          border: "1px solid rgba(255,255,255,0.1)",
-          borderRadius: 10, padding: "18px 22px",
-          backdropFilter: "blur(14px)",
-          minWidth: 220,
+          background: "rgba(18,24,27,0.92)", border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: 10, padding: "18px 22px", backdropFilter: "blur(14px)", minWidth: 220,
         }}>
           <p style={{ color: "#90A4AE", fontSize: 10, letterSpacing: "0.14em", fontWeight: 700, margin: "0 0 14px", textTransform: "uppercase" }}>
             Leyenda
           </p>
           {Object.entries(LEVELS).map(([key, cfg]) => (
             <div key={key} style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
-              <div style={{
-                width: 14, height: 14, borderRadius: "50%", flexShrink: 0, marginTop: 2,
-                background: cfg.color, boxShadow: `0 0 7px ${cfg.color}`,
-              }} />
+              <div style={{ width: 14, height: 14, borderRadius: "50%", flexShrink: 0, marginTop: 2, background: cfg.color, boxShadow: `0 0 7px ${cfg.color}` }} />
               <div>
-                <p style={{ color: "#fff", fontSize: 12, fontWeight: 700, margin: 0, letterSpacing: "0.02em" }}>{cfg.label}</p>
+                <p style={{ color: "#fff", fontSize: 12, fontWeight: 700, margin: 0 }}>{cfg.label}</p>
                 <p style={{ color: "#78909C", fontSize: 11, margin: "2px 0 0" }}>{cfg.sub}</p>
               </div>
             </div>
@@ -144,14 +142,10 @@ export const MapaTiticacaSection = () => {
             <div key={c.id} style={{ position: "absolute", left: c.x, top: c.y, transform: "translate(-50%,-50%)", zIndex: 20 }}>
               {/* Popup */}
               <div style={{
-                position: "absolute",
-                bottom: "calc(100% + 12px)",
-                left: "50%",
+                position: "absolute", bottom: "calc(100% + 12px)", left: "50%",
                 width: 210,
-                background: "rgba(13,21,23,0.95)",
-                border: `1.5px solid ${cfg.color}`,
-                borderRadius: 10, padding: "10px 14px",
-                backdropFilter: "blur(12px)",
+                background: "rgba(13,21,23,0.95)", border: `1.5px solid ${cfg.color}`,
+                borderRadius: 10, padding: "10px 14px", backdropFilter: "blur(12px)",
                 boxShadow: `0 4px 24px rgba(0,0,0,0.5), 0 0 12px ${cfg.color}33`,
                 opacity: isActive ? 1 : 0,
                 transform: isActive ? "translateX(-50%) translateY(0)" : "translateX(-50%) translateY(6px)",
@@ -190,7 +184,7 @@ export const MapaTiticacaSection = () => {
           );
         })}
 
-        {/* Card detalle activo */}
+        {/* Card detalle activo*/}
         <div style={{
           position: "absolute", bottom: 28, left: 28, zIndex: 30, width: 260,
           opacity: active ? 1 : 0,
@@ -200,10 +194,8 @@ export const MapaTiticacaSection = () => {
         }}>
           {active && activeCfg && (
             <div style={{
-              background: "rgba(13,21,23,0.95)",
-              border: `1.5px solid ${activeCfg.color}`,
-              borderRadius: 12, padding: "14px 18px",
-              backdropFilter: "blur(14px)",
+              background: "rgba(13,21,23,0.95)", border: `1.5px solid ${activeCfg.color}`,
+              borderRadius: 12, padding: "14px 18px", backdropFilter: "blur(14px)",
               boxShadow: `0 8px 32px rgba(0,0,0,0.5), 0 0 20px ${activeCfg.color}33`,
             }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
