@@ -53,7 +53,7 @@ export default function StoryPopup({ onClose }: StoryPopupProps) {
               className="text-[16px] font-bold transition-opacity hover:opacity-70"
               onClick={() => {
                 setExpanded(false);
-                setOpen(false);
+                onClose();
               }}
             >
               ✕
