@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local AI / Beads (never commit)
+CLAUDE.md
+.claude/
+.dolt/
+beads.db
+beads/
+.env
+.env.*
+*.env
