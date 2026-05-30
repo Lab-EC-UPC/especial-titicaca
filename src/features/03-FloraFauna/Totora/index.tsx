@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, useCallback } from "react";
-import { motion } from "motion/react";
+import { motion, animate } from "motion/react";
 import { ChevronsRightLeft, ChevronsRight, ChevronsLeft } from "lucide-react";
 
 import MitadTotoraSana from "../../../assets/mitad-totora-sana.png";
@@ -42,6 +42,8 @@ export const TotoraSection = () => {
   const [isDragging, setIsDragging] = useState(false);
   const dragStartClientX = useRef(0);
   const dragStartSlider = useRef(0);
+  const latestSliderRef = useRef(0);
+  const snapAnimRef = useRef<{ stop: () => void } | null>(null);
 
   const measureJoin = useCallback(() => {
     if (sanaHalfRef.current && containerRef.current) {
@@ -50,9 +52,11 @@ export const TotoraSection = () => {
   }, []);
 
   const startDrag = useCallback((clientX: number) => {
+    snapAnimRef.current?.stop();
     setIsDragging(true);
     dragStartClientX.current = clientX;
     dragStartSlider.current = sliderX;
+    latestSliderRef.current = sliderX;
   }, [sliderX]);
 
   useEffect(() => {
@@ -70,11 +74,25 @@ export const TotoraSection = () => {
       const delta = clientX - dragStartClientX.current;
       const next = Math.max(-1, Math.min(1, dragStartSlider.current + (delta / container.offsetWidth) * 2));
       setSliderX(next);
+      latestSliderRef.current = next;
     };
 
     const onMouseMove = (e: MouseEvent) => onMove(e.clientX);
     const onTouchMove = (e: TouchEvent) => onMove(e.touches[0].clientX);
-    const onEnd = () => setIsDragging(false);
+    const onEnd = () => {
+      setIsDragging(false);
+      const current = latestSliderRef.current;
+      const target = Math.abs(current) > REVEAL_THRESHOLD ? Math.sign(current) : 0;
+      if (current === target) return;
+      snapAnimRef.current = animate(current, target, {
+        duration: 0.5,
+        ease: [0.25, 0.46, 0.45, 0.94],
+        onUpdate: (v) => {
+          setSliderX(v);
+          latestSliderRef.current = v;
+        },
+      });
+    };
 
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("mouseup", onEnd);
@@ -112,13 +130,28 @@ export const TotoraSection = () => {
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", userSelect: "none", pointerEvents: "none" }}
         />
 
-        <div style={{ position: "absolute", top: 0, left: "clamp(8px, 4vw, 12%)", bottom: 0, zIndex: 30, pointerEvents: "none" }}>
+        <div
+          className="absolute z-30 w-full text-center"
+          style={{ top: "clamp(60px, 12vh, 120px)", left: 0, pointerEvents: "none" }}
+        >
+          <p
+            className="uppercase text-white font-semibold"
+            style={{
+              fontSize: "clamp(11px, 1.2vw, 15px)",
+              letterSpacing: "clamp(2px, 0.4vw, 5px)",
+            }}
+          >
+            EL DETERIORO DE LA TOTORA
+          </p>
+        </div>
+
+        <div style={{ position: "absolute", top: 0, left: "clamp(20px, 16vw, 26%)", bottom: 0, zIndex: 30, pointerEvents: "none" }}>
           {sanaCards.map((card, i) => (
             <InfoCard key={i} text={card.text} top={card.top} side="left" visible={sanaVisible} delay={i * 0.1} />
           ))}
         </div>
 
-        <div style={{ position: "absolute", top: 0, right: "clamp(8px, 4vw, 12%)", bottom: 0, zIndex: 30, pointerEvents: "none" }}>
+        <div style={{ position: "absolute", top: 0, right: "clamp(20px, 16vw, 26%)", bottom: 0, zIndex: 30, pointerEvents: "none" }}>
           {enfermaCards.map((card, i) => (
             <InfoCard key={i} text={card.text} top={card.top} side="right" visible={enfermaVisible} delay={i * 0.1} />
           ))}
@@ -160,8 +193,8 @@ export const TotoraSection = () => {
                   width: "clamp(34px, 4.5vw, 48px)",
                   height: "clamp(34px, 4.5vw, 48px)",
                   borderRadius: "50%",
-                  background: "rgba(190,205,215,0.9)",
-                  border: "2px solid rgba(255,255,255,0.7)",
+                  background: "#C83C6E",
+                  border: "2px solid rgba(255,255,255,0.5)",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -171,7 +204,7 @@ export const TotoraSection = () => {
                   boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
                 }}
               >
-                <SliderIcon size={18} color="#2D3748" strokeWidth={2.5} />
+                <SliderIcon size={18} color="#ffffff" strokeWidth={2.5} />
               </div>
 
             </div>
