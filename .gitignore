@@ -32,6 +32,7 @@ beads/
 .env
 .env.*
 *.env
+.agents
 
 # Local Netlify folder
 .netlify
