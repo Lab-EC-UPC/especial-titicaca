@@ -5,7 +5,7 @@ import { createScrollTimeline } from "./timeline";
 import { ScrollMessage } from "./ScrollMessage";
 import "./juliaca.css";
 
-import videoSrc from "./assets/video.mp4";
+import videoSrc from "./assets/juliaca_com.mp4";
 import metalesImage from "./assets/metales_titicaca.png";
 import vertimientosImage from "./assets/origen_vertimientos.png";
 
@@ -63,8 +63,9 @@ export const JuliacaSection = () => {
 
             <ScrollMessage start={0.1} end={0.15}>
                 <ScrollMessage.Paragraph>
-                    El olor fétido del río, la ausencia de peces y las enfermedades constantes revelan años de promesas
-                    incumplidas.
+                    Lo que observas aquí es solo una parte del problema.
+                    <br />
+                    Río arriba se acumulan residuos que continúan avanzando por la cuenca.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 

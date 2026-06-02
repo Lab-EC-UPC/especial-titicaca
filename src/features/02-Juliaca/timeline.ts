@@ -42,8 +42,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
     );
 
     gsap.set(video, {
-        filter: "blur(0px)",
-        willChange: "filter",
+        willChange: "auto",
     });
 
     const tl = gsap.timeline({
@@ -84,15 +83,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
             scene.start
         );
 
-        tl.to(
-            video,
-            {
-                filter: "blur(2px)",
-                duration: fadeDuration,
-                ease: "power2.out",
-            },
-            scene.start
-        );
+        
 
         // fade out
         tl.to(
@@ -106,15 +97,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
             Math.max(scene.end - fadeDuration, scene.start + 0.01)
         );
 
-        tl.to(
-            video,
-            {
-                filter: "blur(0px)",
-                duration: fadeDuration,
-                ease: "power2.in",
-            },
-            Math.max(scene.end - fadeDuration, scene.start + 0.01)
-        );
+        
     });
 
     return tl;
