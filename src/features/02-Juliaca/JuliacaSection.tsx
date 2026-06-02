@@ -69,17 +69,17 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.2} end={0.25}>
-                <ScrollMessage.Paragraph>
-                    Lo que observas aquí es solo una parte del problema. Río arriba se acumulan residuos que continúan
-                    avanzando por la cuenca.
-                </ScrollMessage.Paragraph>
-            </ScrollMessage>
-
             <ScrollMessage start={0.3} end={0.4}>
-                <ScrollMessage.Heading>CAP 1: JULIACA</ScrollMessage.Heading>
+                <ScrollMessage.Chapter>Capítulo I</ScrollMessage.Chapter>
+                <ScrollMessage.Heading>
+                    CONTAMINACIÓN QUE
+                    <br />
+                    ARRASTRA COATA
+                </ScrollMessage.Heading>
                 <ScrollMessage.Paragraph>
-                    Juliaca concentra más del 80% de las aguas residuales que ingresan a la cuenca del Titicaca.
+                    Las evaluaciones oficiales confirman el acelerado deterioro del río Coata
+                    <br />
+                    como vía de transporte de la contaminación hacia el Titicaca.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
