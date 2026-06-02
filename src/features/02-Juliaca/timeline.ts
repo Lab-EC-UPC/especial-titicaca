@@ -9,7 +9,7 @@ type Scene = {
     end: number;
 };
 
-const SCROLL_DISTANCE = 6000;
+const SCROLL_DISTANCE = 4000;
 
 function getScenes(container: HTMLElement): Scene[] {
     return Array.from(
@@ -83,7 +83,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
             scene.start
         );
 
-        
+
 
         // fade out
         tl.to(
@@ -97,7 +97,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
             Math.max(scene.end - fadeDuration, scene.start + 0.01)
         );
 
-        
+
     });
 
     return tl;

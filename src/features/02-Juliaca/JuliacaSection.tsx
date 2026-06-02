@@ -61,7 +61,7 @@ export const JuliacaSection = () => {
 
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.04)_45%,rgba(0,0,0,0.2))]" />
 
-            <ScrollMessage start={0.1} end={0.15}>
+            <ScrollMessage start={0.05} end={0.15}>
                 <ScrollMessage.Paragraph>
                     Lo que observas aquí es solo una parte del problema.
                     <br />
@@ -69,7 +69,7 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.3} end={0.4}>
+            <ScrollMessage start={0.2} end={0.3}>
                 <ScrollMessage.Chapter>Capítulo I</ScrollMessage.Chapter>
                 <ScrollMessage.Heading>
                     CONTAMINACIÓN QUE
@@ -85,8 +85,13 @@ export const JuliacaSection = () => {
 
             <ScrollMessage start={0.45} end={0.5}>
                 <ScrollMessage.Paragraph>
-                    El crecimiento urbano supera los sistemas de tratamiento y los residuos terminan recorriendo el río
-                    Coata.
+                    De acuerdo con la Autoridad Nacional del Agua (ANA), las zonas bajo
+                    <br />
+                    alarma máxima en la cuenca aumentaron en la última década.
+                    <br />
+                    Se registra que los puntos críticos identificados por vertimientos pasó
+                    <br />
+                    de 8 en el 2015 a 11 en las evaluaciones del 2025.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
