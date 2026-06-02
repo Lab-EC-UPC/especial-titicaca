@@ -59,8 +59,6 @@ export const JuliacaSection = () => {
                 preload="auto"
             />
 
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.04)_45%,rgba(0,0,0,0.2))]" />
-
             <ScrollMessage start={0.05} end={0.15}>
                 <ScrollMessage.Paragraph>
                     Lo que observas aquí es solo una parte del problema.
