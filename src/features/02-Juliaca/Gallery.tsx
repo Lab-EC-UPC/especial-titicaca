@@ -14,7 +14,7 @@ type GalleryProps = {
 };
 
 export const Gallery = ({ title, images, start, snap, transition }: GalleryProps) => {
-    const trans = transition ?? Math.round(snap! * 0.7);
+    const trans = transition ?? Math.round((snap ?? 130) * 0.7);
     return (
         <div
             className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none"

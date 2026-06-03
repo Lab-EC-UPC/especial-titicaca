@@ -36,7 +36,7 @@ export const JuliacaSection = () => {
             if (video.readyState >= 1) {
                 setupTimeline();
             } else {
-                video.addEventListener("loadedmetadata", setupTimeline, { once: true });
+                video.addEventListener("loadedmetadata", setupTimeline);
             }
 
             const onVisibility = contextSafe!(() => {

@@ -46,7 +46,11 @@ function getGalleryConfig(container: HTMLElement): {
     const start = Number(el.dataset.start);
     const images = Number(el.dataset.images);
     const snap = Number(el.dataset.snap);
-    const transition = Number(el.dataset.transition) ?? Math.round(snap * 0.7);
+    if ([start, images, snap].some(Number.isNaN)) return null;
+
+    const transition = el.dataset.transition !== undefined
+        ? Number(el.dataset.transition)
+        : Math.round(snap * 0.7);
     const width = images * (snap + transition);
 
     return {
@@ -65,13 +69,12 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
     const gallery = getGalleryConfig(container);
     const extraScroll = gallery ? gallery.width : 0;
     const totalScroll = SCROLL_DISTANCE + extraScroll;
+    const fadeDuration = 0.02;
 
     gsap.set(
         scenes.map((scene) => scene.element),
         { autoAlpha: 0, y: 10 }
     );
-
-    gsap.set(video, { willChange: "auto" });
 
     const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -91,7 +94,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         const gEnd = gallery.endPx / totalScroll;
         const pauseTime = (gallery.startPx / SCROLL_DISTANCE) * video.duration;
 
-        const holdStart = gStart + 0.02;
+        const holdStart = gStart + fadeDuration;
         tl.to(video, { currentTime: pauseTime, duration: holdStart, ease: "none" }, 0);
         tl.to(video, { currentTime: pauseTime, duration: gEnd - holdStart, ease: "none" }, holdStart);
         tl.to(video, { currentTime: video.duration, duration: 1 - gEnd, ease: "none" }, gEnd);
@@ -100,16 +103,15 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
     }
 
     // --- scenes ---
-    scenes.forEach((scene) => {
-        const convertPx = (oldProgress: number) => {
-            const px = oldProgress * SCROLL_DISTANCE;
-            if (gallery && px >= gallery.startPx) {
-                return (px + gallery.width) / totalScroll;
-            }
-            return px / totalScroll;
-        };
+    const convertPx = (oldProgress: number) => {
+        const px = oldProgress * SCROLL_DISTANCE;
+        if (gallery && px >= gallery.startPx) {
+            return (px + gallery.width) / totalScroll;
+        }
+        return px / totalScroll;
+    };
 
-        const fadeDuration = 0.02;
+    scenes.forEach((scene) => {
 
         // Fade in
         tl.to(
@@ -132,8 +134,8 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         const gEnd = gallery.endPx / totalScroll;
         const gDur = gallery.width / totalScroll;
 
-        tl.to(gallery.element, { autoAlpha: 1, duration: 0.02, ease: "power2.out" }, gStart);
-        tl.to(gallery.element, { autoAlpha: 0, duration: 0.02, ease: "power2.in" }, gEnd);
+        tl.to(gallery.element, { autoAlpha: 1, duration: fadeDuration, ease: "power2.out" }, gStart);
+        tl.to(gallery.element, { autoAlpha: 0, duration: fadeDuration, ease: "power2.in" }, gEnd);
 
         // carousel state
         const carouselState = { pos: 0 };

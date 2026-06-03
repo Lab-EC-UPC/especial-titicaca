@@ -13,9 +13,9 @@ export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
             data-start={start}
             data-end={end}
         >
-            <div className="relative flex w-full max-w-none items-center justify-center text-white">
+            <div className="flex w-full items-center justify-center text-white">
                 <div
-                    className="relative z-10 max-w-full [&_img]:block [&_img]:max-w-full"
+                    className="max-w-full [&_img]:block [&_img]:max-w-full"
                     style={{
                         backgroundColor: "rgba(10,10,10,0.75)",
                         padding: "4.5rem 3rem",
@@ -40,7 +40,6 @@ ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => (
             lineHeight: "130%",
             letterSpacing: "0.02em",
             textAlign: "center",
-            color: "white",
             fontWeight: 300,
             margin: 0,
             textWrap: "pretty",
@@ -62,7 +61,6 @@ ScrollMessage.Chapter = ({ children }: ScrollChapterProps) => (
             lineHeight: "1.6",
             letterSpacing: "0.25em",
             textAlign: "center",
-            color: "white",
             fontWeight: 400,
             margin: "0 0 8px 0",
             textTransform: "uppercase",
@@ -77,7 +75,7 @@ type ScrollHeadingProps = {
 };
 
 ScrollMessage.Heading = ({ children }: ScrollHeadingProps) => (
-    <h2 className="mb-2 text-center text-4xl font-bold leading-[1.4] tracking-[0.03em] text-white">{children}</h2>
+    <h2 className="mb-2 text-center text-4xl font-bold leading-[1.4] tracking-[0.03em]">{children}</h2>
 );
 
 type ScrollImageHeadingProps = {
@@ -85,7 +83,7 @@ type ScrollImageHeadingProps = {
 };
 
 ScrollMessage.ImageHeading = ({ children }: ScrollImageHeadingProps) => (
-    <h3 className="mb-6 text-center text-2xl leading-[1.4] tracking-[0.03em] text-white">{children}</h3>
+    <h3 className="mb-6 text-center text-2xl leading-[1.4] tracking-[0.03em]">{children}</h3>
 );
 
 type ScrollImageProps = {
@@ -94,5 +92,5 @@ type ScrollImageProps = {
 };
 
 ScrollMessage.Image = ({ src, alt }: ScrollImageProps) => (
-    <img src={src} alt={alt} className="max-h-[50vh] w-auto mx-auto" />
+    <img src={src} alt={alt} className="max-h-[50vh] mx-auto" />
 );
