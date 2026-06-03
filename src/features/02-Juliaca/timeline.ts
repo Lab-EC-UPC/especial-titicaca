@@ -154,21 +154,8 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
 
         // image positioning callback
         const imageEls = gallery.element.querySelectorAll<HTMLElement>("[data-gallery-image]");
-        const lastOpacities: number[] = [];
 
         tl.eventCallback("onUpdate", () => {
-            const progress = tl.progress();
-            const inGallery = progress >= gStart && progress <= gEnd;
-
-            if (!inGallery) {
-                const containerOpacity = parseFloat(gallery.element.style.opacity) || 0;
-                imageEls.forEach((el, idx) => {
-                    const base = lastOpacities[idx] ?? 0;
-                    el.style.opacity = String(base * containerOpacity);
-                });
-                return;
-            }
-
             const pos = carouselState.pos;
             const vw = window.innerWidth;
 
@@ -178,7 +165,6 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
                 const absDist = Math.abs(dist);
 
                 if (absDist >= 1.5) {
-                    lastOpacities[i] = 0;
                     el.style.opacity = "0";
                     return;
                 }
@@ -187,7 +173,6 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
                 const scale = 1 - absDist * 0.4;
                 const opacity = 1 - absDist * 0.65;
 
-                lastOpacities[i] = opacity;
                 el.style.opacity = String(opacity);
                 el.style.transform =
                     `translateX(calc(-50% + ${x}px)) translateY(-50%) scale(${scale})`;
