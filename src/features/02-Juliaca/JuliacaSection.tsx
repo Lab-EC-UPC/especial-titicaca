@@ -7,8 +7,7 @@ import { Gallery } from "./Gallery";
 import "./juliaca.css";
 
 import videoSrc from "./assets/juliaca_com.mp4";
-import metalesImage from "./assets/metales_titicaca.png";
-import vertimientosImage from "./assets/origen_vertimientos.png";
+
 import galeria01 from "./assets/galeria_01.webp";
 import galeria02 from "./assets/galeria_02.webp";
 import galeria03 from "./assets/galeria_03.webp";
@@ -119,7 +118,7 @@ export const JuliacaSection = () => {
                 transition={70}
             />
 
-            <ScrollMessage start={0.45} end={0.5}>
+            <ScrollMessage start={0.4} end={0.5}>
                 <ScrollMessage.Paragraph>
                     De acuerdo con la Autoridad Nacional del Agua (ANA), las zonas bajo
                     <br />
@@ -131,27 +130,31 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.55} end={0.6}>
-                <ScrollMessage.ImageHeading>Metales en el Lago Titicaca y sus cuencas</ScrollMessage.ImageHeading>
-                <ScrollMessage.Image src={metalesImage} alt="Metales en el Lago Titicaca y sus cuencas" />
-            </ScrollMessage>
-
-            <ScrollMessage start={0.65} end={0.7}>
+            <ScrollMessage start={0.55} end={0.65}>
                 <ScrollMessage.Paragraph>
-                    El río Coata concentra la mayor carga contaminante. Registra niveles de plomo y mercurio por encima
-                    de los límites permitidos.
+                    Los monitoreos técnicos realizados entre 2022 y 2024 evidencian que
+                    <br />
+                    las concentraciones de arsénico, plomo, cobre y zinc exceden los
+                    <br />
+                    Estándares de Calidad Ambiental (ECA) para Agua en múltiples
+                    <br />
+                    estaciones de muestreo. Específicamente, en la estación de control
+                    <br />
+                    del río Coata, la concentración de arsénico alcanzó los 0,034 mg/L
+                    <br />
+                    en 2022, una cifra que triplica el límite máximo permisible establecido
+                    <br />
+                    en la normativa (0,01 mg/L).
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.75} end={0.8}>
-                <ScrollMessage.ImageHeading>Origen de los vertimientos</ScrollMessage.ImageHeading>
-                <ScrollMessage.Image src={vertimientosImage} alt="Origen de los vertimientos" />
-            </ScrollMessage>
-
-            <ScrollMessage start={0.85} end={0.9}>
+            <ScrollMessage start={0.75} end={0.85}>
                 <ScrollMessage.Paragraph>
-                    El recorrido de los vertimientos termina en la bahía interior de Puno. El Organismo de Evaluación y
-                    Fiscalización Ambiental (OEFA) la identifica como una de las zonas más afectadas del Lago Titicaca.
+                    El recorrido de los vertimientos termina en la bahía interior de Puno.
+                    <br />
+                    El Organismo de Evaluación y Fiscalización Ambiental (OEFA) la identifica
+                    <br />
+                    como una de las zonas más afectadas del Lago Titicaca.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
         </div>
