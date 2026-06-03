@@ -3,11 +3,16 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { createScrollTimeline } from "./timeline";
 import { ScrollMessage } from "./ScrollMessage";
+import { Gallery } from "./Gallery";
 import "./juliaca.css";
 
 import videoSrc from "./assets/juliaca_com.mp4";
 import metalesImage from "./assets/metales_titicaca.png";
 import vertimientosImage from "./assets/origen_vertimientos.png";
+import galeria01 from "./assets/galeria_01.webp";
+import galeria02 from "./assets/galeria_02.webp";
+import galeria03 from "./assets/galeria_03.webp";
+import galeria04 from "./assets/galeria_04.webp";
 
 gsap.registerPlugin(useGSAP);
 
@@ -80,6 +85,39 @@ export const JuliacaSection = () => {
                     como vía de transporte de la contaminación hacia el Titicaca.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
+
+            <Gallery
+                title="¿Qué revela el paso del tiempo?"
+                images={[
+                    {
+                        src: galeria01,
+                        alt: "Descripción de 10 palabras",
+                        description: "Descripción de 10 palabras",
+                        subtext: "El comercio / 1980",
+                    },
+                    {
+                        src: galeria02,
+                        alt: "Descripción de 10 palabras",
+                        description: "Descripción de 10 palabras",
+                        subtext: "El comercio / 1986",
+                    },
+                    {
+                        src: galeria03,
+                        alt: "Descripción de 10 palabras",
+                        description: "Descripción de 10 palabras",
+                        subtext: "Reynaldo Yucra / 2026",
+                    },
+                    {
+                        src: galeria04,
+                        alt: "Descripción de 10 palabras",
+                        description: "Descripción de 10 palabras",
+                        subtext: "Reynaldo Yucra / 2026",
+                    },
+                ]}
+                start={0.35}
+                snap={130}
+                transition={70}
+            />
 
             <ScrollMessage start={0.45} end={0.5}>
                 <ScrollMessage.Paragraph>
