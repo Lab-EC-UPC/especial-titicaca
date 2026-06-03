@@ -114,7 +114,7 @@ export const JuliacaSection = () => {
                         subtext: "Reynaldo Yucra / 2026",
                     },
                 ]}
-                start={0.35}
+                start={0.34}
                 snap={130}
                 transition={70}
             />

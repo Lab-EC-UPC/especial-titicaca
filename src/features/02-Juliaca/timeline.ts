@@ -91,8 +91,9 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         const gEnd = gallery.endPx / totalScroll;
         const pauseTime = (gallery.startPx / SCROLL_DISTANCE) * video.duration;
 
-        tl.to(video, { currentTime: pauseTime, duration: gStart, ease: "none" }, 0);
-        tl.to(video, { currentTime: pauseTime, duration: gEnd - gStart, ease: "none" }, gStart);
+        const holdStart = gStart + 0.02;
+        tl.to(video, { currentTime: pauseTime, duration: holdStart, ease: "none" }, 0);
+        tl.to(video, { currentTime: pauseTime, duration: gEnd - holdStart, ease: "none" }, holdStart);
         tl.to(video, { currentTime: video.duration, duration: 1 - gEnd, ease: "none" }, gEnd);
     } else {
         tl.to(video, { currentTime: video.duration, duration: 1, ease: "none" }, 0);
@@ -153,14 +154,17 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
 
         // image positioning callback
         const imageEls = gallery.element.querySelectorAll<HTMLElement>("[data-gallery-image]");
+        const lastOpacities: number[] = [];
 
         tl.eventCallback("onUpdate", () => {
             const progress = tl.progress();
             const inGallery = progress >= gStart && progress <= gEnd;
 
             if (!inGallery) {
-                imageEls.forEach((el) => {
-                    el.style.opacity = "0";
+                const containerOpacity = parseFloat(gallery.element.style.opacity) || 0;
+                imageEls.forEach((el, idx) => {
+                    const base = lastOpacities[idx] ?? 0;
+                    el.style.opacity = String(base * containerOpacity);
                 });
                 return;
             }
@@ -174,6 +178,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
                 const absDist = Math.abs(dist);
 
                 if (absDist >= 1.5) {
+                    lastOpacities[i] = 0;
                     el.style.opacity = "0";
                     return;
                 }
@@ -182,6 +187,7 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
                 const scale = 1 - absDist * 0.4;
                 const opacity = 1 - absDist * 0.65;
 
+                lastOpacities[i] = opacity;
                 el.style.opacity = String(opacity);
                 el.style.transform =
                     `translateX(calc(-50% + ${x}px)) translateY(-50%) scale(${scale})`;
