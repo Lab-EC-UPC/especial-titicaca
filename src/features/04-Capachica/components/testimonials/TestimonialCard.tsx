@@ -24,32 +24,43 @@ export const TestimonialCard = ({
 
   return (
     <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-3xl">
-      <div className="relative w-full bg-white/90 backdrop-blur-sm rounded-lg px-8 py-12 md:px-14 md:py-16 shadow-2xl text-center">
-        <div className="
-          absolute top-0 left-1/2
-          -translate-x-1/2 -translate-y-1/2
-          bg-black text-white font-bold
-          text-xs md:text-sm
-          px-10 py-2.5 rounded-md
-          whitespace-nowrap
-        ">
-          {name}
+      <div className="relative w-full text-center px-8 py-12 md:px-14 md:py-16 bg-white/15 border-2 border-white/20 backdrop-blur-[15px] rounded-[15px] shadow-2xl">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[239.23px] h-[56.97px] bg-[#21292C] rounded-md flex items-center justify-center">
+          <span
+            style={{
+              fontFamily: "Citizen",
+              fontStyle: "normal",
+              fontWeight: 700,
+              fontSize: "19px",
+              lineHeight: "19px",
+              textAlign: "center",
+              color: "#FFFFFF",
+            }}
+          >
+            {name}
+          </span>
         </div>
 
-        <p className="text-gray-800 text-base sm:text-lg md:text-xl leading-relaxed">
+        <p
+          style={{
+            fontFamily: "Elza, Arial, Helvetica, sans-serif",
+            fontStyle: "normal",
+            fontWeight: 400,
+            fontSize: "26px",
+            lineHeight: "31px",
+            textAlign: "center",
+            color: "#FFFFFF",
+            maxWidth: "698.4px",
+            margin: "0 auto",
+          }}
+        >
           {testimony[currentIndex].text}
         </p>
 
         <button
           onClick={isLast ? onClose : handleNext}
           aria-label={isLast ? "Cerrar testimonio" : "Continuar testimonio"}
-          className="
-            absolute bottom-0 left-1/2
-            -translate-x-1/2 translate-y-1/2
-            w-11 h-11
-            flex items-center justify-center
-            hover:opacity-80 transition-opacity duration-300
-          "
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-11 h-11 flex items-center justify-center hover:opacity-80 transition-opacity duration-300"
         >
           <img
             src={isLast ? closeIcon : nextIcon}

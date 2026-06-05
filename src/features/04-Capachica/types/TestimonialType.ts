@@ -8,6 +8,7 @@ export interface Testimonial {
   name: string;
   testimony: TestimonyItem[];
   backgroundImage: string;
+  characterImage: string;
   audioSrc: string;
   clickArea: {
     left: string;
