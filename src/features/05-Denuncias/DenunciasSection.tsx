@@ -1,7 +1,21 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
+// ─── Types
+type ProjectType = "tecnica" | "administrativa" | "transparencia";
+
+interface Project {
+  id: number;
+  label: string;
+  type: ProjectType;
+  x: number;
+  y: number;
+  description: string;
+  error: string;
+  budget: string;
+}
+
 // ─── Data
-const PROJECTS = [
+const PROJECTS: Project[] = [
   {
     id: 1,
     label: "Proyecto 1",
@@ -118,7 +132,7 @@ const TYPE_CONFIG = {
 };
 
 // Gem SVG
-function GemNode({ type, active }) {
+function GemNode({ type, active }: { type: ProjectType; active: boolean }) {
   const cfg = TYPE_CONFIG[type];
   const [c0, c1, c2, c3] = cfg.gem;
   return (
@@ -147,9 +161,9 @@ function GemNode({ type, active }) {
 
 // Main Section
 export const DenunciasSection = () => {
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState<Project | null>(null);
   const [closing, setClosing] = useState(false);
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ w: 800, h: 500 });
 
   useEffect(() => {
@@ -166,14 +180,14 @@ export const DenunciasSection = () => {
   }, []);
 
   const getPos = useCallback(
-    (p) => ({
+    (p: Project) => ({
       x: (p.x / 100) * dims.w,
       y: (p.y / 100) * dims.h,
     }),
     [dims]
   );
 
-  const handleNodeClick = (p) => {
+  const handleNodeClick = (p: Project) => {
     if (selected?.id === p.id) {
       handleClose();
       return;
@@ -277,6 +291,7 @@ export const DenunciasSection = () => {
           {CONNECTIONS.map(([aId, bId]) => {
             const a = PROJECTS.find((p) => p.id === aId);
             const b = PROJECTS.find((p) => p.id === bId);
+            if (!a || !b) return null;
             const pa = getPos(a);
             const pb = getPos(b);
             const isActive = selected && (selected.id === aId || selected.id === bId);
