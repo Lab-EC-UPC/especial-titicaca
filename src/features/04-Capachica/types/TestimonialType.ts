@@ -1,3 +1,7 @@
+/**
+ * Shared domain types used across the testimonial section.
+ */
+
 export interface TestimonyItem {
   id: number;
   text: string;

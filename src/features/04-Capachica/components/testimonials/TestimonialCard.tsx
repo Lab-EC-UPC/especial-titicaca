@@ -1,3 +1,7 @@
+/**
+ * Testimonial card with multi-step navigation between testimony fragments.
+ */
+
 import { useState } from "react";
 import closeIcon from "/src/assets/testimonials/icons/close-icon.png";
 import nextIcon from "/src/assets/testimonials/icons/next-icon.png";
@@ -9,11 +13,7 @@ interface TestimonialCardProps {
   onClose: () => void;
 }
 
-export const TestimonialCard = ({
-  name,
-  testimony,
-  onClose,
-}: TestimonialCardProps) => {
+export const TestimonialCard = ({ name, testimony, onClose }: TestimonialCardProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const isLast = currentIndex === testimony.length - 1;
@@ -23,50 +23,20 @@ export const TestimonialCard = ({
   };
 
   return (
-    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 w-[92%] max-w-3xl">
-      <div className="relative w-full text-center px-8 py-12 md:px-14 md:py-16 bg-white/15 border-2 border-white/20 backdrop-blur-[15px] rounded-[15px] shadow-2xl">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[239.23px] h-[56.97px] bg-[#21292C] rounded-md flex items-center justify-center">
-          <span
-            style={{
-              fontFamily: "Citizen",
-              fontStyle: "normal",
-              fontWeight: 700,
-              fontSize: "19px",
-              lineHeight: "19px",
-              textAlign: "center",
-              color: "#FFFFFF",
-            }}
-          >
+    <div className="absolute bottom-10 left-1/2 z-20 w-[92%] max-w-3xl -translate-x-1/2">
+      <div className="relative w-full rounded-[15px] border-2 border-white/20 bg-white/15 px-8 py-12 text-center shadow-2xl backdrop-blur-[15px] md:px-14 md:py-16">
+        <div className="absolute left-1/2 top-0 flex h-[56.97px] w-[239.23px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-[#21292C]">
+          <span className="font-[Citizen] text-[19px] font-bold text-white">
             {name}
           </span>
         </div>
 
-        <p
-          style={{
-            fontFamily: "Elza, Arial, Helvetica, sans-serif",
-            fontStyle: "normal",
-            fontWeight: 400,
-            fontSize: "26px",
-            lineHeight: "31px",
-            textAlign: "center",
-            color: "#FFFFFF",
-            maxWidth: "698.4px",
-            margin: "0 auto",
-          }}
-        >
+        <p className="mx-auto max-w-[698.4px] text-center font-[Elza,Arial,Helvetica,sans-serif] text-[26px] font-normal leading-7.75 text-white">
           {testimony[currentIndex].text}
         </p>
 
-        <button
-          onClick={isLast ? onClose : handleNext}
-          aria-label={isLast ? "Cerrar testimonio" : "Continuar testimonio"}
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2 w-11 h-11 flex items-center justify-center hover:opacity-80 transition-opacity duration-300"
-        >
-          <img
-            src={isLast ? closeIcon : nextIcon}
-            alt={isLast ? "Cerrar" : "Continuar"}
-            className="w-full h-full object-contain"
-          />
+        <button onClick={isLast ? onClose : handleNext} aria-label={isLast ? "Cerrar testimonio" : "Continuar testimonio"} className="absolute bottom-0 left-1/2 flex h-11 w-11 -translate-x-1/2 translate-y-1/2 items-center justify-center transition-opacity duration-300 hover:opacity-80">
+          <img src={isLast ? closeIcon : nextIcon} alt={isLast ? "Cerrar" : "Continuar"} className="h-full w-full object-contain" />
         </button>
       </div>
     </div>

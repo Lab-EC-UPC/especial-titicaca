@@ -1,3 +1,7 @@
+/**
+ * Testimonial experience combining background, character, audio controls and story card.
+ */
+
 import type { Testimonial } from "../../types/TestimonialType";
 import { TestimonialAudioButton } from "./TestimonialAudioButton";
 import { TestimonialCard } from "./TestimonialCard";
@@ -9,18 +13,12 @@ interface TestimonialPersonViewProps {
   onToggleAudio: () => void;
 }
 
-export const TestimonialPersonView = ({
-  testimonial,
-  isPlaying,
-  onClose,
-  onToggleAudio,
-}: TestimonialPersonViewProps) => (
-  <div className="w-full h-screen relative overflow-hidden">
+export const TestimonialPersonView = ({ testimonial, isPlaying, onClose, onToggleAudio }: TestimonialPersonViewProps) => (
+  <div className="relative h-screen w-full overflow-hidden">
+    <img src={testimonial.backgroundImage} alt={testimonial.name} className="absolute inset-0 h-full w-full object-cover" />
 
-    <img src={testimonial.backgroundImage} alt={testimonial.name} className="absolute inset-0 w-full h-full object-cover" />
-
-   <div className="absolute bottom-0 left-1/2 md:left-[53%] -translate-x-1/2 w-[90%] md:w-[65%] overflow-hidden md:h-[85%] h-auto">
-      <img src={testimonial.characterImage} alt={`Personaje ${testimonial.name}`} className="w-full h-auto block md:h-[180%] md:object-top md:object-cover" />
+    <div className="absolute bottom-0 left-1/2 w-[90%] -translate-x-1/2 overflow-hidden md:left-[53%] md:h-[85%] md:w-[65%]">
+      <img src={testimonial.characterImage} alt={`Personaje ${testimonial.name}`} className="block h-auto w-full md:h-[180%] md:object-cover md:object-top" />
     </div>
 
     <TestimonialAudioButton isPlaying={isPlaying} onToggle={onToggleAudio} />
