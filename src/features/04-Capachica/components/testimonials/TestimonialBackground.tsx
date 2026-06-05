@@ -1,8 +1,5 @@
 import { useState } from "react";
-import {
-  TESTIMONIAL_BACKGROUND,
-  type Testimonial,
-} from "../../constants/testimonial.constants";
+import { TESTIMONIAL_BACKGROUND, type Testimonial } from "../../constants/testimonial.constants";
 
 const TOOLTIP_STYLES: string[] = [
   "bg-[#0EA483] text-white",

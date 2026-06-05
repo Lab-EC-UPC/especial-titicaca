@@ -1,7 +1,7 @@
-import bg from "/src/assets/testimonials/testimonial-background.png";
-import person1Bg from "/src/assets/testimonials/testimonial-person-1.png";
-import person2Bg from "/src/assets/testimonials/testimonial-person-2.png";
-import person3Bg from "/src/assets/testimonials/testimonial-person-3.png";
+import bg from "/src/assets/testimonials/testimonials-background.png";
+import person1Bg from "/src/assets/testimonials/capachica-landscape-background.png";
+import person2Bg from "/src/assets/testimonials/capachica-landscape-background.png";
+import person3Bg from "/src/assets/testimonials/capachica-landscape-background.png";
 
 export interface Testimonial {
   id: number;
