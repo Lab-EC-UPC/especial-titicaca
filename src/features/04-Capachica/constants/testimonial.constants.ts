@@ -1,7 +1,7 @@
-import bg from "/src/assets/testimonials/testimonials-background.png";
-import person1Bg from "/src/assets/testimonials/capachica-landscape-background.png";
-import person2Bg from "/src/assets/testimonials/capachica-landscape-background.png";
-import person3Bg from "/src/assets/testimonials/capachica-landscape-background.png";
+import bg from "/src/assets/testimonials/images/testimonials-background.png";
+import person1Bg from "/src/assets/testimonials/images/capachica-landscape-background.png";
+import person2Bg from "/src/assets/testimonials/images/capachica-landscape-background.png";
+import person3Bg from "/src/assets/testimonials/images/capachica-landscape-background.png";
 import type { Testimonial } from "../types/TestimonialType";
 
 export const TESTIMONIAL_BACKGROUND = bg;

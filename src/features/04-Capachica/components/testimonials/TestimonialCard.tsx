@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ChevronRight } from "lucide-react";
+import closeIcon from "/src/assets/testimonials/icons/close-icon.png";
+import nextIcon from "/src/assets/testimonials/icons/next-icon.png";
 import type { TestimonyItem } from "../../types/TestimonialType";
 
 interface TestimonialCardProps {
@@ -39,37 +40,23 @@ export const TestimonialCard = ({
           {testimony[currentIndex].text}
         </p>
 
-        {isLast ? (
-          <button
-            onClick={onClose}
-            aria-label="Cerrar testimonio"
-            className="
-              absolute bottom-0 left-1/2
-              -translate-x-1/2 translate-y-1/2
-              w-11 h-11 rounded-full
-              bg-gray-700/90 text-white font-bold text-base
-              flex items-center justify-center
-              hover:bg-gray-900 transition-all duration-300 shadow-xl
-            "
-          >
-            ✕
-          </button>
-        ) : (
-          <button
-            onClick={handleNext}
-            aria-label="Continuar testimonio"
-            className="
-              absolute bottom-0 left-1/2
-              -translate-x-1/2 translate-y-1/2
-              w-11 h-11 rounded-full
-              bg-gray-700/90 text-white
-              flex items-center justify-center
-              hover:bg-gray-900 transition-all duration-300 shadow-xl
-            "
-          >
-            <ChevronRight size={22} />
-          </button>
-        )}
+        <button
+          onClick={isLast ? onClose : handleNext}
+          aria-label={isLast ? "Cerrar testimonio" : "Continuar testimonio"}
+          className="
+            absolute bottom-0 left-1/2
+            -translate-x-1/2 translate-y-1/2
+            w-11 h-11
+            flex items-center justify-center
+            hover:opacity-80 transition-opacity duration-300
+          "
+        >
+          <img
+            src={isLast ? closeIcon : nextIcon}
+            alt={isLast ? "Cerrar" : "Continuar"}
+            className="w-full h-full object-contain"
+          />
+        </button>
       </div>
     </div>
   );
