@@ -1,4 +1,4 @@
-import type { Testimonial } from "../../constants/testimonial.constants";
+import type { Testimonial } from "../../types/TestimonialType";
 import { TestimonialAudioButton } from "./TestimonialAudioButton";
 import { TestimonialCard } from "./TestimonialCard";
 
@@ -21,13 +21,12 @@ export const TestimonialPersonView = ({
       alt={testimonial.name}
       className="w-full h-full object-cover"
     />
-
     <TestimonialAudioButton
       isPlaying={isPlaying}
       onToggle={onToggleAudio}
     />
-
     <TestimonialCard
+      key={testimonial.id}
       name={testimonial.name}
       testimony={testimonial.testimony}
       onClose={onClose}
