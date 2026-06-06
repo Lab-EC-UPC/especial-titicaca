@@ -23,17 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local AI / Beads (never commit)
-CLAUDE.md
-.claude/
-.dolt/
-beads.db
-beads/
+# Local AI / Beads 
 .env
 .env.*
 *.env
-.agents
 
-# Beads / Dolt files (added by bd init)
-*.db
-.beads-credential-key
+
