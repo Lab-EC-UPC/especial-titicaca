@@ -7,11 +7,11 @@ type CycleTitleProps = {
 export const CycleTitle = ({ start, end, title }: CycleTitleProps) => {
     return (
         <div
-            className="absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-8 opacity-0 pointer-events-none"
+            className="absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-18 opacity-0 pointer-events-none"
             data-start={start}
             data-end={end}
         >
-            <h2 className="text-sm font-bold uppercase tracking-[0.22em] text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] md:text-base">
+            <h2 className="font-[Citizen] text-center text-[40px] leading-10 font-bold uppercase text-white drop-shadow-[0_8px_32px_rgba(0,0,0,0.95)]">
                 {title}
             </h2>
         </div>

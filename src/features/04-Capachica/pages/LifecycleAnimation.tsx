@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { createScrollTimeline } from "../utils/timeline";
-import { IntroMessage } from "../components/animations/IntroMessage";
+import { Message } from "../components/animations/Message";
 import { ChapterTitle } from "../components/animations/ChapterTitle";
 import { CycleTitle } from "../components/animations/CycleTitle";
 import { CycleStep } from "../components/animations/CycleStep";
@@ -71,7 +71,7 @@ export const LifecycleAnimation = () => {
             {/* ── Overlays ─────────────────────────────────────────────────── */}
 
             {/* 1. Párrafo introductorio */}
-            <IntroMessage
+            <Message
                 start={0.0}
                 end={0.15}
                 text="El colapso ambiental del lago ya cruzó la orilla: la contaminación del agua está golpeando directamente la salud y la vida de las comunidades ribereñas."
@@ -83,7 +83,7 @@ export const LifecycleAnimation = () => {
                 end={0.28}
                 label="Capítulo III"
                 title={"Riesgos de salud en\nlas zonas ribereñas"}
-                description="En los distritos y comunidades adyacentes al río Coata y al litoral del Titicaca, la exposición a fuentes de agua contaminada coincide con la prevalencia de cuadros clínicos específicos en la población."
+                description={"En los distritos y comunidades adyacentes al río Coata y al litoral del Titicaca,\nla exposición a fuentes de agua contaminada coincide con la prevalencia de\ncuadros clínicos específicos en la población."}
             />
 
             {/* 3. Título del ciclo — persiste durante toda la secuencia A-D */}
@@ -123,7 +123,7 @@ export const LifecycleAnimation = () => {
 
             {/* Párrafo final del Ciclo de Vida */}
 
-            <IntroMessage
+            <Message
                 start={0.86}
                 end={0.95}
                 text="Los registros de entrevistas locales indican recurrencia de patologías gastrointestinales, dermatitis por contacto, cefaleas crónicas y afecciones respiratorias tras la interacción directa con el recurso hídrico. Asimismo, en el sector ganadero de Capachica, se documentan morbilidades en el ganado alpaquero y vacuno, caracterizadas por infecciones oculares, desnutrición y descarte forzoso de animales."
