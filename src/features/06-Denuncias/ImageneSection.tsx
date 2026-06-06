@@ -186,9 +186,9 @@ function Card({ card, onClick }: { card: CardData; onClick: (card: CardData) => 
         }}
       />
 
-      {/* dark gradient always present */}
-      <div className={`absolute inset-0 bg-gradient-to-t ${card.color}`}
-        style={{ opacity: hovered ? 0.5 : 0.75, transition: "opacity 0.4s ease" }}
+      {/* degradado neutro: las cards se ven en gris ("del pasado") salvo al hover */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10"
+        style={{ opacity: hovered ? 0.45 : 0.72, transition: "opacity 0.4s ease" }}
       />
 
       {/* shine */}
