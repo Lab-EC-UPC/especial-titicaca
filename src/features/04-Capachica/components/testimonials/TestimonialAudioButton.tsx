@@ -2,8 +2,8 @@
  * Audio control button for testimonial playback, allowing users to play or pause narration.
  */
 
-import audioMutedIcon from "/src/assets/testimonials/icons/audio-muted-icon.png";
-import audioUnmutedIcon from "/src/assets/testimonials/icons/audio-unmuted-icon.png";
+import audioMutedIcon from "../../assets/testimonials/icons/audio-muted-icon.png";
+import audioUnmutedIcon from "../../assets/testimonials/icons/audio-unmuted-icon.png";
 
 interface TestimonialAudioButtonProps {
   isPlaying: boolean;
