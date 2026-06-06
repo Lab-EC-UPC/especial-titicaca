@@ -5,6 +5,7 @@ import { MapaTiticacaSection } from "./features/03-MapaTiticaca/MapaTiticacaSect
 import { FloraFaunaSection } from "./features/04-FloraFauna/FloraFaunaSection";
 import { CapachicaSection } from "./features/05-Capachica/pages/CapachicaSection";
 import { DenunciasSection } from "./features/06-Denuncias/DenunciasSection";
+import { ImageneSection } from "./features/06-Denuncias/ImageneSection";
 import { FooterSection } from "./features/07-Footer/FooterSection";
 //import { CoordFinder } from "./components/CoordFinder";
 
@@ -40,6 +41,7 @@ function App() {
         <div id="florafauna">          <FloraFaunaSection />          </div>
         <div id="capachica">        <CapachicaSection />       </div>
         <div id="denuncias"> <DenunciasSection /> </div>
+        <div id="ima"> <ImageneSection/> </div>
         <div id="footer">        <FooterSection />       </div>
         
       </main>

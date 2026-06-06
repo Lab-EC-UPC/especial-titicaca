@@ -1,327 +1,450 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 
-// ─── Types
+// Types
 type ProjectType = "tecnica" | "administrativa" | "transparencia";
 
 interface Project {
   id: number;
   label: string;
   type: ProjectType;
-  x: number;
-  y: number;
+  // desktop position (% of canvas)
+  dx: number;
+  dy: number;
+  // mobile position (% of canvas)
+  mx: number;
+  my: number;
   description: string;
-  error: string;
   budget: string;
 }
 
-// ─── Data
+interface TypeConfig {
+  label: string;
+  color: string;
+  glow: string;
+  gem: [string, string, string, string, string, string];
+}
+
+// ─── Connection groups 
+const GROUP_P1_P5 = "p1p5";
+const GROUP_TEAL  = "teal";
+const GROUP_BLUE  = "blue";
+const GROUP_CROSS = "cross"; // always dim — never highlighted
+
+interface Connection {
+  a: number;
+  b: number;
+  group: string;
+}
+
+const CONNECTIONS: Connection[] = [
+  // ── Group P1↔P5 (morado) 
+  { a: 1, b: 5, group: GROUP_P1_P5 },
+
+  // ── Group teal: P2, P3, P6 
+  { a: 2, b: 3, group: GROUP_TEAL },
+  { a: 3, b: 6, group: GROUP_TEAL },
+  { a: 2, b: 6, group: GROUP_TEAL },
+
+  // ── Group blue-gray: P4, P7, P8 
+  { a: 4, b: 7, group: GROUP_BLUE },
+  { a: 7, b: 8, group: GROUP_BLUE },
+  { a: 4, b: 8, group: GROUP_BLUE },
+
+  // ── Cross connections — always dim 
+  { a: 1, b: 2, group: GROUP_CROSS },
+  { a: 1, b: 4, group: GROUP_CROSS },
+  { a: 2, b: 5, group: GROUP_CROSS },
+  { a: 3, b: 5, group: GROUP_CROSS },
+  { a: 4, b: 5, group: GROUP_CROSS },
+  { a: 5, b: 6, group: GROUP_CROSS },
+  { a: 5, b: 7, group: GROUP_CROSS },
+  { a: 5, b: 8, group: GROUP_CROSS },
+  { a: 6, b: 8, group: GROUP_CROSS },
+];
+
+// Which group does each node belong to (for highlighting logic)?
+const NODE_GROUP: Record<number, string> = {
+  1: GROUP_P1_P5,
+  5: GROUP_P1_P5,
+  2: GROUP_TEAL,
+  3: GROUP_TEAL,
+  6: GROUP_TEAL,
+  4: GROUP_BLUE,
+  7: GROUP_BLUE,
+  8: GROUP_BLUE,
+};
+
+// Project data 
 const PROJECTS: Project[] = [
   {
-    id: 1,
-    label: "Proyecto 1",
-    type: "tecnica",
-    x: 78,
-    y: 72,
-    description:
-      "Construcción de puente vehicular en la av. Los Héroes. Se ejecutó sin estudio de suelos actualizado y con materiales fuera de especificación.",
-    error: "Deficiencia estructural detectada en pilares principales.",
-    budget: "S/. 4,200,000",
+    id: 1, label: "Proyecto 1", type: "transparencia",
+    dx: 18, dy: 58,   mx: 28, my: 22,
+    description: "Construcción de puente vehicular en la av. Los Héroes. Se ejecutó sin estudio de suelos actualizado y con materiales fuera de especificación.",
+    budget: "4,200,000",
   },
   {
-    id: 2,
-    label: "Proyecto 2",
-    type: "administrativa",
-    x: 62,
-    y: 12,
-    description:
-      "Equipamiento de centro de salud primario. Los bienes fueron adquiridos a precio inflado y parte del lote nunca fue entregado.",
-    error: "Negligencia administrativa en proceso de adquisición.",
-    budget: "S/. 980,000",
+    id: 2, label: "Proyecto 2", type: "tecnica",
+    dx: 34, dy: 78,   mx: 12, my: 44,
+    description: "Equipamiento de centro de salud primario. Bienes adquiridos a precio inflado y parte del lote nunca fue entregado.",
+    budget: "980,000",
   },
   {
-    id: 3,
-    label: "Proyecto 3",
-    type: "tecnica",
-    x: 38,
-    y: 22,
-    description:
-      "Mejoramiento de pista y veredas en zona residencial. Obra paralizada sin justificación técnica registrada.",
-    error: "Abandono de obra tras el 60% de avance.",
-    budget: "S/. 1,560,000",
+    id: 3, label: "Proyecto 3", type: "tecnica",
+    dx: 52, dy: 78,   mx: 35, my: 62,
+    description: "Mejoramiento de pista y veredas en zona residencial. Obra paralizada sin justificación técnica registrada.",
+    budget: "1,560,000",
   },
   {
-    id: 4,
-    label: "Proyecto 4",
-    type: "transparencia",
-    x: 8,
-    y: 38,
-    description:
-      "Sistema de riego tecnificado para pequeños agricultores. No se realizaron rendiciones de cuenta ni informes de impacto.",
-    error: "Falta de transparencia en uso de fondos.",
-    budget: "S/. 730,000",
+    id: 4, label: "Proyecto 4", type: "administrativa",
+    dx: 44, dy: 18,   mx: 78, my: 22,
+    description: "Sistema de riego tecnificado para pequeños agricultores. No se realizaron rendiciones de cuenta ni informes de impacto.",
+    budget: "730,000",
   },
   {
-    id: 5,
-    label: "Proyecto 5",
-    type: "administrativa",
-    x: 10,
-    y: 58,
-    description:
-      "Construcción de losas deportivas en 5 distritos. Solo se ejecutaron 2 y los contratos presentan firmas irregulares.",
-    error: "Contratos con posibles falsificaciones documentarias.",
-    budget: "S/. 2,100,000",
+    id: 5, label: "Proyecto 5", type: "transparencia",
+    dx: 50, dy: 45,   mx: 62, my: 44,
+    description: "Construcción de losas deportivas en 5 distritos. Solo se ejecutaron 2 y los contratos presentan firmas irregulares.",
+    budget: "2,100,000",
   },
   {
-    id: 6,
-    label: "Proyecto 6",
-    type: "tecnica",
-    x: 42,
-    y: 55,
-    description:
-      "Instalación de paneles solares en comunidades rurales. Equipos instalados sin capacitación a beneficiarios ni plan de mantenimiento.",
-    error: "Deficiencia técnica en instalación y posventa.",
-    budget: "S/. 3,400,000",
+    id: 6, label: "Proyecto 6", type: "tecnica",
+    dx: 70, dy: 78,   mx: 78, my: 62,
+    description: "Instalación de paneles solares en comunidades rurales. Equipos instalados sin capacitación ni plan de mantenimiento.",
+    budget: "3,400,000",
   },
   {
-    id: 7,
-    label: "Proyecto 7",
-    type: "transparencia",
-    x: 20,
-    y: 78,
-    description:
-      "Programa de capacitación laboral juvenil. Asistentes registrados no coinciden con los beneficiarios reales identificados en campo.",
-    error: "Irregularidades en el registro de beneficiarios.",
-    budget: "S/. 540,000",
+    id: 7, label: "Proyecto 7", type: "administrativa",
+    dx: 82, dy: 26,   mx: 18, my: 80,
+    description: "Programa de capacitación laboral juvenil. Asistentes registrados no coinciden con los beneficiarios reales.",
+    budget: "540,000",
   },
   {
-    id: 8,
-    label: "Proyecto 8",
-    type: "administrativa",
-    x: 52,
-    y: 80,
-    description:
-      "Rehabilitación de infraestructura educativa en zonas de frontera. Pagos realizados a contratistas sin expediente técnico aprobado.",
-    error: "Pagos indebidos sin sustento técnico previo.",
-    budget: "S/. 1,870,000",
+    id: 8, label: "Proyecto 8", type: "administrativa",
+    dx: 88, dy: 68,   mx: 65, my: 88,
+    description: "Rehabilitación de infraestructura educativa en zonas de frontera. Pagos realizados sin expediente técnico aprobado.",
+    budget: "1,870,000",
   },
 ];
 
-const CONNECTIONS = [
-  [1, 2],[1, 6],[1, 8],[2, 3],[3, 4],[3, 6],[4, 5],[5, 6],[5, 7],[6, 8],[7, 8],
-];
-
-const TYPE_CONFIG = {
+const TYPE_CFG: Record<ProjectType, TypeConfig> = {
   tecnica: {
     label: "Deficiencias técnicas",
-    color: "#4ade80",
-    glow: "rgba(74,222,128,0.45)",
-    gem: ["#2d6a4f", "#52b788", "#95d5b2", "#1b4332"],
+    color: "#4a9aae",
+    glow: "rgba(74,154,174,0.6)",
+    gem: ["#2a5f73", "#3a7d96", "#6aabbd", "#1d4457", "#5c9db3", "#82c0d0"],
   },
   administrativa: {
-    label: "Negligencia administrativa",
-    color: "#60a5fa",
-    glow: "rgba(96,165,250,0.45)",
-    gem: ["#1e3a5f", "#2563eb", "#93c5fd", "#172554"],
+    label: "Neglicencia administrativa",
+    color: "#3a6a82",
+    glow: "rgba(58,106,130,0.6)",
+    gem: ["#1e4555", "#2d6070", "#4a8090", "#163545", "#3a7080", "#5a96a4"],
   },
   transparencia: {
     label: "Falta de transparencia",
-    color: "#f472b6",
-    glow: "rgba(244,114,182,0.45)",
-    gem: ["#6b21a8", "#a855f7", "#e879f9", "#3b0764"],
+    color: "#8a4a7a",
+    glow: "rgba(138,74,122,0.65)",
+    gem: ["#6a2a58", "#8a3a70", "#ae5890", "#451838", "#9a4880", "#c070b0"],
   },
-};
+} as const;
 
-// Gem SVG
-function GemNode({ type, active }: { type: ProjectType; active: boolean }) {
-  const cfg = TYPE_CONFIG[type];
-  const [c0, c1, c2, c3] = cfg.gem;
+// ─── Gem SVG 
+function GemSVG({
+  type,
+  size,
+  active,
+}: {
+  type: ProjectType;
+  size: number;
+  active: boolean;
+}) {
+  const c = TYPE_CFG[type];
+  const [c0, c1, c2, c3, c4, c5] = c.gem;
+  const f = active
+    ? `drop-shadow(0 0 16px ${c.glow}) drop-shadow(0 0 8px ${c.color})`
+    : `drop-shadow(0 0 7px ${c.glow})`;
   return (
     <svg
-      width={52}
-      height={52}
-      viewBox="0 0 52 52"
-      style={{
-        filter: active
-          ? `drop-shadow(0 0 16px ${cfg.glow}) drop-shadow(0 0 8px ${cfg.color})`
-          : `drop-shadow(0 0 5px ${cfg.glow})`,
-        transition: "filter 0.35s",
-        display: "block",
-      }}
+      width={size}
+      height={size}
+      viewBox="0 0 80 80"
+      style={{ display: "block", filter: f, transition: "filter 0.3s" }}
     >
-      <polygon points="26,4 46,18 40,44 12,44 6,18" fill={c0} />
-      <polygon points="26,4 46,18 26,14" fill={c2} opacity="0.7" />
-      <polygon points="26,4 6,18 26,14" fill={c1} opacity="0.5" />
-      <polygon points="26,14 46,18 40,44 26,38" fill={c1} opacity="0.6" />
-      <polygon points="26,14 6,18 12,44 26,38" fill={c3} opacity="0.5" />
-      <polygon points="26,38 40,44 12,44" fill={c0} opacity="0.8" />
-      <ellipse cx="22" cy="13" rx="4" ry="2" fill="white" opacity="0.18" transform="rotate(-10 22 13)" />
+      <polygon points="40,6 70,22 74,54 55,74 25,74 6,54 10,22" fill={c0} />
+      <polygon points="40,6 70,22 50,30 40,18" fill={c2} opacity="0.85" />
+      <polygon points="40,6 10,22 30,30 40,18" fill={c1} opacity="0.65" />
+      <polygon points="40,18 70,22 74,54 55,44" fill={c4} opacity="0.55" />
+      <polygon points="40,18 10,22 6,54 25,44" fill={c1} opacity="0.5" />
+      <polygon points="40,18 55,44 40,58 25,44" fill={c5} opacity="0.45" />
+      <polygon points="55,44 74,54 55,74 40,58" fill={c3} opacity="0.75" />
+      <polygon points="25,44 6,54 25,74 40,58" fill={c0} opacity="0.88" />
+      <polygon points="40,58 55,74 25,74" fill={c3} opacity="0.92" />
+      <ellipse cx="36" cy="20" rx="6" ry="3" fill="white" opacity="0.18"
+        transform="rotate(-12 36 20)" />
     </svg>
   );
 }
 
-// Main Section
+// Legend 
+function Legend({ inline }: { inline: boolean }) {
+  if (inline) {
+    // Mobile: box top-left
+    return (
+      <div style={{
+        display: "inline-flex",
+        flexDirection: "column",
+        gap: 8,
+        background: "rgba(20,24,34,0.7)",
+        border: "1px solid rgba(255,255,255,0.08)",
+        borderRadius: 8,
+        padding: "10px 14px",
+        margin: "0 0 0 12px",
+      }}>
+        <span style={{
+          fontFamily: "'Barlow Condensed',sans-serif",
+          fontSize: 10,
+          fontWeight: 700,
+          letterSpacing: "0.14em",
+          textTransform: "uppercase",
+          color: "#5a6272",
+          marginBottom: 2,
+        }}>Leyenda</span>
+        {(["tecnica", "administrativa", "transparencia"] as ProjectType[]).map((k) => (
+          <div key={k} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{
+              width: 18, height: 18, borderRadius: 3,
+              background: TYPE_CFG[k].color, flexShrink: 0, display: "inline-block",
+            }} />
+            <span style={{
+              fontFamily: "'Barlow Condensed',sans-serif",
+              fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+              textTransform: "uppercase", color: "#9aa3b0",
+            }}>{TYPE_CFG[k].label}</span>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Desktop: pill bar bottom
+  return (
+    <div style={{
+      display: "flex",
+      flexWrap: "wrap",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "clamp(8px,2vw,22px)",
+      margin: "0 clamp(12px,5%,64px) 24px",
+      background: "rgba(15,18,26,0.55)",
+      border: "1px solid rgba(255,255,255,0.07)",
+      borderRadius: 40,
+      padding: "10px 28px",
+    }}>
+      <span style={{
+        fontFamily: "'Barlow Condensed',sans-serif",
+        fontSize: "clamp(9px,1.1vw,11px)", fontWeight: 700,
+        letterSpacing: "0.14em", textTransform: "uppercase", color: "#5a6272",
+      }}>Leyenda</span>
+      {(["tecnica", "administrativa", "transparencia"] as ProjectType[]).map((k) => (
+        <div key={k} style={{
+          display: "flex", alignItems: "center", gap: 7,
+          fontSize: "clamp(9px,1.2vw,12px)", fontWeight: 600,
+          letterSpacing: "0.12em", textTransform: "uppercase", color: "#9aa3b0",
+          fontFamily: "'Barlow Condensed',sans-serif",
+        }}>
+          <span style={{
+            width: 18, height: 18, borderRadius: 3,
+            background: TYPE_CFG[k].color, flexShrink: 0, display: "inline-block",
+          }} />
+          {TYPE_CFG[k].label}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// Main component
 export const DenunciasSection = () => {
   const [selected, setSelected] = useState<Project | null>(null);
-  const [closing, setClosing] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [dims, setDims] = useState({ w: 800, h: 500 });
+  const [closing, setClosing]   = useState(false);
+  const wrapRef     = useRef<HTMLDivElement>(null);
+  const canvasRef   = useRef<HTMLDivElement>(null);
+  const [dims, setDims]     = useState({ w: 700, h: 420 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const update = () => {
-      if (containerRef.current) {
-        const r = containerRef.current.getBoundingClientRect();
-        setDims({ w: r.width, h: r.height });
-      }
+      if (!wrapRef.current) return;
+      const w = wrapRef.current.offsetWidth || 700;
+      const mobile = w < 600;
+      setIsMobile(mobile);
+      setDims({
+        w,
+        h: mobile ? Math.max(w * 1.5, 480) : Math.max(w * 0.58, 340),
+      });
     };
     update();
     const ro = new ResizeObserver(update);
-    if (containerRef.current) ro.observe(containerRef.current);
+    if (wrapRef.current) ro.observe(wrapRef.current);
     return () => ro.disconnect();
   }, []);
 
+  const nodeSize = Math.max(32, Math.min(62, dims.w * (isMobile ? 0.1 : 0.075)));
+
   const getPos = useCallback(
     (p: Project) => ({
-      x: (p.x / 100) * dims.w,
-      y: (p.y / 100) * dims.h,
+      x: ((isMobile ? p.mx : p.dx) / 100) * dims.w,
+      y: ((isMobile ? p.my : p.dy) / 100) * dims.h,
     }),
-    [dims]
+    [dims, isMobile]
   );
 
-  const handleNodeClick = (p: Project) => {
-    if (selected?.id === p.id) {
-      handleClose();
-      return;
-    }
+  // Nodes mismo grupo
+  const selectedGroup = selected ? NODE_GROUP[selected.id] : null;
+  const groupMemberIds: number[] = selectedGroup
+    ? PROJECTS.filter((p) => NODE_GROUP[p.id] === selectedGroup).map((p) => p.id)
+    : [];
+
+  const handleClick = (p: Project) => {
+    if (closing) return;
+    if (selected?.id === p.id) { handleClose(); return; }
     setClosing(false);
     setSelected(p);
   };
 
   const handleClose = () => {
     setClosing(true);
-    setTimeout(() => {
-      setSelected(null);
-      setClosing(false);
-    }, 300);
+    setTimeout(() => { setSelected(null); setClosing(false); }, 260);
   };
 
-  // IDs of nodes directly connected to the selected node
-  const connectedIds = selected
-    ? CONNECTIONS.filter(([a, b]) => a === selected.id || b === selected.id)
-        .flatMap(([a, b]) => [a, b])
-        .filter((id) => id !== selected.id)
-    : [];
+  // Popup positioning
+  const getPopupStyle = (p: Project): React.CSSProperties => {
+    const pos = getPos(p);
+    const pw  = Math.max(180, Math.min(260, dims.w * (isMobile ? 0.55 : 0.29)));
+    const ph  = 210;
+    let left  = pos.x - pw - nodeSize * 0.7;
+    let top   = pos.y - ph * 0.55;
+    if (left < 8)              left = pos.x + nodeSize * 0.7;
+    if (left + pw > dims.w - 8) left = pos.x - pw - nodeSize * 0.7;
+    if (top < 8)               top  = 8;
+    if (top + ph > dims.h - 8) top  = dims.h - ph - 8;
+    return {
+      position: "absolute", left, top, width: pw,
+      background: "rgba(30,36,48,0.94)",
+      backdropFilter: "blur(18px)",
+      WebkitBackdropFilter: "blur(18px)",
+      border: "1px solid rgba(255,255,255,0.1)",
+      borderRadius: 12,
+      padding: "16px 16px 14px",
+      zIndex: 40,
+      boxShadow: `0 10px 50px rgba(0,0,0,0.6), 0 0 24px ${TYPE_CFG[p.type].glow}`,
+    };
+  };
 
   return (
     <div
       id="denuncias"
-      className="relative overflow-hidden"
+      ref={wrapRef}
       style={{
-        background: "linear-gradient(160deg,#0d1117 0%,#0f1923 55%,#0d1117 100%)",
-        minHeight: "100vh",
-        fontFamily: "'Syne', 'Barlow', sans-serif",
+        background: "#2e3440",
+        position: "relative",
+        overflow: "hidden",
+        fontFamily: "'Barlow Condensed', sans-serif",
       }}
     >
+      {/* ── Scoped styles — only inside #denuncias ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Barlow:wght@300;400;500&display=swap');
-        .node-gem { cursor: pointer; }
-        .node-gem:hover .gem-wrap { transform: scale(1.1); }
-        .gem-wrap { transition: transform 0.35s cubic-bezier(0.34,1.5,0.64,1); }
-        .popup-enter { animation: popupIn 0.36s cubic-bezier(0.34,1.26,0.64,1) forwards; }
-        .popup-exit  { animation: popupOut 0.26s ease-in forwards; }
-        @keyframes popupIn  {
-          from { opacity:0; transform:translateY(-50%) translateX(24px) scale(0.96); }
-          to   { opacity:1; transform:translateY(-50%) translateX(0)     scale(1);    }
-        }
-        @keyframes popupOut {
-          from { opacity:1; transform:translateY(-50%) translateX(0)    scale(1);    }
-          to   { opacity:0; transform:translateY(-50%) translateX(24px) scale(0.96); }
-        }
-        .legend-dot { width:10px; height:10px; border-radius:2px; display:inline-block; margin-right:7px; }
-        .pulse-ring { animation: pulseRing 2.1s ease-out infinite; }
-        @keyframes pulseRing { 0%{r:28;opacity:0.55} 100%{r:46;opacity:0} }
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap');
+        #denuncias .dn-node { cursor: pointer; position: absolute; }
+        #denuncias .dn-wrap { transition: transform 0.4s cubic-bezier(0.34,1.5,0.64,1); transform-origin: center center; }
+        #denuncias .dn-node:hover .dn-wrap { filter: brightness(1.2); }
+        #denuncias .dn-popup-enter { animation: dnPopIn  0.36s cubic-bezier(0.34,1.26,0.64,1) forwards; }
+        #denuncias .dn-popup-exit  { animation: dnPopOut 0.24s ease-in forwards; }
+        @keyframes dnPopIn  { from{opacity:0;transform:scale(0.86) translateY(10px)} to{opacity:1;transform:scale(1) translateY(0)} }
+        @keyframes dnPopOut { from{opacity:1;transform:scale(1) translateY(0)} to{opacity:0;transform:scale(0.86) translateY(10px)} }
+        #denuncias .dn-pulse  { animation: dnPulse 2.2s ease-out infinite; }
+        #denuncias .dn-pulse2 { animation: dnPulse 2.2s ease-out 1s infinite; }
+        @keyframes dnPulse { 0%{opacity:0.6} 100%{r:54;opacity:0} }
       `}</style>
 
-      {/* ── Header ── */}
-      <div className="relative z-10 pt-12 pb-4 text-center px-6">
-        <p style={{
-          fontFamily: "'Syne',sans-serif", fontWeight: 800,
-          fontSize: "clamp(1.5rem,3.5vw,2.4rem)", color: "#f1f5f9",
-          letterSpacing: "-0.02em", marginBottom: "0.5rem",
-        }}>
-          ¿Qué pasó realmente?
-        </p>
-        <p style={{
-          fontFamily: "'Barlow',sans-serif", fontWeight: 300,
-          fontSize: "clamp(0.85rem,1.5vw,1rem)", color: "#94a3b8",
-          maxWidth: 540, margin: "0 auto", lineHeight: 1.6,
-        }}>
-          Cada proyecto acumula una historia de negligencia, opacidad o abandono
-          administrativo que explica por qué los fondos no se convirtieron en resultados.
-        </p>
+      {/* ── Title ── */}
+      <div style={{
+        textAlign: "center",
+        padding: "28px 16px 12px",
+        letterSpacing: "0.18em",
+        fontSize: "clamp(14px,2.5vw,22px)",
+        fontWeight: 700,
+        color: "#c8cfd8",
+        textTransform: "uppercase",
+      }}>
+        Denuncias de Proyectos
       </div>
 
-      {/* ── Legend ── */}
-      <div className="relative z-10 flex flex-wrap gap-4 justify-center mb-1" style={{ paddingBottom: "0.4rem" }}>
-        {Object.entries(TYPE_CONFIG).map(([k, v]) => (
-          <div key={k} className="flex items-center" style={{ fontFamily: "'Barlow',sans-serif", fontSize: "0.78rem", color: "#cbd5e1" }}>
-            <span className="legend-dot" style={{ background: v.color, boxShadow: `0 0 6px ${v.glow}` }} />
-            {v.label}
-          </div>
-        ))}
-      </div>
+      {/* ── Mobile legend── */}
+      {isMobile && (
+        <div style={{ padding: "0 12px 10px" }}>
+          <Legend inline={true} />
+        </div>
+      )}
 
-      {/* ── Network Canvas ── */}
+      {/* ── Network canvas ── */}
       <div
-        ref={containerRef}
-        className="relative mx-auto"
-        style={{ width: "100%", height: "clamp(340px,55vh,600px)" }}
+        ref={canvasRef}
+        style={{ position: "relative", width: "100%", height: dims.h }}
       >
-        {/* SVG Lines layer */}
-        <svg
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          style={{ overflow: "visible" }}
-        >
+        {/* SVG lines */}
+        <svg style={{
+          position: "absolute", inset: 0, width: "100%", height: "100%",
+          overflow: "visible", pointerEvents: "none",
+        }}>
           <defs>
-            <filter id="glow-line">
-              <feGaussianBlur stdDeviation="2.5" result="blur" />
-              <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+            <filter id="dn-glow-line">
+              <feGaussianBlur stdDeviation="3" result="b" />
+              <feMerge>
+                <feMergeNode in="b" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
             </filter>
           </defs>
 
-          {CONNECTIONS.map(([aId, bId]) => {
-            const a = PROJECTS.find((p) => p.id === aId);
-            const b = PROJECTS.find((p) => p.id === bId);
-            if (!a || !b) return null;
+          {CONNECTIONS.map(({ a: aId, b: bId, group }) => {
+            const a = PROJECTS.find((p) => p.id === aId)!;
+            const b = PROJECTS.find((p) => p.id === bId)!;
             const pa = getPos(a);
             const pb = getPos(b);
-            const isActive = selected && (selected.id === aId || selected.id === bId);
-            const isDimmed = selected && !isActive;
+
+            const isActive =
+              selected !== null &&
+              group !== GROUP_CROSS &&
+              group === selectedGroup;
+
+          
+            const isDimmed = selected !== null && !isActive;
 
             return (
               <line
                 key={`${aId}-${bId}`}
                 x1={pa.x} y1={pa.y}
                 x2={pb.x} y2={pb.y}
-                stroke={isActive ? TYPE_CONFIG[selected.type].color : "rgba(148,163,184,0.25)"}
-                strokeWidth={isActive ? 2 : 1}
-                filter={isActive ? "url(#glow-line)" : undefined}
-                opacity={isDimmed ? 0.07 : isActive ? 0.9 : 0.45}
+                stroke={isActive ? TYPE_CFG[selected!.type].color : "rgba(160,170,185,0.32)"}
+                strokeWidth={isActive ? 2.5 : 1.5}
+                filter={isActive ? "url(#dn-glow-line)" : undefined}
+                opacity={isDimmed ? 0.05 : group === GROUP_CROSS ? 0.3 : 0.42}
                 style={{ transition: "stroke 0.3s, opacity 0.3s, stroke-width 0.3s" }}
               />
             );
           })}
 
-          {/* Pulse rings on selected node – stays at original position */}
+          {/* Pulse rings */}
           {selected && (() => {
             const pos = getPos(selected);
+            const col = TYPE_CFG[selected.type].color;
+            const pr  = nodeSize * 0.52;
             return (
               <>
-                <circle cx={pos.x} cy={pos.y} r="28" fill="none"
-                  stroke={TYPE_CONFIG[selected.type].color} strokeWidth="1.5"
-                  className="pulse-ring" />
-                <circle cx={pos.x} cy={pos.y} r="28" fill="none"
-                  stroke={TYPE_CONFIG[selected.type].color} strokeWidth="1"
-                  className="pulse-ring" style={{ animationDelay: "0.9s" }} />
+                <circle cx={pos.x} cy={pos.y} r={pr} fill="none"
+                  stroke={col} strokeWidth="1.5" className="dn-pulse" />
+                <circle cx={pos.x} cy={pos.y} r={pr} fill="none"
+                  stroke={col} strokeWidth="1" className="dn-pulse2" />
               </>
             );
           })()}
@@ -329,178 +452,118 @@ export const DenunciasSection = () => {
 
         {/* Nodes */}
         {PROJECTS.map((p) => {
-          const pos = getPos(p);
-          const isSelected = selected?.id === p.id;
-          const isConnected = connectedIds.includes(p.id);
-          const isDimmed = selected && !isSelected && !isConnected;
-          const scale = isSelected ? 1.6 : isConnected ? 1.1 : 1;
+          const pos      = getPos(p);
+          const isSel    = selected?.id === p.id;
+          const isInGroup = groupMemberIds.includes(p.id);
+          const isDim    = selected !== null && !isInGroup;
+          const scale    = isSel ? 1.6 : isInGroup ? 1.12 : 1;
+          const labelColor = isSel
+            ? TYPE_CFG[p.type].color
+            : isInGroup ? "#d0d8e4" : "#6b7585";
 
           return (
             <div
               key={p.id}
-              className="node-gem absolute"
+              className="dn-node"
               style={{
-                left: pos.x,
-                top: pos.y,
-                // Fixed anchor — no positional transform, only scale via child
-                transform: "translate(-50%, -50%)",
-                zIndex: isSelected ? 20 : isConnected ? 15 : 10,
-                opacity: isDimmed ? 0.18 : 1,
+                left: pos.x, top: pos.y,
+                transform: "translate(-50%,-50%)",
+                zIndex: isSel ? 20 : isInGroup ? 15 : 10,
+                opacity: isDim ? 0.2 : 1,
                 transition: "opacity 0.3s",
               }}
-              onClick={() => handleNodeClick(p)}
+              onClick={() => handleClick(p)}
             >
-              {/* Scale wrapper — scales in place around center */}
-              <div
-                className="gem-wrap"
-                style={{
-                  transform: `scale(${scale})`,
-                  transformOrigin: "center center",
-                  transition: "transform 0.38s cubic-bezier(0.34,1.5,0.64,1)",
-                }}
-              >
-                <GemNode type={p.type} active={isSelected} />
+              <div className="dn-wrap" style={{ transform: `scale(${scale})` }}>
+                <GemSVG type={p.type} size={nodeSize} active={isSel} />
               </div>
-
-              {/* Label */}
               <div style={{
                 position: "absolute",
-                top: "calc(100% + 6px)",
+                top: nodeSize + 6,
                 left: "50%",
                 transform: "translateX(-50%)",
-                fontFamily: "'Barlow',sans-serif",
-                fontSize: "0.68rem",
-                fontWeight: isSelected ? 600 : 400,
-                color: isSelected
-                  ? TYPE_CONFIG[p.type].color
-                  : isConnected ? "#e2e8f0" : "#64748b",
                 whiteSpace: "nowrap",
-                textShadow: isSelected ? `0 0 10px ${TYPE_CONFIG[p.type].glow}` : "none",
+                fontFamily: "'Barlow Condensed',sans-serif",
+                fontSize: `clamp(10px,${dims.w * 0.014}px,14px)`,
+                fontWeight: isSel ? 700 : 600,
+                letterSpacing: "0.07em",
+                textTransform: "uppercase",
+                color: labelColor,
+                textShadow: isSel ? `0 0 12px ${TYPE_CFG[p.type].glow}` : "none",
                 transition: "color 0.3s",
                 pointerEvents: "none",
-                letterSpacing: "0.04em",
               }}>
                 {p.label}
               </div>
             </div>
           );
         })}
+
+        {/* Popup */}
+        {selected && (
+          <div
+            className={closing ? "dn-popup-exit" : "dn-popup-enter"}
+            style={getPopupStyle(selected)}
+          >
+            <p style={{
+              fontFamily: "'Barlow',sans-serif", fontWeight: 300,
+              fontSize: "clamp(10px,1.2vw,12px)", color: "#9aa3b0",
+              lineHeight: 1.65, margin: "0 0 12px", textAlign: "center",
+            }}>
+              {selected.description}
+            </p>
+            <p style={{
+              fontFamily: "'Barlow Condensed',sans-serif", fontWeight: 700,
+              fontSize: "clamp(22px,3vw,32px)", color: "#f0f2f5",
+              margin: 0, textAlign: "center", letterSpacing: "-0.01em", lineHeight: 1.1,
+            }}>
+              <em style={{ fontStyle: "italic", fontSize: "0.68em", color: "#8a96a6", marginRight: 2 }}>
+                s/.
+              </em>
+              {selected.budget}
+            </p>
+            <p style={{
+              fontFamily: "'Barlow Condensed',sans-serif",
+              fontSize: "clamp(8px,1vw,10px)", letterSpacing: "0.15em",
+              textTransform: "uppercase", color: "#5a6272",
+              textAlign: "center", margin: "3px 0 14px",
+            }}>
+              Costo del proyecto
+            </p>
+            <button
+              onClick={handleClose}
+              style={{
+                display: "flex", alignItems: "center", justifyContent: "center",
+                width: 30, height: 30, borderRadius: "50%",
+                background: "#c8cfd8", color: "#2e3440",
+                border: "none", cursor: "pointer",
+                fontSize: 13, fontWeight: 700,
+                margin: "0 auto", transition: "background 0.2s",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#ffffff")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "#c8cfd8")}
+            >
+              ✕
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Hint */}
-      <p className="text-center pb-4" style={{
-        fontFamily: "'Barlow',sans-serif", fontSize: "0.72rem",
-        color: selected ? "transparent" : "#2d3f55",
-        letterSpacing: "0.07em", textTransform: "uppercase",
-        transition: "color 0.3s", userSelect: "none",
+      <p style={{
+        textAlign: "center",
+        fontFamily: "'Barlow Condensed',sans-serif",
+        fontSize: "clamp(9px,1.1vw,11px)", letterSpacing: "0.1em",
+        textTransform: "uppercase", color: "#3d4555",
+        padding: "6px 0 8px",
+        opacity: selected ? 0 : 1, transition: "opacity 0.3s",
+        userSelect: "none",
       }}>
         Haz clic en un nodo para explorar el proyecto
       </p>
 
-      {/* ── Popup ── */}
-      {selected && (
-        <div
-          className={`absolute z-30 ${closing ? "popup-exit" : "popup-enter"}`}
-          style={{
-            top: "50%",
-            right: "clamp(12px, 3vw, 40px)",
-            width: "clamp(220px, 26vw, 310px)",
-            background: "rgba(10,18,32,0.84)",
-            backdropFilter: "blur(20px) saturate(1.6)",
-            WebkitBackdropFilter: "blur(20px) saturate(1.6)",
-            border: `1px solid ${TYPE_CONFIG[selected.type].color}38`,
-            borderRadius: 14,
-            boxShadow: `0 0 50px rgba(0,0,0,0.65), 0 0 22px ${TYPE_CONFIG[selected.type].glow}`,
-            padding: "1.4rem 1.4rem 1.2rem",
-            transform: "translateY(-50%)",
-          }}
-        >
-          {/* Close */}
-          <button
-            onClick={handleClose}
-            style={{
-              position: "absolute", top: 10, right: 10,
-              width: 26, height: 26, borderRadius: "50%",
-              border: "1px solid rgba(148,163,184,0.3)",
-              background: "rgba(148,163,184,0.1)", color: "#94a3b8",
-              cursor: "pointer", display: "flex", alignItems: "center",
-              justifyContent: "center", fontSize: "0.8rem", fontWeight: 700,
-              transition: "background 0.2s, color 0.2s",
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(244,114,182,0.2)"; e.currentTarget.style.color = "#f472b6"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(148,163,184,0.1)"; e.currentTarget.style.color = "#94a3b8"; }}
-          >
-            ✕
-          </button>
-
-          {/* Badge */}
-          <div style={{
-            display: "inline-flex", alignItems: "center", gap: 6,
-            background: `${TYPE_CONFIG[selected.type].color}14`,
-            border: `1px solid ${TYPE_CONFIG[selected.type].color}48`,
-            borderRadius: 99, padding: "2px 10px", marginBottom: "0.75rem",
-          }}>
-            <span style={{
-              width: 7, height: 7, borderRadius: "50%",
-              background: TYPE_CONFIG[selected.type].color,
-              boxShadow: `0 0 6px ${TYPE_CONFIG[selected.type].color}`,
-              display: "inline-block",
-            }} />
-            <span style={{
-              fontFamily: "'Barlow',sans-serif", fontSize: "0.66rem", fontWeight: 500,
-              color: TYPE_CONFIG[selected.type].color,
-              letterSpacing: "0.05em", textTransform: "uppercase",
-            }}>
-              {TYPE_CONFIG[selected.type].label}
-            </span>
-          </div>
-
-          {/* Title */}
-          <p style={{
-            fontFamily: "'Syne',sans-serif", fontWeight: 700,
-            fontSize: "1.05rem", color: "#f1f5f9",
-            marginBottom: "0.55rem", lineHeight: 1.25,
-          }}>
-            {selected.label}
-          </p>
-
-          {/* Description */}
-          <p style={{
-            fontFamily: "'Barlow',sans-serif", fontWeight: 300,
-            fontSize: "0.79rem", color: "#94a3b8",
-            lineHeight: 1.65, marginBottom: "0.75rem",
-          }}>
-            {selected.description}
-          </p>
-
-          {/* Error */}
-          <div style={{
-            background: "rgba(244,114,182,0.07)",
-            border: "1px solid rgba(244,114,182,0.2)",
-            borderRadius: 8, padding: "0.5rem 0.7rem", marginBottom: "0.85rem",
-          }}>
-            <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: "0.66rem", color: "#f472b6", fontWeight: 500, marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.06em" }}>
-              Error detectado
-            </p>
-            <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: "0.77rem", color: "#fecdd3" }}>
-              {selected.error}
-            </p>
-          </div>
-
-          {/* Budget */}
-          <div style={{ borderTop: "1px solid rgba(148,163,184,0.1)", paddingTop: "0.7rem" }}>
-            <p style={{ fontFamily: "'Barlow',sans-serif", fontSize: "0.66rem", color: "#475569", fontWeight: 500, textTransform: "uppercase", letterSpacing: "0.07em", marginBottom: 2 }}>
-              Costo del proyecto
-            </p>
-            <p style={{
-              fontFamily: "'Syne',sans-serif", fontWeight: 800,
-              fontSize: "1.45rem", color: "#f1f5f9", letterSpacing: "-0.01em",
-            }}>
-              {selected.budget}
-            </p>
-          </div>
-        </div>
-      )}
+      {/* ── Desktop legend (bottom pill) ── */}
+      {!isMobile && <Legend inline={false} />}
     </div>
   );
 };
