@@ -326,7 +326,7 @@ export const ImageneSection = () => {
   const [activeCard, setActiveCard] = useState<CardData | null>(null);
 
   return (
-    <div id="imas" className="bg-[#1e2535]">
+    <div id="imas" className="bg-[#2e3440]">
       <div className="mx-auto container w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center min-h-full">
 

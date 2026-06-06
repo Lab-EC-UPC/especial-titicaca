@@ -35,6 +35,7 @@ const fullPlantStyle = {
 export const TotoraSection = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sanaHalfRef = useRef<HTMLImageElement>(null);
+  const enfermaHalfRef = useRef<HTMLImageElement>(null);
 
   const [sliderX, setSliderX] = useState(0);
   const [joinPct, setJoinPct] = useState(50);
@@ -45,9 +46,15 @@ export const TotoraSection = () => {
   const snapAnimRef = useRef<{ stop: () => void } | null>(null);
 
   const measureJoin = useCallback(() => {
-    if (sanaHalfRef.current && containerRef.current) {
-      setJoinPct((sanaHalfRef.current.offsetWidth / containerRef.current.offsetWidth) * 100);
-    }
+    const sana = sanaHalfRef.current;
+    const enferma = enfermaHalfRef.current;
+    const container = containerRef.current;
+    if (!sana || !enferma || !container) return;
+    // Esperar a que AMBAS mitades tengan ancho real: un <img> con width:auto
+    // mide 0 hasta que carga, lo que en producción (carga asíncrona) daría una
+    // costura desfasada (~100%) y movería la barra/handle.
+    if (!sana.offsetWidth || !enferma.offsetWidth || !container.offsetWidth) return;
+    setJoinPct((sana.offsetWidth / container.offsetWidth) * 100);
   }, []);
 
   const startDrag = useCallback((clientX: number) => {
@@ -187,8 +194,8 @@ export const TotoraSection = () => {
             <div ref={containerRef} style={{ position: "relative", display: "flex", alignItems: "flex-start" }}>
 
               <div style={{ display: "flex", alignItems: "flex-start", opacity: halfOpacity, transition: "opacity 0.15s linear" }}>
-                <img ref={sanaHalfRef} src={MitadTotoraSana}    alt="Totora sana"         draggable={false} onLoad={measureJoin} style={plantImageStyle} />
-                <img                    src={MitadTotoraPodrida} alt="Totora deteriorada" draggable={false}                       style={plantImageStyle} />
+                <img ref={sanaHalfRef}    src={MitadTotoraSana}    alt="Totora sana"         draggable={false} onLoad={measureJoin} style={plantImageStyle} />
+                <img ref={enfermaHalfRef} src={MitadTotoraPodrida} alt="Totora deteriorada" draggable={false} onLoad={measureJoin} style={plantImageStyle} />
               </div>
 
               <img src={TotoraSana}    alt="Totora sana completa"    draggable={false} style={{ ...fullPlantStyle, clipPath: fullSanaClip,    opacity: sliderX > 0 ? 1 : 0 }} />
