@@ -3,7 +3,7 @@ import { TESTIMONIALS } from "../constants/testimonial.constants";
 import { TestimonialBackground } from "../components/testimonials/TestimonialBackground";
 import { TestimonialPersonView } from "../components/testimonials/TestimonialPersonView";
 
-export const TestimonialGallery = () => {
+export const TestimonialSection = () => {
   const { selectedId, isPlaying, selectPerson, closePerson, toggleAudio } =
     useTestimonial();
 
