@@ -171,7 +171,8 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
                     return;
                 }
 
-                const x = dist * vw * 0.35;
+                const spread = vw < 768 ? 0.5 : 0.45;
+                const x = dist * vw * spread;
                 const scale = 1 - absDist * 0.4;
                 const opacity = 1 - absDist * 0.65;
 

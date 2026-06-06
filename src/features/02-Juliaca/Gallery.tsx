@@ -1,3 +1,5 @@
+import type { ReactNode } from "react";
+
 export type GalleryImage = {
     src: string;
     alt: string;
@@ -6,7 +8,7 @@ export type GalleryImage = {
 };
 
 type GalleryProps = {
-    title: string;
+    title: ReactNode;
     images: GalleryImage[];
     start?: number;
     snap?: number;
@@ -17,14 +19,14 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
     const trans = transition ?? Math.round((snap ?? 130) * 0.7);
     return (
         <div
-            className="absolute inset-0 z-20 flex flex-col items-center justify-center gap-8 opacity-0 pointer-events-none"
+            className="absolute inset-0 z-20 flex flex-col items-center gap-2 md:gap-12 md:justify-center pt-[18vh] md:pt-0 opacity-0 pointer-events-none"
             data-gallery
             data-start={start}
             data-images={images.length}
             data-snap={snap}
             data-transition={trans}
         >
-            <h2 className="text-center text-xl md:text-2xl font-bold leading-[1.4] tracking-[0.2em] uppercase text-white">
+            <h2 className="text-center text-xl md:text-2xl font-bold leading-[1.4] tracking-[0.2em] uppercase text-white max-w-[80%] md:max-w-full">
                 {title}
             </h2>
 
@@ -43,9 +45,9 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                                 className="max-h-[45vh] w-auto max-w-full object-contain"
                             />
 
-                            <div data-gallery-text className="flex flex-col items-start gap-1 text-left ml-5 opacity-0">
+                            <div data-gallery-text className="flex flex-col items-start gap-1 text-left md:ml-5 ml-0 opacity-0">
                                 <p
-                                    className="text-sm md:text-lg"
+                                    className="text-xs md:text-lg"
                                     style={{
                                         fontFamily:
                                             'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
@@ -60,7 +62,7 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                                     {img.description}
                                 </p>
                                 <p
-                                    className="text-xs md:text-sm"
+                                    className="text-[11px] md:text-sm"
                                     style={{
                                         fontFamily:
                                             'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',

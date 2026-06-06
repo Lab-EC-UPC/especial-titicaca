@@ -1,3 +1,4 @@
+import { Children, isValidElement, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 
 type ScrollMessageProps = {
@@ -15,7 +16,7 @@ export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
         >
             <div className="flex w-full items-center justify-center text-white">
                 <div
-                    className="max-w-full [&_img]:block [&_img]:max-w-full py-6 px-4 md:py-[4.5rem] md:px-[3rem]"
+                    className="max-w-full [&_img]:block [&_img]:max-w-full py-10 px-4 md:py-[4.5rem] md:px-[3rem]"
                     style={{
                         backgroundColor: "rgba(10,10,10,0.75)",
                     }}
@@ -31,22 +32,38 @@ type ScrollParagraphProps = {
     children: ReactNode;
 };
 
-ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => (
-    <p
-        className="scroll-paragraph text-sm md:text-lg"
-        style={{
-            fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            lineHeight: "130%",
-            letterSpacing: "0.02em",
-            textAlign: "center",
-            fontWeight: 300,
-            margin: 0,
-            textWrap: "pretty",
-        }}
-    >
-        {children}
-    </p>
-);
+ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
+
+    const content = isMobile
+        ? Children.map(children, (child) =>
+              isValidElement(child) && child.type === "br" ? " " : child
+          )
+        : children;
+
+    return (
+        <p
+            className="text-sm md:text-lg"
+            style={{
+                fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                lineHeight: "130%",
+                letterSpacing: "0.02em",
+                textAlign: "center",
+                fontWeight: 300,
+                margin: 0,
+                textWrap: "pretty",
+            }}
+        >
+            {content}
+        </p>
+    );
+};
 
 type ScrollChapterProps = {
     children: ReactNode;

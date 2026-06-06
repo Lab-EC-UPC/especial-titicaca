@@ -97,7 +97,7 @@ export const JuliacaSection = () => {
             </ScrollMessage>
 
             <Gallery
-                title="¿Qué revela el paso del tiempo?"
+                title={isMobile ? <>¿Qué revela<br />el paso del tiempo?</> : "¿Qué revela el paso del tiempo?"}
                 images={[
                     {
                         src: galeria01,
