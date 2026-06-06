@@ -1,3 +1,4 @@
+import { Children, isValidElement, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 
 type ScrollMessageProps = {
@@ -13,12 +14,13 @@ export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
             data-start={start}
             data-end={end}
         >
-            <div className="relative flex w-full max-w-[min(58ch,92vw)] items-center justify-center text-white">
+            <div className="flex w-full items-center justify-center text-white">
                 <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-[-3.5rem] -z-10 rounded-[999px] bg-black/35 blur-[52px] opacity-90"
-                />
-                <div className="relative z-10 max-w-full drop-shadow-[0_16px_26px_rgba(0,0,0,0.92)] [&_img]:block [&_img]:max-w-full [&_img]:rounded-[1.25rem]">
+                    className="max-w-full [&_img]:block [&_img]:max-w-full py-10 px-4 md:py-[4.5rem] md:px-[3rem]"
+                    style={{
+                        backgroundColor: "rgba(10,10,10,0.75)",
+                    }}
+                >
                     {children}
                 </div>
             </div>
@@ -30,8 +32,58 @@ type ScrollParagraphProps = {
     children: ReactNode;
 };
 
-ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => (
-    <p className="text-center text-lg font-light leading-[1.4] tracking-[0.03em] text-white">{children}</p>
+ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
+
+    const content = isMobile
+        ? Children.map(children, (child) =>
+              isValidElement(child) && child.type === "br" ? " " : child
+          )
+        : children;
+
+    return (
+        <p
+            className="text-sm md:text-lg"
+            style={{
+                fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                lineHeight: "130%",
+                letterSpacing: "0.02em",
+                textAlign: "center",
+                fontWeight: 300,
+                margin: 0,
+                textWrap: "pretty",
+            }}
+        >
+            {content}
+        </p>
+    );
+};
+
+type ScrollChapterProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.Chapter = ({ children }: ScrollChapterProps) => (
+    <p
+        style={{
+            fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+            fontSize: 13,
+            lineHeight: "1.6",
+            letterSpacing: "0.25em",
+            textAlign: "center",
+            fontWeight: 400,
+            margin: "0 0 8px 0",
+            textTransform: "uppercase",
+        }}
+    >
+        {children}
+    </p>
 );
 
 type ScrollHeadingProps = {
@@ -39,7 +91,7 @@ type ScrollHeadingProps = {
 };
 
 ScrollMessage.Heading = ({ children }: ScrollHeadingProps) => (
-    <h2 className="mb-2 text-center text-4xl font-extrabold leading-[1.4] tracking-[0.03em] text-white">{children}</h2>
+    <h2 className="mb-2 text-center text-2xl md:text-4xl font-bold leading-[1.4] tracking-[0.03em]">{children}</h2>
 );
 
 type ScrollImageHeadingProps = {
@@ -47,7 +99,7 @@ type ScrollImageHeadingProps = {
 };
 
 ScrollMessage.ImageHeading = ({ children }: ScrollImageHeadingProps) => (
-    <h3 className="mb-6 text-center text-2xl leading-[1.4] tracking-[0.03em] text-white">{children}</h3>
+    <h3 className="mb-6 text-center text-2xl leading-[1.4] tracking-[0.03em]">{children}</h3>
 );
 
 type ScrollImageProps = {
@@ -56,5 +108,5 @@ type ScrollImageProps = {
 };
 
 ScrollMessage.Image = ({ src, alt }: ScrollImageProps) => (
-    <img src={src} alt={alt} className="max-h-[50vh] w-auto mx-auto" />
+    <img src={src} alt={alt} className="max-h-[50vh] mx-auto" />
 );

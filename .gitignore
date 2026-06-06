@@ -23,9 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local AI / Beads 
+# Local AI / Beads
 .env
 .env.*
 *.env
-
-
+.agents/*
