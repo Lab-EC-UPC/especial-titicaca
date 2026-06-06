@@ -5,3 +5,9 @@ body,
   min-height: 100%;
   background: #000;
 }
+
+@media (max-width: 767px) {
+  .scroll-paragraph br {
+    display: none;
+  }
+}

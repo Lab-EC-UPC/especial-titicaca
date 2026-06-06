@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { createScrollTimeline } from "./timeline";
@@ -6,7 +6,8 @@ import { ScrollMessage } from "./ScrollMessage";
 import { Gallery } from "./Gallery";
 import "./juliaca.css";
 
-import videoSrc from "./assets/juliaca_com.mp4";
+import comVideo from "./assets/juliaca_com.mp4";
+import mobVideo from "./assets/juliaca_mob.mp4";
 
 import galeria01 from "./assets/galeria_01.webp";
 import galeria02 from "./assets/galeria_02.webp";
@@ -18,6 +19,15 @@ gsap.registerPlugin(useGSAP);
 export const JuliacaSection = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
+
+    const videoSrc = isMobile ? mobVideo : comVideo;
 
     useGSAP(
         (_context, contextSafe) => {
@@ -49,12 +59,13 @@ export const JuliacaSection = () => {
                 document.removeEventListener("visibilitychange", onVisibility);
             };
         },
-        { scope: sectionRef },
+        { scope: sectionRef, dependencies: [isMobile] },
     );
 
     return (
         <div ref={sectionRef} className="relative isolate h-screen w-full overflow-hidden bg-black">
             <video
+                key={isMobile ? "mob" : "desk"}
                 ref={videoRef}
                 className="absolute inset-0 h-full w-full object-cover"
                 src={videoSrc}

@@ -15,10 +15,9 @@ export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
         >
             <div className="flex w-full items-center justify-center text-white">
                 <div
-                    className="max-w-full [&_img]:block [&_img]:max-w-full"
+                    className="max-w-full [&_img]:block [&_img]:max-w-full py-6 px-4 md:py-[4.5rem] md:px-[3rem]"
                     style={{
                         backgroundColor: "rgba(10,10,10,0.75)",
-                        padding: "4.5rem 3rem",
                     }}
                 >
                     {children}
@@ -34,9 +33,9 @@ type ScrollParagraphProps = {
 
 ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => (
     <p
+        className="scroll-paragraph text-sm md:text-lg"
         style={{
             fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-            fontSize: 18,
             lineHeight: "130%",
             letterSpacing: "0.02em",
             textAlign: "center",
@@ -75,7 +74,7 @@ type ScrollHeadingProps = {
 };
 
 ScrollMessage.Heading = ({ children }: ScrollHeadingProps) => (
-    <h2 className="mb-2 text-center text-4xl font-bold leading-[1.4] tracking-[0.03em]">{children}</h2>
+    <h2 className="mb-2 text-center text-2xl md:text-4xl font-bold leading-[1.4] tracking-[0.03em]">{children}</h2>
 );
 
 type ScrollImageHeadingProps = {

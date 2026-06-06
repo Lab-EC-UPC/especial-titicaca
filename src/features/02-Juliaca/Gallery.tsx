@@ -24,7 +24,7 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
             data-snap={snap}
             data-transition={trans}
         >
-            <h2 className="text-center text-2xl font-bold leading-[1.4] tracking-[0.2em] uppercase text-white">
+            <h2 className="text-center text-xl md:text-2xl font-bold leading-[1.4] tracking-[0.2em] uppercase text-white">
                 {title}
             </h2>
 
@@ -45,10 +45,10 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
 
                             <div data-gallery-text className="flex flex-col items-start gap-1 text-left ml-5 opacity-0">
                                 <p
+                                    className="text-sm md:text-lg"
                                     style={{
                                         fontFamily:
                                             'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-                                        fontSize: 18,
                                         lineHeight: "130%",
                                         letterSpacing: "0.02em",
                                         color: "white",
@@ -60,10 +60,10 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                                     {img.description}
                                 </p>
                                 <p
+                                    className="text-xs md:text-sm"
                                     style={{
                                         fontFamily:
                                             'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
-                                        fontSize: 14,
                                         lineHeight: "130%",
                                         letterSpacing: "0.1em",
                                         color: "rgba(255,255,255,0.6)",
