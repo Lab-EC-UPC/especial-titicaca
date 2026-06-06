@@ -26,7 +26,7 @@ export const TestimonialPersonView = ({
             className="absolute inset-0 h-full w-full object-cover"
         />
 
-        <div className="absolute bottom-0 left-1/2 w-[100%] -translate-x-1/2 overflow-hidden md:h-[90%] md:w-[100%]">
+        <div className="absolute bottom-0 left-1/2 w-full -translate-x-1/2 overflow-hidden md:h-[90%] md:w-full">
             <img
                 src={testimonial.characterImage}
                 alt={`Personaje ${testimonial.name}`}

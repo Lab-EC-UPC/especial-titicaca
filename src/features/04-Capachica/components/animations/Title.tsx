@@ -1,10 +1,10 @@
-type CycleTitleProps = {
+type TitleProps = {
     start: number;
     end: number;
     title: string;
 };
 
-export const CycleTitle = ({ start, end, title }: CycleTitleProps) => {
+export const Title = ({ start, end, title }: TitleProps) => {
     return (
         <div
             className="absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-18 opacity-0 pointer-events-none"
