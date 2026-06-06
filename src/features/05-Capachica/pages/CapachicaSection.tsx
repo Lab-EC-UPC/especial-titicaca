@@ -9,6 +9,7 @@ import { CycleStep } from "../components/animations/CycleStep";
 import animationVideo from "../assets/videos/animation.mp4";
 import { TestimonialSection } from "./TestimonialSection";
 import { TriangulacionSection } from "../TriangulacionSection";
+import { TotoraSection } from "../Totora";
 
 gsap.registerPlugin(useGSAP);
 
@@ -80,9 +81,18 @@ export const CapachicaSection = () => {
                 text="Los totorales del lago se están reduciendo drásticamente. Esta planta es vital porque purifica el agua de forma natural y sostiene la economía de la zona (pesca, artesanía y forraje). Pobladores de Capachica reportan que las alteraciones morfológicas en la planta han suspendido su uso tradicional para consumo alimenticio."
             />
 
-            {/* Capítulo de la totora */}
-
-            <Title start={0.09} end={0.14} title="El deterioro de la totora" />
+            {/* Capítulo de la totora: comparador interactivo (arrastrar ←/→) */}
+            <div
+                className="absolute inset-0 z-30 opacity-0"
+                data-start="0.09"
+                data-end="0.16"
+                data-pause-video="true"
+                data-interactive="true"
+            >
+                <div className="relative h-full w-full overflow-hidden">
+                    <TotoraSection />
+                </div>
+            </div>
 
             {/* 2. Párrafo introductorio ciclo de vida */}
 

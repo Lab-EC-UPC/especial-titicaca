@@ -1,6 +1,6 @@
-import Boga from "../../../assets/BOGA.png";
-import Orestia from "../../../assets/Orestia-cuvieri.png";
-import Suche from "../../../assets/SUCHE.png";
+import Boga from "../assets/BOGA.png";
+import Orestia from "../assets/Orestia-cuvieri.png";
+import Suche from "../assets/SUCHE.png";
 
 import { FlamencoWalk } from "./Flamenco/Walk";
 import { FlamencoFrontal } from "./Flamenco/Frontal";

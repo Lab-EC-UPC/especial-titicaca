@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
 
-import PajaroIcon from "../../../assets/pato.png";
-import PescadoIcon from "../../../assets/pescado.png";
+import PajaroIcon from "../assets/pato.png";
+import PescadoIcon from "../assets/pescado.png";
 
 import { aves, peces } from "./data";
 import { SpeciesCard } from "./SpeciesCard";

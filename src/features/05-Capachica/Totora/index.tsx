@@ -2,11 +2,10 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, animate } from "motion/react";
 import { ChevronsRightLeft, ChevronsRight, ChevronsLeft } from "lucide-react";
 
-import MitadTotoraSana from "../../../assets/mitad-totora-sana.png";
-import MitadTotoraPodrida from "../../../assets/mitad-totora-podrida.png";
-import TotoraSana from "../../../assets/totora-sana.png";
-import TotoraPodrida from "../../../assets/totora-podrida.png";
-import Fondo from "../../../assets/fondo.png";
+import MitadTotoraSana from "../assets/mitad-totora-sana.png";
+import MitadTotoraPodrida from "../assets/mitad-totora-podrida.png";
+import TotoraSana from "../assets/totora-sana.png";
+import TotoraPodrida from "../assets/totora-podrida.png";
 
 import { sanaCards, enfermaCards } from "./constants";
 import { InfoCard } from "./InfoCard";
@@ -123,13 +122,6 @@ export const TotoraSection = () => {
     <section className="relative w-full" style={{ height: "100vh" }}>
       <div className="w-full overflow-hidden" style={{ height: "100vh" }}>
 
-        <img
-          src={Fondo}
-          alt=""
-          aria-hidden
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center", userSelect: "none", pointerEvents: "none" }}
-        />
-
         <div
           className="absolute z-30 w-full text-center"
           style={{ top: "clamp(60px, 12vh, 120px)", left: 0, pointerEvents: "none" }}
@@ -142,6 +134,28 @@ export const TotoraSection = () => {
             }}
           >
             EL DETERIORO DE LA TOTORA
+          </p>
+        </div>
+
+        {/* Indicación de arrastre (se desvanece al interactuar) */}
+        <div
+          className="absolute z-30 w-full text-center"
+          style={{
+            bottom: "clamp(36px, 8vh, 90px)",
+            left: 0,
+            pointerEvents: "none",
+            opacity: labelsOpacity,
+            transition: "opacity 0.2s ease",
+          }}
+        >
+          <p
+            className="uppercase text-white/75 font-light"
+            style={{
+              fontSize: "clamp(9px, 1vw, 13px)",
+              letterSpacing: "clamp(1px, 0.3vw, 3px)",
+            }}
+          >
+            Desliza hacia la izquierda o derecha para más información
           </p>
         </div>
 
