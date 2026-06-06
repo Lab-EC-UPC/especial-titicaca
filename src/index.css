@@ -9,3 +9,17 @@
 html {
   scroll-behavior: smooth;
 }
+
+@font-face {
+  font-family: "Citizen";
+  src: url("/fonts/Citizen.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Elza";
+  src: url("/fonts/elza-regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+}
