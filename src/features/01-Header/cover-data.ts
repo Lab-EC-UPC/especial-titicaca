@@ -1,4 +1,4 @@
-// Generado por scripts/optimize-cover.mjs — no editar a mano.
+
 import band0 from "./assets/cover/band-00.webp";
 import band1 from "./assets/cover/band-01.webp";
 import band2 from "./assets/cover/band-02.webp";

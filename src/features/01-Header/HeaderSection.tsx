@@ -1,4 +1,3 @@
-// Portada del especial: tira vertical en bandas WebP con carga lazy (scripts/optimize-cover.mjs).
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
