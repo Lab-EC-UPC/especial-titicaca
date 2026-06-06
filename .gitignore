@@ -34,9 +34,6 @@ beads/
 *.env
 .agents
 
-# Local Netlify folder
-.netlify
-
 # Beads / Dolt files (added by bd init)
 *.db
 .beads-credential-key
