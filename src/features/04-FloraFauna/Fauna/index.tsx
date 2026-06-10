@@ -9,8 +9,8 @@ import { SpeciesCard } from "./SpeciesCard";
 import type { TabKey } from "./types";
 
 const TABS: { tab: TabKey; icon: string; alt: string }[] = [
-  { tab: "aves", icon: PajaroIcon, alt: "Aves" },
   { tab: "peces", icon: PescadoIcon, alt: "Peces" },
+  { tab: "aves", icon: PajaroIcon, alt: "Aves" },
 ];
 
 const containerVariants = {
@@ -28,7 +28,7 @@ const buildAnimalVariants = (fromX: string) => ({
 });
 
 export const Fauna = () => {
-  const [activeTab, setActiveTab] = useState<TabKey>("aves");
+  const [activeTab, setActiveTab] = useState<TabKey>("peces");
   const [animKey, setAnimKey] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [arrivedItems, setArrivedItems] = useState<boolean[]>([
