@@ -20,8 +20,8 @@ export const TESTIMONIALS: Testimonial[] = [
     id: 1,
     name: "Feliciana Suaña",
     testimony: [
-      { id: 1, text: "La contaminación viene de ese río. Nosotros no tomamos,\nsolo a nuestros animales les hacemos tomar. No estoy bien;\nme duele todo mi cuerpo, todo, todito. Mi oído ya no escucha." },
-      { id: 2, text: "Mis pies me duelen demasiado. Ahora tengo que cubrirlos\ncon trapos. Ya no puedo caminar como antes; se me hace\nimposible ir lejos, solo logro avanzar distancias muy cortas. " },
+      { id: 1, text: "La contaminación viene de ese río. Nosotros no tomamos, solo a nuestros animales les hacemos tomar. No estoy bien; me duele todo mi cuerpo, todo, todito. Mi oído ya no escucha." },
+      { id: 2, text: "Mis pies me duelen demasiado. Ahora tengo que cubrirlos con trapos. Ya no puedo caminar como antes; se me hace imposible ir lejos, solo logro avanzar distancias muy cortas. " },
     ],
     backgroundImage: person1Bg,
     characterImage: felicianaChar,
@@ -32,7 +32,7 @@ export const TESTIMONIALS: Testimonial[] = [
     id: 2,
     name: "Victor Chata Grande",
     testimony: [
-      { id: 1, text: "Para el ganado estamos consumiendo agua del subsuelo;\npor eso les da diarrea y no pueden engordar. Nosotros vivimos\nde esto, y si vas al borde del río Coata, por los desbordes,\nla agricultura tampoco produce ya." },
+      { id: 1, text: "Para el ganado estamos consumiendo agua del subsuelo; por eso les da diarrea y no pueden engordar. Nosotros vivimos de esto, y si vas al borde del río Coata, por los desbordes, la agricultura tampoco produce ya." },
     ],
     backgroundImage: person2Bg,
     characterImage: victorChar,
@@ -43,9 +43,9 @@ export const TESTIMONIALS: Testimonial[] = [
     id: 3,
     name: "Juliana Churata",
     testimony: [
-      { id: 1, text: "Yo estoy enferma por metales pesados desde hace cuatro\naños. Me dolía toda la parte interna de mi cuerpo y no me\npermitía comer. Desde pequeña, criábamos animales\ny consumíamos el agua de esa laguna." },
-      { id: 2, text: "Desde ahora ya no lo consumimos. Ya no han venido de nuevo\na hacerme el análisis. Me dijeron que dentro de cuatro años\ndebía hacerme analizar, pero no me han hecho los análisis.\nAhora no se sabe si hay o no." },
-      { id: 3, text: "Mi hija también tiene metal pesado y no ha recibido\ntratamiento en su colegio. Esto es grave, aquí en Puno ya\nfalleció la señora Rufina y también el señor Alberto Paucar.\nSegún los análisis, a causa del metal pesado." },
+      { id: 1, text: "Yo estoy enferma por metales pesados desde hace cuatro años. Me dolía toda la parte interna de mi cuerpo y no me permitía comer. Desde pequeña, criábamos animales y consumíamos el agua de esa laguna." },
+      { id: 2, text: "Desde ahora ya no lo consumimos. Ya no han venido de nuevo a hacerme el análisis. Me dijeron que dentro de cuatro años debía hacerme analizar, pero no me han hecho los análisis. Ahora no se sabe si hay o no." },
+      { id: 3, text: "Mi hija también tiene metal pesado y no ha recibido\ntratamiento en su colegio. Esto es grave, aquí en Puno ya falleció la señora Rufina y también el señor Alberto Paucar. Según los análisis, a causa del metal pesado." },
     ],
     backgroundImage: person3Bg,
     characterImage: juliana,
