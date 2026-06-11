@@ -1,7 +1,0 @@
-{
-  "database": "dolt",
-  "backend": "dolt",
-  "dolt_mode": "embedded",
-  "dolt_database": "especial_titicaca",
-  "project_id": "6d1ac75b-03b7-40d9-8955-0cf14f23f10a"
-}

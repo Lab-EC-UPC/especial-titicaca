@@ -4,7 +4,6 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
@@ -23,20 +22,8 @@ dist-ssr
 *.sln
 *.sw?
 
-# Local AI / Beads (never commit)
-CLAUDE.md
-.claude/
-.dolt/
-beads.db
-beads/
+# Local AI / Beads
 .env
 .env.*
 *.env
-.agents
-
-# Local Netlify folder
-.netlify
-
-# Beads / Dolt files (added by bd init)
-*.db
-.beads-credential-key
+.agents/*

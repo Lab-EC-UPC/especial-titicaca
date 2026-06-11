@@ -1,11 +1,11 @@
 import "./index.css";
 import { HeaderSection } from "./features/01-Header/HeaderSection";
 import { JuliacaSection } from "./features/02-Juliaca/JuliacaSection";
-import { MapaTiticacaSection } from "./features/02-Juliaca/MapaTiticacaSection";
-import { FloraFaunaSection } from "./features/03-FloraFauna/FloraFaunaSection";
-import { CapachicaSection } from "./features/04-Capachica/pages/CapachicaSection";
-import { DenunciasSection } from "./features/05-Denuncias/DenunciasSection";
-import { FooterSection } from "./features/06-Footer/FooterSection";
+import { MapaTiticacaSection } from "./features/03-MapaTiticaca/MapaTiticacaSection";
+import { FloraFaunaSection } from "./features/04-FloraFauna/FloraFaunaSection";
+import { CapachicaSection } from "./features/05-Capachica/pages/CapachicaSection";
+import { DenunciasSection } from "./features/06-Denuncias/DenunciasSection";
+import { FooterSection } from "./features/07-Footer/FooterSection";
 //import { CoordFinder } from "./components/CoordFinder";
 
 function App() {
