@@ -7,6 +7,7 @@ import { ChapterTitle } from "../components/animations/ChapterTitle";
 import { Title } from "../components/animations/Title";
 import { CycleStep } from "../components/animations/CycleStep";
 import animationVideo from "../assets/videos/animation.mp4";
+import animationVideoMobile from "../assets/videos/animation_mobile.mp4";
 import { TestimonialSection } from "./TestimonialSection";
 import { TriangulacionSection } from "../TriangulacionSection";
 import { TotoraSection } from "../Totora";
@@ -16,36 +17,44 @@ gsap.registerPlugin(useGSAP);
 export const CapachicaSection = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const videoMobileRef = useRef<HTMLVideoElement>(null);
 
     useGSAP(
         (_context, contextSafe) => {
             const section = sectionRef.current;
             const video = videoRef.current;
-            if (!section || !video) return;
+            const videoMobile = videoMobileRef.current;
+            if (!section || !video || !videoMobile) return;
+
+            const activeVideo =
+                window.matchMedia("(min-width: 640px)").matches ? video : videoMobile;
 
             let timeline: ReturnType<typeof createScrollTimeline> | null = null;
 
             const setupTimeline = contextSafe!(() => {
                 if (timeline) return;
-                timeline = createScrollTimeline(section, video);
+                timeline = createScrollTimeline(section, activeVideo);
             });
 
-            if (video.readyState >= 1) {
+            if (activeVideo.readyState >= 1) {
                 setupTimeline();
             } else {
-                video.addEventListener("loadedmetadata", setupTimeline, {
+                activeVideo.addEventListener("loadedmetadata", setupTimeline, {
                     once: true,
                 });
             }
 
             const onVisibility = contextSafe!(() => {
-                if (document.hidden) video.pause();
+                if (document.hidden) {
+                    video.pause();
+                    videoMobile.pause();
+                }
             });
 
             document.addEventListener("visibilitychange", onVisibility);
 
             return () => {
-                video.removeEventListener("loadedmetadata", setupTimeline);
+                activeVideo.removeEventListener("loadedmetadata", setupTimeline);
                 document.removeEventListener("visibilitychange", onVisibility);
             };
         },
@@ -58,11 +67,21 @@ export const CapachicaSection = () => {
             id="capachica-animation1"
             className="relative isolate h-screen w-full overflow-hidden bg-black"
         >
-            {/* ── Video de fondo ───────────────────────────────────────────── */}
+            {/* ── Video de fondo (desktop / tablet) ───────────────────────── */}
             <video
                 ref={videoRef}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 hidden h-full w-full object-cover sm:block"
                 src={animationVideo}
+                muted
+                playsInline
+                preload="auto"
+            />
+
+            {/* ── Video de fondo (mobile) ──────────────────────────────────── */}
+            <video
+                ref={videoMobileRef}
+                className="absolute inset-0 block h-full w-full object-cover sm:hidden"
+                src={animationVideoMobile}
                 muted
                 playsInline
                 preload="auto"
