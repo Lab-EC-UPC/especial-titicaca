@@ -1,10 +1,19 @@
 import { useState, useEffect, useRef } from "react";
 import StoryPopup from "../../components/StoryPopup";
+import Leyenda from "../../components/Leyenda";
 import CardRoute from "../../components/CardRoute";
+import PopupSaludInformation from "../../components/PopupSaludInformation";
+import PopupMineriaInformation from "../../components/PopupMineriaInformation";
 import mapaInicio from "../../assets/images/Capachica/TriangulacionSection/maps/mapa-inicio.png";
 import mapaRuta from "../../assets/images/Capachica/TriangulacionSection/maps/mapa-ruta.png";
 import mapaSeleccionPuno from "../../assets/images/Capachica/TriangulacionSection/maps/mapa-seleccion-puno.png";
 import botonCerrar from "../../assets/images/Capachica/TriangulacionSection/boton-cerrar.png";
+import botonAtras from "../../assets/images/Capachica/TriangulacionSection/Botón atrás.png";
+import mapaCarabaya from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/pantalla-carabaya.png";
+
+const PROVINCE_MAPS: Record<string, string> = {
+  "carabaya": mapaCarabaya,
+};
 
 // ─── Text path data from Figma SVG exports ──────────────────────────────────
 // "Arequipa (Perú)" – 214×30px, fill #354046
@@ -144,6 +153,7 @@ const PunoProvinceMap = ({
 }) => (
   <svg
     viewBox="0 0 1920 1080"
+    preserveAspectRatio="xMidYMid slice"
     className="absolute inset-0 w-full h-full z-[6]"
     xmlns="http://www.w3.org/2000/svg"
   >
@@ -248,14 +258,106 @@ const RecorridoSVG = ({ step }: { step: number }) => (
   </svg>
 );
 
-type View = "story" | "route" | "map";
+type View = "story" | "route" | "map" | "province";
+type LegendTab = "salud" | "mineria";
+
+interface SaludMarker { x: number; y: number; tipo: "segura" | "riesgo" | "critica"; }
+interface MineriaMarker {
+  x: number; y: number;
+  tipo: "formal" | "informal";
+  nombre: string;
+  eessMasCercano: string;
+  distanciaKm: number;
+  descripcion?: string;
+}
+interface SaludPopupData {
+  zona: "segura" | "riesgo" | "critica";
+  provincia: string;
+  cantidadTotal: number;
+  activo: number;
+  desactivado: number;
+  categoria: string;
+  clasificacion: string;
+}
+
+const PROVINCE_SALUD_POPUPS: Record<string, SaludPopupData[]> = {
+  carabaya: [
+    { zona: "critica", provincia: "Carabaya", cantidadTotal: 29, activo: 29, desactivado: 0,
+      categoria: "Posta básica (I-1) y Puesto c/médico (I-2)",
+      clasificacion: "PUESTOS DE SALUD O POSTAS DE SALUD" },
+    { zona: "riesgo",  provincia: "Carabaya", cantidadTotal: 8,  activo: 8,  desactivado: 0,
+      categoria: "Centro de Salud (I-3) y Centro c/especialidades (I-4)",
+      clasificacion: "Centros de salud o centros médicos y/o centros de salud con camas de internamiento" },
+    { zona: "segura",  provincia: "Carabaya", cantidadTotal: 8,  activo: 8,  desactivado: 0,
+      categoria: "Centro de Salud (I-3) y Centro c/especialidades (I-4)",
+      clasificacion: "Centros de salud o centros médicos y/o centros de salud con camas de internamiento" },
+  ],
+};
+
+const PROVINCE_MARKERS: Record<string, { salud: SaludMarker[]; mineria: MineriaMarker[] }> = {
+  carabaya: {
+    mineria: [
+      { x: 793,  y: 503, tipo: "informal", nombre: "Ollachea",  eessMasCercano: "KCANA (I-2)",         distanciaKm: 2.4, descripcion: "Con cobertura a 2.4 km del EESS más cercano" },
+      { x: 1045, y: 615, tipo: "informal", nombre: "Ituata",    eessMasCercano: "TAHUANA (I-1)",        distanciaKm: 0.3, descripcion: "Con cobertura a 0.3 km del EESS más cercano" },
+      { x: 1012, y: 906, tipo: "informal", nombre: "Crucero",   eessMasCercano: "IPRESS CRUCERO (I-4)", distanciaKm: 0.8, descripcion: "Con cobertura a 0.8 km del EESS más cercano" },
+    ],
+    salud: [
+      // ZONA SEGURA (1) — más grande, con verde solapado a la derecha
+      { x: 728,  y: 725, tipo: "segura"  },
+      { x: 750,  y: 718, tipo: "riesgo"  },
+      // ZONA RIESGO MEDIO (8)
+      { x: 735,  y: 274, tipo: "riesgo"  },
+      { x: 653,  y: 313, tipo: "riesgo"  },
+      { x: 688,  y: 530, tipo: "riesgo"  },
+      { x: 651,  y: 623, tipo: "riesgo"  },
+      { x: 1009, y: 779, tipo: "riesgo"  },
+      { x: 1030, y: 679, tipo: "riesgo"  },
+      { x: 1035, y: 777, tipo: "riesgo"  },
+      { x: 860,  y: 848, tipo: "riesgo"  },
+      // ZONA CRÍTICA (29)
+      { x: 743,  y:  86, tipo: "critica" },
+      { x: 797,  y: 142, tipo: "critica" },
+      { x: 800,  y: 288, tipo: "critica" },
+      { x: 810,  y: 186, tipo: "critica" },
+      { x: 797,  y: 242, tipo: "critica" },
+      { x: 511,  y: 447, tipo: "critica" },
+      { x: 535,  y: 447, tipo: "critica" },
+      { x: 560,  y: 447, tipo: "critica" },
+      { x: 765,  y: 438, tipo: "critica" },
+      { x: 778,  y: 546, tipo: "critica" },
+      { x: 780,  y: 565, tipo: "critica" },
+      { x: 505,  y: 685, tipo: "critica" },
+      { x: 555,  y: 697, tipo: "critica" },
+      { x: 555,  y: 582, tipo: "critica" },
+      { x: 648,  y: 750, tipo: "critica" },
+      { x: 661,  y: 622, tipo: "critica" },
+      { x: 765,  y: 612, tipo: "critica" },
+      { x: 838,  y: 824, tipo: "critica" },
+      { x: 961,  y: 595, tipo: "critica" },
+      { x: 1000, y: 677, tipo: "critica" },
+      { x: 1067, y: 640, tipo: "critica" },
+      { x: 1074, y: 599, tipo: "critica" },
+      { x: 1097, y: 642, tipo: "critica" },
+      { x: 1131, y: 644, tipo: "critica" },
+      { x: 1144, y: 598, tipo: "critica" },
+      { x: 1039, y: 779, tipo: "critica" },
+      { x: 1068, y: 942, tipo: "critica" },
+      { x: 1076, y: 960, tipo: "critica" },
+      { x: 1072, y: 981, tipo: "critica" },
+    ],
+  },
+};
 
 export const TriangulacionSection = () => {
   const [view, setView] = useState<View>("story");
   const [step, setStep] = useState(0);
   const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
+  const [legendTab, setLegendTab] = useState<LegendTab>("salud");
+  const [saludAnchor, setSaludAnchor] = useState<{ x: number; y: number; tipo: "segura" | "riesgo" | "critica" } | null>(null);
+  const [mineriaPopup, setMineriaPopup] = useState<MineriaMarker | null>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
     if (view !== "route") return;
@@ -285,13 +387,13 @@ export const TriangulacionSection = () => {
     <div
       ref={sectionRef}
       id="triangulacion"
-      className={`relative w-full bg-[#304551] ${view === "route" ? "h-[300vh]" : "h-screen"}`}
+      className={`relative w-full ${view === "province" ? "bg-[#151B1B]" : "bg-[#304551]"} ${view === "route" ? "h-[300vh]" : "h-screen"}`}
     >
       <div className="sticky top-0 h-screen overflow-hidden">
         <img
-          src={view === "map" ? mapaSeleccionPuno : view === "route" ? mapaRuta : mapaInicio}
+          src={view === "province" && selectedProvince ? (PROVINCE_MAPS[selectedProvince] ?? mapaInicio) : view === "map" ? mapaSeleccionPuno : view === "route" ? mapaRuta : mapaInicio}
           alt="Mapa Triangulación"
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full ${view === "province" ? "object-contain" : "object-cover"}`}
         />
 
         {view === "story" && (
@@ -313,7 +415,7 @@ export const TriangulacionSection = () => {
               selectedId={selectedProvince}
               onHover={setHoveredProvince}
               onLeave={() => setHoveredProvince(null)}
-              onSelect={(id) => setSelectedProvince((prev) => (prev === id ? null : id))}
+              onSelect={(id) => { setSelectedProvince(id); setView("province"); }}
             />
             <button
               onClick={() => { setView("story"); setSelectedProvince(null); }}
@@ -328,6 +430,137 @@ export const TriangulacionSection = () => {
                 ? PROVINCES.find((p) => p.id === selectedProvince)?.name
                 : "Haz clic en cada provincia para conocer más información"}
             </p>
+          </>
+        )}
+
+        {view === "province" && (
+          <>
+            {/* Botones navegación top-left */}
+            <div className="absolute top-8 left-8 z-10 flex gap-3">
+              <button
+                onClick={() => { setView("map"); setSelectedProvince(null); }}
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+              >
+                <img src={botonAtras} alt="Volver" className="w-12 h-12" />
+              </button>
+              <button
+                onClick={() => { setView("story"); setSelectedProvince(null); }}
+                className="cursor-pointer hover:opacity-80 transition-opacity"
+              >
+                <img src={botonCerrar} alt="Cerrar" className="w-12 h-12" />
+              </button>
+            </div>
+
+            {/* Marcadores SVG sobre el mapa de provincia */}
+            {selectedProvince && PROVINCE_MARKERS[selectedProvince] && (
+              <svg
+                ref={svgRef}
+                viewBox="0 0 1920 1080"
+                preserveAspectRatio="xMidYMid meet"
+                className="absolute inset-0 w-full h-full z-10"
+                onClick={() => { setSaludAnchor(null); setMineriaPopup(null); }}
+              >
+                {legendTab === "mineria" &&
+                  PROVINCE_MARKERS[selectedProvince].mineria.map((m, i) => (
+                    <g
+                      key={i}
+                      transform={`translate(${m.x}, ${m.y})`}
+                      className="cursor-pointer"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const rect = svgRef.current!.getBoundingClientRect();
+                        const scaleX = rect.width  / 1920;
+                        const scaleY = rect.height / 1080;
+                        const scale  = Math.min(scaleX, scaleY);
+                        const offX   = (rect.width  - 1920 * scale) / 2;
+                        const offY   = (rect.height - 1080 * scale) / 2;
+                        setSaludAnchor(null);
+                        setMineriaPopup(prev =>
+                          prev?.nombre === m.nombre ? null : { ...m,
+                            _sx: m.x * scale + offX,
+                            _sy: m.y * scale + offY,
+                          } as MineriaMarker & { _sx: number; _sy: number }
+                        );
+                      }}
+                    >
+                      <polygon
+                        points="0,-18 16,14 -16,14"
+                        fill={m.tipo === "formal" ? "#13A383" : "#C03583"}
+                      />
+                    </g>
+                  ))}
+                {legendTab === "salud" &&
+                  PROVINCE_MARKERS[selectedProvince].salud.map((m, i) => (
+                    <circle
+                      key={i}
+                      cx={m.x}
+                      cy={m.y}
+                      r={m.tipo === "segura" ? 22 : 14}
+                      className="cursor-pointer"
+                      fill={
+                        m.tipo === "segura" ? "#F4F4F4"
+                        : m.tipo === "riesgo" ? "#13A383"
+                        : "#C03583"
+                      }
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        const rect = svgRef.current!.getBoundingClientRect();
+                        const scaleX = rect.width  / 1920;
+                        const scaleY = rect.height / 1080;
+                        const scale  = Math.min(scaleX, scaleY);
+                        const offX   = (rect.width  - 1920 * scale) / 2;
+                        const offY   = (rect.height - 1080 * scale) / 2;
+                        setMineriaPopup(null);
+                        setSaludAnchor(prev =>
+                          prev?.tipo === m.tipo ? null : {
+                            x: m.x * scale + offX,
+                            y: m.y * scale + offY,
+                            tipo: m.tipo,
+                          }
+                        );
+                      }}
+                    />
+                  ))}
+              </svg>
+            )}
+
+            {/* Popup Salud — 1 card del tipo clickeado */}
+            {saludAnchor && selectedProvince && (() => {
+              const popup = PROVINCE_SALUD_POPUPS[selectedProvince]?.find(p => p.zona === saludAnchor.tipo);
+              if (!popup) return null;
+              return (
+                <div
+                  className="absolute z-20 pointer-events-none"
+                  style={{ left: saludAnchor.x + 24, top: saludAnchor.y - 80 }}
+                >
+                  <PopupSaludInformation {...popup} />
+                </div>
+              );
+            })()}
+
+            {/* Popup Minería — 1 card a la derecha del triángulo clickeado */}
+            {mineriaPopup && (
+              <div
+                className="absolute z-20 pointer-events-none"
+                style={{
+                  left: (mineriaPopup as MineriaMarker & { _sx: number })._sx + 24,
+                  top:  (mineriaPopup as MineriaMarker & { _sy: number })._sy - 80,
+                }}
+              >
+                <PopupMineriaInformation
+                  tipo={mineriaPopup.tipo}
+                  nombre={mineriaPopup.nombre}
+                  eessMasCercano={mineriaPopup.eessMasCercano}
+                  distanciaKm={mineriaPopup.distanciaKm}
+                  descripcion={mineriaPopup.descripcion}
+                />
+              </div>
+            )}
+
+            {/* Leyenda bottom-right */}
+            <div className="absolute bottom-8 right-8 z-10">
+              <Leyenda activeTab={legendTab} onTabChange={setLegendTab} />
+            </div>
           </>
         )}
 
