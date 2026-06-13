@@ -3,7 +3,7 @@ import {
   PROVINCE_MARKERS,
   type SaludMarker,
   type MineriaMarker,
-} from "../features/04-Capachica/data/triangulacionData";
+} from "../features/05-Capachica/data/triangulacionData";
 
 import mapaCarabaya      from "../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-carabaya.png";
 import mapaElCollao      from "../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-collao.png";
@@ -94,8 +94,8 @@ export function MapMarkerEditor({ onClose }: Props) {
   useEffect(() => {
     const existing = PROVINCE_MARKERS[province];
     _uid = 0;
-    setSalud((existing?.salud  ?? []).map(m => ({ ...m, id: nextId() })));
-    setMineria((existing?.mineria ?? []).map(m => ({ ...m, id: nextId() })));
+    setSalud((existing?.salud  ?? []).map((m: SaludMarker) => ({ ...m, id: nextId() })));
+    setMineria((existing?.mineria ?? []).map((m: MineriaMarker) => ({ ...m, id: nextId() })));
     setSelected(null);
     setHistory([]);
   }, [province]);
@@ -225,8 +225,8 @@ export function MapMarkerEditor({ onClose }: Props) {
   function resetProvince() {
     const existing = PROVINCE_MARKERS[province];
     _uid = 0;
-    setSalud((existing?.salud  ?? []).map(m => ({ ...m, id: nextId() })));
-    setMineria((existing?.mineria ?? []).map(m => ({ ...m, id: nextId() })));
+    setSalud((existing?.salud  ?? []).map((m: SaludMarker) => ({ ...m, id: nextId() })));
+    setMineria((existing?.mineria ?? []).map((m: MineriaMarker) => ({ ...m, id: nextId() })));
     setSelected(null);
     setHistory([]);
   }

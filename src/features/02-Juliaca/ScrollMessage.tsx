@@ -1,0 +1,112 @@
+import { Children, isValidElement, useState, useEffect } from "react";
+import type { ReactNode } from "react";
+
+type ScrollMessageProps = {
+    start: number;
+    end: number;
+    children: ReactNode;
+};
+
+export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
+    return (
+        <div
+            className="absolute inset-0 z-20 grid place-items-center px-4 opacity-0 pointer-events-none"
+            data-start={start}
+            data-end={end}
+        >
+            <div className="flex w-full items-center justify-center text-white">
+                <div
+                    className="max-w-full [&_img]:block [&_img]:max-w-full py-10 px-4 md:py-[4.5rem] md:px-[3rem]"
+                    style={{
+                        backgroundColor: "rgba(10,10,10,0.75)",
+                    }}
+                >
+                    {children}
+                </div>
+            </div>
+        </div>
+    );
+};
+
+type ScrollParagraphProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
+
+    const content = isMobile
+        ? Children.map(children, (child) =>
+              isValidElement(child) && child.type === "br" ? " " : child
+          )
+        : children;
+
+    return (
+        <p
+            className="text-sm md:text-lg"
+            style={{
+                fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                lineHeight: "130%",
+                letterSpacing: "0.02em",
+                textAlign: "center",
+                fontWeight: 300,
+                margin: 0,
+                textWrap: "pretty",
+            }}
+        >
+            {content}
+        </p>
+    );
+};
+
+type ScrollChapterProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.Chapter = ({ children }: ScrollChapterProps) => (
+    <p
+        style={{
+            fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+            fontSize: 13,
+            lineHeight: "1.6",
+            letterSpacing: "0.25em",
+            textAlign: "center",
+            fontWeight: 400,
+            margin: "0 0 8px 0",
+            textTransform: "uppercase",
+        }}
+    >
+        {children}
+    </p>
+);
+
+type ScrollHeadingProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.Heading = ({ children }: ScrollHeadingProps) => (
+    <h2 className="mb-2 text-center text-2xl md:text-4xl font-bold leading-[1.4] tracking-[0.03em]">{children}</h2>
+);
+
+type ScrollImageHeadingProps = {
+    children: ReactNode;
+};
+
+ScrollMessage.ImageHeading = ({ children }: ScrollImageHeadingProps) => (
+    <h3 className="mb-6 text-center text-2xl leading-[1.4] tracking-[0.03em]">{children}</h3>
+);
+
+type ScrollImageProps = {
+    src: string;
+    alt: string;
+};
+
+ScrollMessage.Image = ({ src, alt }: ScrollImageProps) => (
+    <img src={src} alt={alt} className="max-h-[50vh] mx-auto" />
+);
