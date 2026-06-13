@@ -1,10 +1,26 @@
+import { Children, isValidElement, useEffect, useState, type ReactNode } from "react";
+
 type MessageProps = {
     start: number;
     end: number;
-    text: string;
+    children: ReactNode;
 };
 
-export const Message = ({ start, end, text }: MessageProps) => {
+export const Message = ({ start, end, children }: MessageProps) => {
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
+
+    const content = isMobile
+        ? Children.map(children, (child) =>
+              isValidElement(child) && child.type === "br" ? " " : child
+          )
+        : children;
+
     return (
         <div
             className="absolute inset-0 z-20 grid place-items-center opacity-0 pointer-events-none"
@@ -13,8 +29,19 @@ export const Message = ({ start, end, text }: MessageProps) => {
         >
             <div className="relative mx-4 max-w-65 md:max-w-140 lg:max-w-210">
                 <div className="bg-black/60 px-6 py-10 text-center md:px-12 md:py-16">
-                    <p className="font-inter lg:text-[22px] md:text-[16px] sm:text-[14px] font-light leading-[1.6] tracking-[0.02em] text-white/90 md:leading-[1.65]">
-                        {text}
+                    <p
+                        className="text-sm font-light text-white md:text-lg lg:text-[22px]"
+                        style={{
+                            fontFamily:
+                                'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                            lineHeight: "130%",
+                            letterSpacing: "0.02em",
+                            textAlign: "center",
+                            margin: 0,
+                            textWrap: "pretty",
+                        }}
+                    >
+                        {content}
                     </p>
                 </div>
             </div>
