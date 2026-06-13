@@ -1,3 +1,4 @@
+import campesinoNew from "../assets/images/Capachica/TriangulacionSection/campesino-new.png";
 
 interface StoryPopupProps {
   onShowRoute: () => void;
@@ -14,7 +15,7 @@ export default function StoryPopup({ onShowRoute }: StoryPopupProps) {
         {/* Avatar */}
         <div className="absolute -top-10 md:-top-23 left-1/2 -translate-x-1/2 h-20 w-20 md:h-40 md:w-40 rounded-full overflow-hidden flex-shrink-0 border-2 md:border-4 border-[#C03A84]">
           <img
-            src="/src/assets/images/Capachica/TriangulacionSection/campesino-new.png"
+            src={campesinoNew}
             alt="Arturo Ticona"
             className="h-full w-full object-cover"
           />
