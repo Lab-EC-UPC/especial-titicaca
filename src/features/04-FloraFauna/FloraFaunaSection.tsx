@@ -9,21 +9,21 @@ import Muestra3 from "./assets/Muestra3.png";
 const SOCIAL_IMAGES: SocialImage[] = [
   {
     src: Muestra1,
-    alt: "Contaminación en la orilla del lago",
-    description: "Descripción del cuadro",
-    subtext: "Año · Lugar de la foto",
+    alt: "Desechos",
+    description: "Desechos en las orillas del Titicaca",
+    subtext: "2026 / Andre Poma",
   },
   {
     src: Muestra2,
-    alt: "Residuos acumulados en la totora",
-    description: "Descripción del cuadro",
-    subtext: "Año · Lugar de la foto",
+    alt: "Desechos",
+    description: "Desechos en las orillas del Titicaca",
+    subtext: "2026 / Andre Poma",
   },
   {
     src: Muestra3,
-    alt: "Estado del ecosistema afectado",
-    description: "Descripción del cuadro",
-    subtext: "Año · Lugar de la foto",
+    alt: "Botaderos",
+    description: "Botaderos en islas de los uros",
+    subtext: "2026 / Andre Poma",
   },
 ];
 

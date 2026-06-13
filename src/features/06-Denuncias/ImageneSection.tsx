@@ -19,7 +19,7 @@ const cards: CardData[] = [
     id: 1,
     title: "Sector Salud",
     subtitle: "(MINSA / DIRESA Puno)",
-    image: "/image1_denuncias.jpg",
+    image: "/image1_denuncias.png",
     color: "from-rose-900/80 to-rose-700/60",
     accent: "bg-rose-500",
     accentBorder: "border-rose-500",
@@ -51,7 +51,7 @@ const cards: CardData[] = [
     id: 2,
     title: "Medio Ambiente y Biodiversidad",
     subtitle: "(MINAM / SERNANP / SERFOR)",
-    image: "/image3_denuncias.jpg",
+    image: "/image2_denuncias.png",
     color: "from-emerald-900/80 to-emerald-700/60",
     accent: "bg-emerald-500",
     accentBorder: "border-emerald-500",
@@ -83,7 +83,7 @@ const cards: CardData[] = [
     id: 3,
     title: "Gestión de Recursos Hídricos",
     subtitle: "(ANA)",
-    image: "/image2_denuncias.jpg",
+    image: "/image3_denuncias.png",
     color: "from-blue-900/80 to-blue-700/60",
     accent: "bg-blue-500",
     accentBorder: "border-blue-500",
@@ -115,7 +115,7 @@ const cards: CardData[] = [
     id: 4,
     title: "Autoridad Binacional del Lago Titicaca",
     subtitle: "(ALT)",
-    image: "/1780732388219_image.png",
+    image: "/image4_denuncias.png",
     color: "from-violet-900/80 to-violet-700/60",
     accent: "bg-violet-500",
     accentBorder: "border-violet-500",
@@ -145,7 +145,13 @@ const cards: CardData[] = [
   },
 ];
 
-function Card({ card, onClick }: { card: CardData; onClick: (card: CardData) => void }) {
+function Card({
+  card,
+  onClick,
+}: {
+  card: CardData;
+  onClick: (card: CardData) => void;
+}) {
   const [hovered, setHovered] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const ref = useRef<HTMLDivElement>(null);
@@ -164,14 +170,21 @@ function Card({ card, onClick }: { card: CardData; onClick: (card: CardData) => 
       onClick={() => onClick(card)}
       onMouseEnter={() => setHovered(true)}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => { setHovered(false); setTilt({ x: 0, y: 0 }); }}
+      onMouseLeave={() => {
+        setHovered(false);
+        setTilt({ x: 0, y: 0 });
+      }}
       className="relative cursor-pointer rounded-2xl overflow-hidden"
       style={{
         transform: hovered
           ? `perspective(800px) rotateY(${tilt.x}deg) rotateX(${tilt.y}deg) scale(1.05)`
           : "perspective(800px) rotateY(0deg) rotateX(0deg) scale(1)",
-        transition: hovered ? "transform 0.1s ease-out" : "transform 0.45s cubic-bezier(0.23,1,0.32,1)",
-        boxShadow: hovered ? "0 28px 52px rgba(0,0,0,0.45)" : "0 4px 18px rgba(0,0,0,0.2)",
+        transition: hovered
+          ? "transform 0.1s ease-out"
+          : "transform 0.45s cubic-bezier(0.23,1,0.32,1)",
+        boxShadow: hovered
+          ? "0 28px 52px rgba(0,0,0,0.45)"
+          : "0 4px 18px rgba(0,0,0,0.2)",
         aspectRatio: "3/4",
       }}
     >
@@ -180,26 +193,34 @@ function Card({ card, onClick }: { card: CardData; onClick: (card: CardData) => 
         alt={card.title}
         className="absolute inset-0 w-full h-full object-cover"
         style={{
-          filter: hovered ? "none" : "grayscale(100%) brightness(0.8)",
           transform: hovered ? "scale(1.1)" : "scale(1)",
-          transition: "filter 0.55s ease, transform 0.55s ease",
+          transition: "transform 0.55s ease",
         }}
       />
 
       {/* degradado neutro: las cards se ven en gris ("del pasado") salvo al hover */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10"
-        style={{ opacity: hovered ? 0.45 : 0.72, transition: "opacity 0.4s ease" }}
+      <div
+        className="absolute inset-0 bg-gradient-to-t from-black/80 to-black/10"
+        style={{
+          opacity: hovered ? 0.45 : 0.72,
+          transition: "opacity 0.4s ease",
+        }}
       />
 
       {/* shine */}
       {hovered && (
-        <div className="absolute inset-0 pointer-events-none"
-          style={{ background: "linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 55%)" }}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(135deg,rgba(255,255,255,0.1) 0%,transparent 55%)",
+          }}
         />
       )}
 
       <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-5">
-        <div className={`${card.accent} h-[3px] rounded-full mb-3`}
+        <div
+          className={`${card.accent} h-[3px] rounded-full mb-3`}
           style={{
             width: hovered ? "2.5rem" : "1.5rem",
             transition: "width 0.35s ease",
@@ -209,7 +230,8 @@ function Card({ card, onClick }: { card: CardData; onClick: (card: CardData) => 
           {card.title}
         </h3>
         <p className="text-white/60 text-xs mt-1">{card.subtitle}</p>
-        <div className="mt-3 flex items-center gap-1 text-white/50 text-xs"
+        <div
+          className="mt-3 flex items-center gap-1 text-white/50 text-xs"
           style={{
             opacity: hovered ? 1 : 0,
             transform: hovered ? "translateY(0)" : "translateY(5px)",
@@ -217,7 +239,14 @@ function Card({ card, onClick }: { card: CardData; onClick: (card: CardData) => 
           }}
         >
           <span>Ver preguntas</span>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+          <svg
+            width="12"
+            height="12"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+          >
             <path d="M5 12h14M12 5l7 7-7 7" />
           </svg>
         </div>
@@ -226,7 +255,13 @@ function Card({ card, onClick }: { card: CardData; onClick: (card: CardData) => 
   );
 }
 
-function Popup({ card, onClose }: { card: CardData | null; onClose: () => void }) {
+function Popup({
+  card,
+  onClose,
+}: {
+  card: CardData | null;
+  onClose: () => void;
+}) {
   const [open, setOpen] = useState<number | null>(null);
   if (!card) return null;
 
@@ -235,7 +270,10 @@ function Popup({ card, onClose }: { card: CardData | null; onClose: () => void }
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-6"
-      style={{ backgroundColor: "rgba(0,0,0,0.75)", backdropFilter: "blur(6px)" }}
+      style={{
+        backgroundColor: "rgba(0,0,0,0.75)",
+        backdropFilter: "blur(6px)",
+      }}
       onClick={onClose}
     >
       <div
@@ -245,21 +283,41 @@ function Popup({ card, onClose }: { card: CardData | null; onClose: () => void }
       >
         {/* Hero */}
         <div className="relative h-44 sm:h-56 w-full overflow-hidden flex-shrink-0">
-          <img src={card.image} alt={card.title} className="w-full h-full object-cover" />
-          <div className={`absolute inset-0 bg-gradient-to-t ${card.color}`} style={{ opacity: 0.85 }} />
+          <img
+            src={card.image}
+            alt={card.title}
+            className="w-full h-full object-cover"
+          />
+          <div
+            className={`absolute inset-0 bg-gradient-to-t ${card.color}`}
+            style={{ opacity: 0.85 }}
+          />
           <div className="absolute inset-0 flex flex-col justify-end p-5 sm:p-6">
-            <span className={`text-xs font-semibold tracking-widest uppercase ${card.accentText} mb-1`}>
+            <span
+              className={`text-xs font-semibold tracking-widest uppercase ${card.accentText} mb-1`}
+            >
               Preguntas a la institución
             </span>
-            <h2 className="text-white text-lg sm:text-2xl font-bold leading-tight">{card.popup.heading}</h2>
-            <p className="text-white/55 text-xs sm:text-sm mt-1">{card.popup.sub}</p>
+            <h2 className="text-white text-lg sm:text-2xl font-bold leading-tight">
+              {card.popup.heading}
+            </h2>
+            <p className="text-white/55 text-xs sm:text-sm mt-1">
+              {card.popup.sub}
+            </p>
           </div>
           <button
             onClick={onClose}
             className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
             aria-label="Cerrar"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+            >
               <path d="M18 6L6 18M6 6l12 12" />
             </svg>
           </button>
@@ -280,17 +338,26 @@ function Popup({ card, onClose }: { card: CardData | null; onClose: () => void }
                 className="w-full flex items-start gap-3 p-4 text-left"
                 onClick={() => toggle(i)}
               >
-                <span className={`text-xs font-bold tracking-widest mt-0.5 flex-shrink-0 ${card.accentText}`}>
+                <span
+                  className={`text-xs font-bold tracking-widest mt-0.5 flex-shrink-0 ${card.accentText}`}
+                >
                   {p.n}
                 </span>
-                <span className="text-white/80 text-sm font-medium leading-snug flex-1 line-clamp-2"
+                <span
+                  className="text-white/80 text-sm font-medium leading-snug flex-1 line-clamp-2"
                   style={{ WebkitLineClamp: open === i ? "unset" : 2 }}
                 >
-                  {open === i ? p.q : p.q.slice(0, 90) + (p.q.length > 90 ? "…" : "")}
+                  {open === i
+                    ? p.q
+                    : p.q.slice(0, 90) + (p.q.length > 90 ? "…" : "")}
                 </span>
                 <svg
-                  width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" strokeWidth="2"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
                   className={`flex-shrink-0 mt-0.5 transition-transform duration-300 text-white/40 ${open === i ? "rotate-180" : ""}`}
                 >
                   <path d="M6 9l6 6 6-6" />
@@ -309,7 +376,9 @@ function Popup({ card, onClose }: { card: CardData | null; onClose: () => void }
 
         {/* Footer */}
         <div className="flex-shrink-0 px-5 py-3 border-t border-white/10 flex items-center justify-between">
-          <span className="text-white/30 text-xs">4 preguntas sin respuesta</span>
+          <span className="text-white/30 text-xs">
+            4 preguntas sin respuesta
+          </span>
           <button
             onClick={onClose}
             className="text-xs text-white/40 hover:text-white/70 transition-colors"
@@ -329,7 +398,6 @@ export const ImageneSection = () => {
     <div id="imas" className="bg-[#2e3440]">
       <div className="mx-auto container w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center min-h-full">
-
           <div className="text-center mb-10 sm:mb-14">
             <p className="text-white/35 text-xs tracking-[0.35em] uppercase mb-3">
               Rendición de cuentas
@@ -357,7 +425,12 @@ export const ImageneSection = () => {
         </div>
       </div>
 
-      <Popup card={activeCard} onClose={() => { setActiveCard(null); }} />
+      <Popup
+        card={activeCard}
+        onClose={() => {
+          setActiveCard(null);
+        }}
+      />
     </div>
   );
 };

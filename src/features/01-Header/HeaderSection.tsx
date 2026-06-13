@@ -54,53 +54,56 @@ export const HeaderSection = () => {
         <CoverMessage.Paragraph>
           El Titicaca es el lago navegable más alto del mundo y el principal
           recurso hídrico, pesquero y turístico para las poblaciones ribereñas
-          de Perú y Bolivia. Hoy, su equilibrio está en riesgo.
+          de Perú y Bolivia.
+          <br />
+          <br />
+          Hoy, su equilibrio está en riesgo.
         </CoverMessage.Paragraph>
       </CoverMessage>
 
       <CoverMessage at={22}>
         <CoverMessage.Paragraph>
-          Los ríos que alimentan al lago reciben descargas continuas de aguas
-          residuales y basura sin tratamiento previo. La provincia de San Román
-          (Juliaca) concentra más del 87% del volumen total de aguas servidas
-          vertidas en la cuenca del río Coata. Este flujo contaminante se
-          origina en centros urbanos, botaderos informales y pasivos mineros. Es
-          arrastrada por los ríos de la cuenca hasta acumularse en el lecho del
-          lago.
+          Los ríos que alimentan al Titicaca reciben descargas permanentes de
+          aguas residuales, basura y contaminantes. La provincia de San Román
+          (Juliaca) concentra más del 87% de las aguas servidas que llegan a la
+          cuenca del Coata. A esto se agregan botaderos informales y residuos de
+          antiguas actividades mineras. Gran parte de esa contaminación termina
+          acumulándose en el lago.
         </CoverMessage.Paragraph>
       </CoverMessage>
 
-      <CoverMessage at={38}>
+      <CoverMessage at={42}>
         <CoverMessage.Title>BAJO LA SUPERFICIE</CoverMessage.Title>
         <CoverMessage.Subtitle>
           La crisis que esconde el Lago Titicaca
         </CoverMessage.Subtitle>
       </CoverMessage>
 
-      <CoverMessage at={53}>
+      <CoverMessage at={59}>
         <CoverMessage.Paragraph>
-          El río Coata y otros afluentes transportan aguas residuales
-          domésticas, residuos sólidos y metales pesados hacia el lago Titicaca.
-          Esta investigación documenta el avance de la contaminación en Juliaca,
-          Coata y las comunidades puneñas, evaluando su impacto directo en la
-          biodiversidad, la salud pública y las actividades económicas matrices:
-          pesca, ganadería y turismo.
+          Esta contaminación tiene un impacto directo y preocupante en la salud
+          de las personas que viven cerca de los ríos. En las últimas dos
+          décadas, se han registrado 987 muertes relacionadas con el consumo de
+          agua contaminada en la región, siendo los niños menores de 11 años y
+          los adultos mayores los grupos más vulnerables.
         </CoverMessage.Paragraph>
       </CoverMessage>
 
-      <CoverMessage at={66}>
+      <CoverMessage at={74}>
         <CoverMessage.Paragraph>
-          Recorrimos los puntos críticos de la cuenca para contrastar los datos
-          oficiales con la realidad de las comunidades afectadas en Puno. Este
-          reporte audiovisual registra el testimonio de los habitantes ribereños
-          y la evidencia física de los relaves y vertimientos en el agua.
+          Este documental sigue la ruta de la contaminación desde Juliaca hasta
+          el lago Titicaca. Con imágenes aéreas, registros en campo y
+          testimonios de especialistas y habitantes de la cuenca, muestra cómo
+          el deterioro ambiental afecta al ecosistema más importante del
+          altiplano.
         </CoverMessage.Paragraph>
       </CoverMessage>
 
-      <CoverMessage at={84}>
-        <CoverMessage.Title>
-          ¿Qué esconde el lago más alto del mundo?
-        </CoverMessage.Title>
+      <CoverMessage at={92}>
+        <h2 className="text-xl font-normal leading-[1.15] tracking-tight sm:text-3xl md:text-4xl">
+          ¿Cómo llegó el Titicaca a esta situación si sus problemas eran
+          conocidos desde hace mucho?
+        </h2>
         <div className="pointer-events-auto mt-4 aspect-video w-full max-w-64 overflow-hidden rounded-2xl bg-white/5 shadow-[0_20px_60px_rgba(0,0,0,0.55)] ring-1 ring-white/15 sm:mt-8 sm:max-w-2xl">
           {youTubeId ? (
             <iframe
