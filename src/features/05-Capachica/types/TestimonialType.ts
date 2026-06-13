@@ -12,6 +12,7 @@ export interface Testimonial {
   name: string;
   testimony: TestimonyItem[];
   backgroundImage: string;
+  backgroundImageMobile: string;
   characterImage: string;
   seatedImage: string;
   position: {

@@ -17,7 +17,7 @@ export const TestimonialCard = ({ name, testimony, currentIndex, onNext, onClose
   const isLast = currentIndex === testimony.length - 1;
 
   return (
-    <div className="absolute bottom-10 left-1/2 z-20 w-[92vw] -translate-x-1/2 sm:bottom-14 md:bottom-20 md:w-197.5 md:max-w-[92vw]">
+    <div className="absolute bottom-24 left-1/2 z-20 w-[92vw] -translate-x-1/2 sm:bottom-14 md:bottom-20 md:w-197.5 md:max-w-[92vw]">
       <div className="relative h-auto w-full rounded-[15px] border-2 border-[rgba(88,106,116,0.5)] bg-[rgba(21,27,27,0.65)] px-4 pt-6 pb-9 shadow-2xl backdrop-blur-[25px] sm:px-6 sm:pt-7 sm:pb-10 md:h-[251.04px] md:px-8 md:py-12">
         <div className="absolute left-1/2 top-0 flex h-9 w-[60%] max-w-[313.7px] -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-md bg-[#13A383] px-2 sm:h-10 md:h-[56.97px] md:w-[313.7px]">
           <span className="text-center font-[Citizen] text-[13px] leading-tight font-bold text-black sm:text-[16px] md:text-[19px] md:leading-4.75">
