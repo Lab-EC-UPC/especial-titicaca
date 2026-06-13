@@ -5,9 +5,10 @@ type ScrollMessageProps = {
     start: number;
     end: number;
     children: ReactNode;
+    background?: boolean;
 };
 
-export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
+export const ScrollMessage = ({ start, end, children, background = true }: ScrollMessageProps) => {
     return (
         <div
             className="absolute inset-0 z-20 grid place-items-center px-4 opacity-0 pointer-events-none"
@@ -17,9 +18,7 @@ export const ScrollMessage = ({ start, end, children }: ScrollMessageProps) => {
             <div className="flex w-full items-center justify-center text-white">
                 <div
                     className="max-w-full [&_img]:block [&_img]:max-w-full py-10 px-4 md:py-[4.5rem] md:px-[3rem]"
-                    style={{
-                        backgroundColor: "rgba(10,10,10,0.75)",
-                    }}
+                    style={background ? { backgroundColor: "rgba(10,10,10,0.75)" } : undefined}
                 >
                     {children}
                 </div>

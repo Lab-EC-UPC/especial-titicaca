@@ -76,28 +76,38 @@ export const JuliacaSection = () => {
 
             <ScrollMessage start={0.05} end={0.15}>
                 <ScrollMessage.Paragraph>
-                    Lo que observas aquí es solo una parte del problema.
+                    Lo que observas aquí es solo una parte de la historia.
                     <br />
-                    Río arriba se acumulan residuos que continúan avanzando por la cuenca.
+                    Para entender lo que ocurre en el Titicaca, primero hay que mirar al río Coata.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
             <ScrollMessage start={0.2} end={0.3}>
                 <ScrollMessage.Chapter>Capítulo I</ScrollMessage.Chapter>
                 <ScrollMessage.Heading>
-                    CONTAMINACIÓN QUE
+                    SIGUIENDO
                     <br />
-                    ARRASTRA COATA
+                    EL CURSO DEL COATA
                 </ScrollMessage.Heading>
                 <ScrollMessage.Paragraph>
-                    Las evaluaciones oficiales confirman el acelerado deterioro del río Coata
+                    Es el el principal receptor de basura de la región, arrastrando cada año
                     <br />
-                    como vía de transporte de la contaminación hacia el Titicaca.
+                    más de 4,000 toneladas de residuos sólidos y vertiendo un volumen de aguas
+                    <br />
+                    residuales equivalente a llenar más de 300 piscinas olímpicas cada año.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
             <Gallery
-                title={isMobile ? <>¿Qué revela<br />el paso del tiempo?</> : "¿Qué revela el paso del tiempo?"}
+                title={
+                    isMobile ?
+                        <>
+                            ¿Qué revela
+                            <br />
+                            el paso del tiempo?
+                        </>
+                    :   "¿Qué revela el paso del tiempo?"
+                }
                 images={[
                     {
                         src: galeria01,
@@ -131,41 +141,49 @@ export const JuliacaSection = () => {
 
             <ScrollMessage start={0.4} end={0.5}>
                 <ScrollMessage.Paragraph>
-                    De acuerdo con la Autoridad Nacional del Agua (ANA), las zonas bajo
+                    Los registros de la Autoridad Nacional del Agua (ANA) muestran un deterioro
                     <br />
-                    alarma máxima en la cuenca aumentaron en la última década.
+                    sostenido en la cuenca. En 2015 se identificaron 8 puntos críticos por
                     <br />
-                    Se registra que los puntos críticos identificados por vertimientos pasó
-                    <br />
-                    de 8 en el 2015 a 11 en las evaluaciones del 2025.
+                    vertimientos; para 2025 la cifra aumentó a 11 zonas en estado de alerta máxima.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
             <ScrollMessage start={0.55} end={0.65}>
                 <ScrollMessage.Paragraph>
-                    Los monitoreos técnicos realizados entre 2022 y 2024 evidencian que
+                    En el río Coata, el arsénico llegó a triplicar el límite establecido por
                     <br />
-                    las concentraciones de arsénico, plomo, cobre y zinc exceden los
+                    los Estándares de Calidad Ambiental (ECA) en 2022. También se detectaron
                     <br />
-                    Estándares de Calidad Ambiental (ECA) para Agua en múltiples
+                    niveles elevados de plomo, cobre y zinc. En la cuenca del Ramis, el aluminio
                     <br />
-                    estaciones de muestreo. Específicamente, en la estación de control
+                    alcanzó concentraciones de hasta 478,644 mg/L, más de 95 veces por encima
                     <br />
-                    del río Coata, la concentración de arsénico alcanzó los 0,034 mg/L
-                    <br />
-                    en 2022, una cifra que triplica el límite máximo permisible establecido
-                    <br />
-                    en la normativa (0,01 mg/L).
+                    del valor de referencia para la protección del riego y la ganadería.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
             <ScrollMessage start={0.75} end={0.85}>
                 <ScrollMessage.Paragraph>
-                    El recorrido de los vertimientos termina en la bahía interior de Puno.
+                    La bahía interior de Puno recibe gran parte de los vertimientos que llegan
                     <br />
-                    El Organismo de Evaluación y Fiscalización Ambiental (OEFA) la identifica
+                    al Titicaca. Allí se han identificado al menos 15 descargas de aguas servidas
                     <br />
-                    como una de las zonas más afectadas del Lago Titicaca.
+                    y los monitoreos registran altas concentraciones de coliformes fecales,
+                    <br />
+                    incluidas bacterias como E. coli.
+                </ScrollMessage.Paragraph>
+            </ScrollMessage>
+
+            <ScrollMessage start={0.9} end={0.98} background={false}>
+                <ScrollMessage.Paragraph>
+                    El impacto ya no se limita al agua. La alteración de sus condiciones
+                    <br />
+                    naturales reduce el oxígeno disponible y favorece la proliferación de
+                    <br />
+                    plantas flotantes, afectando el equilibrio biológico del lago y las
+                    <br />
+                    especies que dependen de este ecosistema.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
         </div>
