@@ -1,7 +1,6 @@
 /**
  * Interactive testimonial map view that displays selectable characters and contextual tooltips.
  */
-
 import { useState } from "react";
 import { TESTIMONIAL_BACKGROUND, TESTIMONIAL_TITLE, TESTIMONIAL_SUBTITLE } from "../../constants/testimonial.constants";
 import type { Testimonial } from "../../types/TestimonialType";
@@ -34,31 +33,57 @@ export const TestimonialBackground = ({ testimonials, onSelectPerson }: Testimon
   const handleMouseLeave = () => setTooltip(null);
 
   return (
-    <div className="relative w-full overflow-hidden">
-      <img src={TESTIMONIAL_BACKGROUND} alt="Testimonios" className="block h-auto w-full" />
+    <div className="relative h-screen w-full overflow-hidden">
+      <img
+        src={TESTIMONIAL_BACKGROUND}
+        alt="Testimonios"
+        className="absolute inset-0 z-0 h-full w-full object-cover"
+      />
 
-      <p className="absolute left-1/2 top-10 z-10 flex -translate-x-1/2 items-center whitespace-nowrap text-center font-[Citizen] text-[40px] font-bold uppercase tracking-[0.02em] text-[#F5F5F5]">
+      <div className="absolute bottom-[18%] left-1/2 z-10 flex w-full max-w-275 -translate-x-1/2 items-end justify-center gap-1 px-4 sm:bottom-[2%] sm:gap-3 sm:px-6 md:bottom-[6%] md:gap-6 lg:bottom-0 lg:px-8">
+        {testimonials.map((t, i) => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => onSelectPerson(t.id)}
+            onMouseMove={(e) => handleMouseMove(e, `Conocer testimonio de ${t.name}`, TOOLTIP_STYLES[i])}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={(e) => {
+              const touch = e.touches[0];
+              handleMouseMove(
+                { clientX: touch.clientX, clientY: touch.clientY } as unknown as React.MouseEvent,
+                `Conocer testimonio de ${t.name}`,
+                TOOLTIP_STYLES[i]
+              );
+            }}
+            aria-label={`Ver testimonio de ${t.name}`}
+            className="block w-1/3 cursor-pointer p-0 leading-none focus:outline-none"
+          >
+            <img
+              src={t.seatedImage}
+              alt={`Personaje ${t.name}`}
+              className="block h-auto w-full select-none pointer-events-none drop-shadow-lg transition-transform duration-200 hover:scale-105"
+              draggable={false}
+            />
+          </button>
+        ))}
+      </div>
+
+      <p className="absolute left-1/2 top-4 z-20 w-full -translate-x-1/2 px-4 text-center font-[Citizen] text-[20px] font-bold uppercase leading-tight tracking-[0.02em] text-[#F5F5F5] sm:top-6 sm:text-[28px] md:top-8 md:text-[34px] lg:top-10 lg:text-[40px]">
         {TESTIMONIAL_TITLE}
       </p>
-
-      <p className="absolute bottom-10 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap text-center font-[Citizen] text-[26px] font-normal text-white" style={{ WebkitTextStroke: "3.2px #151B1B", paintOrder: "stroke fill" }}>
+      <p
+        className="absolute bottom-4 left-1/2 z-20 w-full -translate-x-1/2 px-4 text-center font-[Citizen] text-[13px] font-normal leading-snug text-white sm:bottom-6 sm:text-[18px] md:bottom-8 md:text-[22px] lg:bottom-10 lg:text-[26px]"
+        style={{ WebkitTextStroke: "2px #151B1B", paintOrder: "stroke fill" }}
+      >
         {TESTIMONIAL_SUBTITLE}
       </p>
 
-      {testimonials.map((t, i) => (
-        <button
-          key={t.id}
-          onClick={() => onSelectPerson(t.id)}
-          onMouseMove={(e) => handleMouseMove(e, `Conocer testimonio de ${t.name}`, TOOLTIP_STYLES[i])}
-          onMouseLeave={handleMouseLeave}
-          aria-label={`Ver testimonio de ${t.name}`}
-          className="absolute cursor-pointer"
-          style={{ left: t.clickArea.left, top: t.clickArea.top, width: t.clickArea.width, height: t.clickArea.height }}
-        />
-      ))}
-
       {tooltip && (
-        <div className={`fixed z-50 rounded-lg px-4 py-2 text-sm font-bold shadow-lg pointer-events-none ${tooltip.colorClass}`} style={{ left: tooltip.x + 14, top: tooltip.y + 14 }}>
+        <div
+          className={`fixed z-50 hidden rounded-lg px-3 py-2 text-xs font-bold shadow-lg pointer-events-none sm:block sm:px-4 sm:text-sm ${tooltip.colorClass}`}
+          style={{ left: tooltip.x + 14, top: tooltip.y + 14 }}
+        >
           {tooltip.text}
         </div>
       )}

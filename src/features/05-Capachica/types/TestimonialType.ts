@@ -1,7 +1,6 @@
 /**
  * Shared domain types used across the testimonial section.
  */
-
 export interface TestimonyItem {
   id: number;
   text: string;
@@ -13,11 +12,11 @@ export interface Testimonial {
   testimony: TestimonyItem[];
   backgroundImage: string;
   characterImage: string;
+  seatedImage: string;
   audioSrc: string;
-  clickArea: {
+  position: {
     left: string;
-    top: string;
+    bottom: string;
     width: string;
-    height: string;
   };
 }
