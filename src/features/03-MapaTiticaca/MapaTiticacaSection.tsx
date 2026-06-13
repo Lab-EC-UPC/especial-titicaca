@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-
+// ─── PALETA ───────────────────────────────────────────────────────────────────
 const LEVELS = {
   critical: { color: "#E91E8C", label: "CRÍTICO",        sub: "Relaves mineros, drenaje ácido" },
   high:     { color: "#F06292", label: "ALTO",            sub: "Daño bacteriológico" },
@@ -8,252 +8,206 @@ const LEVELS = {
   sin:      { color: "#90A4AE", label: "SIN EXCEDENCIAS", sub: "No se registran excedencias" },
 } as const;
 
-const SCALE = 2.2;
-const MAX_T = parseFloat(((1 - 1 / SCALE) / 2 * 100).toFixed(1)); // 27.3
+// ─── CONSTANTES ───────────────────────────────────────────────────────────────
+const SCALE        = 2.2;
+const MAX_T        = parseFloat(((1 - 1 / SCALE) / 2 * 100).toFixed(1)); // 27.3
+const clampT       = (v: number) => Math.max(-MAX_T, Math.min(MAX_T, v));
+const clampDot     = (v: number) => Math.max(0, Math.min(100, v));
+const DESKTOP_RATIO = 1920 / 1080;
+const MOBILE_RATIO  = 412 / 917;
+const MOBILE_BP     = 768;
 
-const MIN_DOT = 0;
-const MAX_DOT = 100;
-
-const clampT   = (v: number) => Math.max(-MAX_T,  Math.min(MAX_T,  v));
-const clampDot = (v: number) => Math.max(MIN_DOT, Math.min(MAX_DOT, v));
-
-const ZOOM_TARGETS_DEFAULT = {
-  azangaro:   { x: 18.2, y:  27.2 },
-  lagunillas: { x: 17.2, y: -16.8 },
-  pucara:     { x: 20.7, y:  27.2 },
-  ilave:      { x: 13.2, y: -27.3 },
-  illpa:      { x: 19.7, y:   7.7 },
-  suches:     { x:  2.7, y:  27.2 },
-  ramis:      { x: 18.7, y:  25.2 },
-  huancane:   { x: 11.2, y:  27.2 },
-} as const;
-
-type LevelKey = keyof typeof LEVELS;
-type CuencaId = keyof typeof ZOOM_TARGETS_DEFAULT;
-
-interface ZoomTarget { x: number; y: number; }
-type ZoomTargets = Record<CuencaId, ZoomTarget>;
-type DotPositions = Record<CuencaId, { x: number; y: number }>;
-
+// ─── TIPOS ────────────────────────────────────────────────────────────────────
+type LevelKey   = keyof typeof LEVELS;
+type CuencaId   = "azangaro"|"lagunillas"|"pucara"|"ilave"|"illpa"|"suches"|"ramis"|"huancane";
+interface XY          { x: number; y: number; }
+type ZoomTargets   = Record<CuencaId, XY>;
+type DotPositions  = Record<CuencaId, XY>;
 interface Cuenca {
-  id: CuencaId;
-  name: string;
-  contaminant: string;
-  value: string;
-  excede: string;
-  level: LevelKey;
-  x: string; // default dot X %
-  y: string; // default dot Y %
+  id: CuencaId; name: string; shortName: string;
+  contaminant: string; value: string; excede: string; level: LevelKey;
 }
 
+// ─── DATA ─────────────────────────────────────────────────────────────────────
 const CUENCAS: Cuenca[] = [
-  { id: "azangaro",   name: "Cuenca Azángaro",  contaminant: "Mercurio", value: "2.15 mg/L",   excede: "2153 veces", level: "critical", x: "36%", y: "58%" },
-  { id: "lagunillas", name: "Cuenca Lagunillas", contaminant: "Hierro",   value: "2.67 mg/L",   excede: "0.6 veces",  level: "sin",      x: "57%", y: "37%" },
-  { id: "pucara",     name: "Cuenca Pucará",     contaminant: "Hierro",   value: "128.07 mg/L", excede: "25.6 veces", level: "high",     x: "29%", y: "50%" },
-  { id: "ilave",      name: "Cuenca Ilave",      contaminant: "Arsénico", value: "0.03 mg/L",   excede: "3.4 veces",  level: "moderate", x: "50%", y: "56%" },
-  { id: "illpa",      name: "Cuenca Illpa",      contaminant: "Aluminio", value: "13.13 mg/L",  excede: "2.6 veces",  level: "moderate", x: "66%", y: "49%" },
-  { id: "suches",     name: "Cuencas Suches",    contaminant: "Aluminio", value: "40.28 mg/L",  excede: "5.0 veces",  level: "high",     x: "27%", y: "70%" },
-  { id: "ramis",      name: "Intercuenca Ramis", contaminant: "Hierro",   value: "178.05 mg/L", excede: "35.6 veces", level: "critical", x: "49%", y: "72%" },
-  { id: "huancane",   name: "Cuenca Huancané",   contaminant: "Cobre",    value: "3.00 mg/L",   excede: "15 veces",   level: "high",     x: "61%", y: "74%" },
+  { id:"azangaro",   name:"Cuenca Azángaro",   shortName:"Azángaro",  contaminant:"Mercurio", value:"2.15 mg/L",   excede:"2153 veces", level:"critical" },
+  { id:"lagunillas", name:"Cuenca Lagunillas",  shortName:"Lagunillas",contaminant:"Hierro",   value:"2.67 mg/L",   excede:"0.6 veces",  level:"sin"      },
+  { id:"pucara",     name:"Cuenca Pucará",      shortName:"Pucará",    contaminant:"Hierro",   value:"128.07 mg/L", excede:"25.6 veces", level:"high"     },
+  { id:"ilave",      name:"Cuenca Ilave",       shortName:"Ilave",     contaminant:"Arsénico", value:"0.03 mg/L",   excede:"3.4 veces",  level:"moderate" },
+  { id:"illpa",      name:"Cuenca Illpa",       shortName:"Illpa",     contaminant:"Aluminio", value:"13.13 mg/L",  excede:"2.6 veces",  level:"moderate" },
+  { id:"suches",     name:"Cuencas Suches",     shortName:"Suches",    contaminant:"Aluminio", value:"40.28 mg/L",  excede:"5.0 veces",  level:"high"     },
+  { id:"ramis",      name:"Intercuenca Ramis",  shortName:"Ramis",     contaminant:"Hierro",   value:"178.05 mg/L", excede:"35.6 veces", level:"critical" },
+  { id:"huancane",   name:"Cuenca Huancané",    shortName:"Huancané",  contaminant:"Cobre",    value:"3.00 mg/L",   excede:"15 veces",   level:"high"     },
 ];
 
-const MAP_IMAGE = "/mapa_titicaca.png";
+// ─── COORDENADAS DESKTOP ──────────────────────────────────────────────────────
+const ZOOM_DESKTOP: ZoomTargets = {
+  azangaro:   { x: 21.2, y:  27.2 },
+  lagunillas: { x: 21.7, y: -15.3 },
+  pucara:     { x: 21.7, y:  27.2 },
+  ilave:      { x: 11.2, y: -27.3 },
+  illpa:      { x: 19.7, y:  11.2 },
+  suches:     { x:  3.2, y:  27.2 },
+  ramis:      { x: 18.7, y:  24.2 },
+  huancane:   { x:  2.7, y:  27.2 },
+};
+const DOTS_DESKTOP: DotPositions = {
+  azangaro:   { x: 30.5, y:  8.5 },
+  lagunillas: { x: 30.5, y: 57.0 },
+  pucara:     { x: 25.5, y: 11.5 },
+  ilave:      { x: 41.5, y: 81.5 },
+  illpa:      { x: 26.5, y: 41.5 },
+  suches:     { x: 45.5, y:  7.0 },
+  ramis:      { x: 35.5, y: 24.0 },
+  huancane:   { x: 47.0, y: 12.5 },
+};
 
-// EDITOR PANEL
+// ─── COORDENADAS MOBILE ───────────────────────────────────────────────────────
+const ZOOM_MOBILE: ZoomTargets = {
+  azangaro:   { x: 27.2, y:  7.7 },
+  lagunillas: { x: 22.7, y: -8.8 },
+  pucara:     { x: 23.2, y: 13.2 },
+  ilave:      { x: 11.2, y: -9.3 },
+  illpa:      { x: 20.7, y:  5.2 },
+  suches:     { x:  6.2, y: 11.7 },
+  ramis:      { x: 19.2, y:  8.7 },
+  huancane:   { x:  4.2, y: 10.7 },
+};
+const DOTS_MOBILE: DotPositions = {
+  azangaro:   { x: 19.0, y: 27.5 },
+  lagunillas: { x: 20.5, y: 54.5 },
+  pucara:     { x:  9.0, y: 29.0 },
+  ilave:      { x: 45.0, y: 85.5 },
+  illpa:      { x: 26.0, y: 43.0 },
+  suches:     { x: 45.0, y: 13.5 },
+  ramis:      { x: 34.0, y: 29.5 },
+  huancane:   { x: 47.0, y: 20.0 },
+};
 
+// ─── HOOK: área real de la imagen (objectFit:contain) ─────────────────────────
+function useMapRect(imgRef: React.RefObject<HTMLImageElement | null>, imgRatio: number) {
+  const [rect, setRect] = useState({ left: 0, top: 0, width: 0, height: 0 });
+  useEffect(() => {
+    const compute = () => {
+      const el = imgRef.current; if (!el) return;
+      const cw = el.clientWidth, ch = el.clientHeight;
+      let w: number, h: number;
+      if (imgRatio > cw / ch) { w = cw; h = cw / imgRatio; }
+      else                     { h = ch; w = ch * imgRatio; }
+      setRect({ left: (cw - w) / 2, top: (ch - h) / 2, width: w, height: h });
+    };
+    compute();
+    const ro = new ResizeObserver(compute);
+    if (imgRef.current) ro.observe(imgRef.current);
+    return () => ro.disconnect();
+  }, [imgRef, imgRatio]);
+  return rect;
+}
+
+// ─── EDITOR PANEL ─────────────────────────────────────────────────────────────
 type EditorTab = "zoom" | "dots";
 
 const EditorPanel = ({
-  targets,
-  dots,
-  activeId,
-  onZoomChange,
-  onDotChange,
-  onClose,
+  device, accentColor, zoomTargets, dotPositions, activeId,
+  onZoomChange, onDotChange, onClose,
 }: {
-  targets:      ZoomTargets;
-  dots:         DotPositions;
-  activeId:     CuencaId | null;
+  device: "desktop" | "mobile"; accentColor: string;
+  zoomTargets: ZoomTargets; dotPositions: DotPositions; activeId: CuencaId | null;
   onZoomChange: (id: CuencaId, axis: "x" | "y", val: number) => void;
   onDotChange:  (id: CuencaId, axis: "x" | "y", val: number) => void;
-  onClose:      () => void;
+  onClose: () => void;
 }) => {
-  const [tab, setTab]             = useState<EditorTab>("zoom");
+  const [tab, setTab]               = useState<EditorTab>("dots");
   const [selectedId, setSelectedId] = useState<CuencaId | null>(activeId);
-
   useEffect(() => { if (activeId) setSelectedId(activeId); }, [activeId]);
 
-  const cuenca    = selectedId ? CUENCAS.find(c => c.id === selectedId)! : null;
-  const cfg       = cuenca ? LEVELS[cuenca.level] : null;
-  const zTarget   = selectedId ? targets[selectedId] : null;
-  const dTarget   = selectedId ? dots[selectedId]    : null;
-
-  const shortName = (c: Cuenca) =>
-    c.name.replace("Cuenca ", "").replace("Intercuenca ", "").replace("Cuencas ", "");
+  const cuenca  = selectedId ? CUENCAS.find(c => c.id === selectedId)! : null;
+  const cfg     = cuenca ? LEVELS[cuenca.level] : null;
+  const zTarget = selectedId ? zoomTargets[selectedId]  : null;
+  const dTarget = selectedId ? dotPositions[selectedId] : null;
 
   return (
     <div style={{
-      position: "fixed", bottom: 16, left: "50%", transform: "translateX(-50%)",
-      zIndex: 100,
-      background: "rgba(13,21,23,0.97)",
-      border: "1px solid rgba(255,255,255,0.12)",
-      borderRadius: 14, padding: "14px 16px",
-      backdropFilter: "blur(16px)",
-      boxShadow: "0 8px 40px rgba(0,0,0,0.7)",
-      width: "min(560px, 96vw)",
-      fontFamily: "monospace",
+      position:"fixed", bottom:16, left:"50%", transform:"translateX(-50%)",
+      zIndex:200, background:"rgba(10,16,20,0.98)",
+      border:"1px solid "+accentColor+"55", borderRadius:14, padding:"14px 18px",
+      backdropFilter:"blur(20px)", boxShadow:"0 12px 48px rgba(0,0,0,0.8)",
+      width:"min(620px,96vw)", fontFamily:"monospace",
     }}>
-
-      {/* ── Header ── */}
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-        <div style={{ display: "flex", gap: 6 }}>
-          {(["zoom", "dots"] as EditorTab[]).map(t => (
-            <button key={t} onClick={() => setTab(t)} style={{
-              background: tab === t ? "#E91E8C" : "rgba(255,255,255,0.06)",
-              border: `1px solid ${tab === t ? "#E91E8C" : "rgba(255,255,255,0.1)"}`,
-              color: "#fff", borderRadius: 6, padding: "4px 12px",
-              fontSize: 11, fontWeight: 700, cursor: "pointer",
-              letterSpacing: "0.1em", textTransform: "uppercase",
-              transition: "all 0.2s",
-            }}>
+      {/* Header */}
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <div style={{display:"flex",gap:6,alignItems:"center",flexWrap:"wrap"}}>
+          <span style={{background:accentColor+"22",border:"1px solid "+accentColor+"55",color:accentColor,fontSize:10,fontWeight:700,padding:"2px 8px",borderRadius:20,letterSpacing:"0.12em",textTransform:"uppercase"}}>
+            {device === "desktop" ? "🖥 Desktop" : "📱 Mobile"}
+          </span>
+          {(["zoom","dots"] as EditorTab[]).map(t => (
+            <button key={t} onClick={() => setTab(t)} style={{background:tab===t?accentColor:"rgba(255,255,255,0.06)",border:"1px solid "+(tab===t?accentColor:"rgba(255,255,255,0.1)"),color:"#fff",borderRadius:6,padding:"3px 10px",fontSize:10,fontWeight:700,cursor:"pointer",letterSpacing:"0.1em",textTransform:"uppercase"}}>
               {t === "zoom" ? "⊕ Zoom" : "● Puntos"}
             </button>
           ))}
-          <span style={{ color: "#546E7A", fontSize: 10, alignSelf: "center", marginLeft: 4 }}>
-            límite {tab === "zoom" ? `±${MAX_T}%` : "0–100%"}
-          </span>
+          <span style={{color:"#546E7A",fontSize:10}}>límite {tab==="zoom"?"±"+MAX_T+"%":"0–100%"}</span>
         </div>
-        <button onClick={onClose} style={{
-          background: "none", border: "none", color: "#546E7A",
-          cursor: "pointer", fontSize: 20, lineHeight: 1, padding: "0 4px",
-        }}>×</button>
+        <button onClick={onClose} style={{background:"none",border:"none",color:"#546E7A",cursor:"pointer",fontSize:20,lineHeight:1}}>×</button>
       </div>
 
-      {/* ── Selector cuencas ── */}
-      <div style={{ display: "flex", gap: 5, flexWrap: "wrap", marginBottom: 12 }}>
+      {/* Selector cuencas */}
+      <div style={{display:"flex",gap:5,flexWrap:"wrap",marginBottom:10}}>
         {CUENCAS.map(c => {
-          const lcfg = LEVELS[c.level];
-          const sel  = selectedId === c.id;
+          const lc = LEVELS[c.level], sel = selectedId === c.id;
           return (
-            <button key={c.id} onClick={() => setSelectedId(c.id)} style={{
-              background: sel ? lcfg.color : "rgba(255,255,255,0.05)",
-              border: `1px solid ${sel ? lcfg.color : "rgba(255,255,255,0.1)"}`,
-              color: sel ? "#fff" : "#8FA0AB",
-              borderRadius: 6, padding: "3px 9px", fontSize: 11,
-              cursor: "pointer", fontWeight: sel ? 700 : 400,
-              transition: "all 0.2s", whiteSpace: "nowrap",
-            }}>
-              {shortName(c)}
+            <button key={c.id} onClick={() => setSelectedId(c.id)} style={{background:sel?lc.color:"rgba(255,255,255,0.05)",border:"1px solid "+(sel?lc.color:"rgba(255,255,255,0.1)"),color:sel?"#fff":"#8FA0AB",borderRadius:6,padding:"3px 9px",fontSize:11,cursor:"pointer",fontWeight:sel?700:400,whiteSpace:"nowrap"}}>
+              {c.shortName}
             </button>
           );
         })}
       </div>
 
-      {/* ── Sliders ── */}
+      {/* Sliders */}
       {selectedId && cuenca && cfg ? (
         <>
-          {tab === "zoom" && zTarget && (
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              {(["x", "y"] as const).map(axis => (
-                <div key={axis} style={{ flex: "1 1 200px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-                    <span style={{ color: "#8FA0AB", fontSize: 11 }}>
-                      {axis === "x" ? "X — horizontal" : "Y — vertical"}
+          <div style={{display:"flex",gap:14,flexWrap:"wrap"}}>
+            {(["x","y"] as const).map(axis => {
+              const isZoom = tab === "zoom";
+              const val    = isZoom ? (zTarget?.[axis] ?? 0) : (dTarget?.[axis] ?? 0);
+              const min    = isZoom ? -MAX_T : 0;
+              const max    = isZoom ?  MAX_T : 100;
+              return (
+                <div key={axis} style={{flex:"1 1 210px"}}>
+                  <div style={{display:"flex",justifyContent:"space-between",marginBottom:4}}>
+                    <span style={{color:"#8FA0AB",fontSize:11}}>
+                      {axis==="x" ? (isZoom?"Zoom X (izq←→der)":"Punto X (izq←→der)") : (isZoom?"Zoom Y (↑arr→aba↓)":"Punto Y (↑arr→aba↓)")}
                     </span>
-                    <span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>
-                      {zTarget[axis].toFixed(1)}%
-                    </span>
+                    <span style={{color:cfg.color,fontSize:13,fontWeight:900}}>{val.toFixed(1)}%</span>
                   </div>
-                  <input type="range" min={-MAX_T} max={MAX_T} step={0.5}
-                    value={zTarget[axis]}
-                    onChange={e => onZoomChange(selectedId, axis, parseFloat(e.target.value))}
-                    style={{ width: "100%", accentColor: cfg.color }}
+                  <input type="range" min={min} max={max} step={0.5} value={val}
+                    onChange={e => { const v = parseFloat(e.target.value); isZoom ? onZoomChange(selectedId,axis,v) : onDotChange(selectedId,axis,v); }}
+                    style={{width:"100%",accentColor:cfg.color,height:6,cursor:"pointer"}}
                   />
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#546E7A", fontSize: 10 }}>
-                      {axis === "x" ? "← izq" : "↑ arriba"}
-                    </span>
-                    <span style={{ color: "#546E7A", fontSize: 10 }}>
-                      {axis === "x" ? "der →" : "abajo ↓"}
-                    </span>
-                  </div>
                 </div>
-              ))}
-            </div>
-          )}
-
-          {tab === "dots" && dTarget && (
-            <div style={{ display: "flex", gap: 16, flexWrap: "wrap" }}>
-              {(["x", "y"] as const).map(axis => (
-                <div key={axis} style={{ flex: "1 1 200px" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 5 }}>
-                    <span style={{ color: "#8FA0AB", fontSize: 11 }}>
-                      {axis === "x" ? "X — horizontal" : "Y — vertical"}
-                    </span>
-                    <span style={{ color: "#fff", fontSize: 12, fontWeight: 700 }}>
-                      {dTarget[axis].toFixed(1)}%
-                    </span>
-                  </div>
-                  <input type="range" min={MIN_DOT} max={MAX_DOT} step={0.5}
-                    value={dTarget[axis]}
-                    onChange={e => onDotChange(selectedId, axis, parseFloat(e.target.value))}
-                    style={{ width: "100%", accentColor: cfg.color }}
-                  />
-                  <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <span style={{ color: "#546E7A", fontSize: 10 }}>
-                      {axis === "x" ? "← izq (0%)" : "↑ arriba (0%)"}
-                    </span>
-                    <span style={{ color: "#546E7A", fontSize: 10 }}>
-                      {axis === "x" ? "der → (100%)" : "abajo ↓ (100%)"}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Output copiable */}
-          <div style={{
-            marginTop: 12, background: "rgba(255,255,255,0.04)",
-            borderRadius: 8, padding: "8px 12px",
-            border: "1px solid rgba(255,255,255,0.06)",
-          }}>
-            <span style={{ color: "#546E7A", fontSize: 10, display: "block", marginBottom: 3 }}>
-              {tab === "zoom" ? "ZOOM" : "PUNTO"} — copia al código
+              );
+            })}
+          </div>
+          {/* Output */}
+          <div style={{marginTop:10,background:"rgba(255,255,255,0.04)",borderRadius:8,padding:"8px 12px",border:"1px solid rgba(255,255,255,0.06)"}}>
+            <span style={{color:"#546E7A",fontSize:10,display:"block",marginBottom:3}}>
+              Copia → {tab==="zoom"?"ZOOM_":"DOTS_"}{device==="desktop"?"DESKTOP":"MOBILE"}
             </span>
-            <code style={{ color: "#E91E8C", fontSize: 11, wordBreak: "break-all" }}>
-              {tab === "zoom" && zTarget &&
-                selectedId + ": { x: " + zTarget.x.toFixed(1) + ", y: " + zTarget.y.toFixed(1) + " }"}
-              {tab === "dots" && dTarget &&
-                '{ id: "' + selectedId + '", x: "' + dTarget.x.toFixed(1) + '%", y: "' + dTarget.y.toFixed(1) + '%" }'}
+            <code style={{color:accentColor,fontSize:11,wordBreak:"break-all"}}>
+              {tab==="zoom" && zTarget && `${selectedId}: { x: ${zTarget.x.toFixed(1)}, y: ${zTarget.y.toFixed(1)} }`}
+              {tab==="dots" && dTarget && `${selectedId}: { x: ${dTarget.x.toFixed(1)}, y: ${dTarget.y.toFixed(1)} }`}
             </code>
           </div>
         </>
       ) : (
-        <p style={{ color: "#546E7A", fontSize: 12, margin: 0, textAlign: "center" }}>
-          Selecciona una cuenca para editarla
-        </p>
+        <p style={{color:"#546E7A",fontSize:12,margin:0,textAlign:"center"}}>Haz scroll o selecciona una cuenca</p>
       )}
 
-      {/* Exportar todos */}
-      <details style={{ marginTop: 10 }}>
-        <summary style={{ color: "#546E7A", fontSize: 10, cursor: "pointer", userSelect: "none" }}>
-          Ver todos los valores
-        </summary>
-        <pre style={{
-          marginTop: 6, color: "#8FA0AB", fontSize: 10,
-          background: "rgba(255,255,255,0.03)", borderRadius: 6,
-          padding: "8px 10px", overflow: "auto", maxHeight: 130,
-        }}>
+      <details style={{marginTop:10}}>
+        <summary style={{color:"#546E7A",fontSize:10,cursor:"pointer",userSelect:"none"}}>Ver todos los valores ({tab})</summary>
+        <pre style={{marginTop:6,color:"#8FA0AB",fontSize:10,background:"rgba(255,255,255,0.03)",borderRadius:6,padding:"8px 10px",overflow:"auto",maxHeight:150}}>
           {tab === "zoom"
-            ? "const ZOOM_TARGETS = {\n" +
-              Object.entries(targets).map(([k, v]) =>
-                "  " + k.padEnd(12) + ": { x: " + String(v.x.toFixed(1)).padStart(5) + ", y: " + String(v.y.toFixed(1)).padStart(5) + " },"
-              ).join("\n") +
-              "\n} as const;"
-            : CUENCAS.map(c =>
-                '  { id: "' + c.id + '", x: "' + dots[c.id].x.toFixed(1) + '%", y: "' + dots[c.id].y.toFixed(1) + '%" },'
-              ).join("\n")
+            ? CUENCAS.map(c => "  "+c.id.padEnd(12)+": { x:"+String(zoomTargets[c.id].x.toFixed(1)).padStart(6)+", y:"+String(zoomTargets[c.id].y.toFixed(1)).padStart(6)+" },").join("\n")
+            : CUENCAS.map(c => "  "+c.id.padEnd(12)+": { x:"+String(dotPositions[c.id].x.toFixed(1)).padStart(6)+", y:"+String(dotPositions[c.id].y.toFixed(1)).padStart(6)+" },").join("\n")
           }
         </pre>
       </details>
@@ -261,231 +215,276 @@ const EditorPanel = ({
   );
 };
 
-//PRINCIPAL
-
+// ─── COMPONENTE PRINCIPAL ─────────────────────────────────────────────────────
 export const MapaTiticacaSection = () => {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const [activeIdx,   setActiveIdx]   = useState(-1);
-  const [zoom,        setZoom]        = useState({ scale: 1, tx: 0, ty: 0 });
-  const [showEditor,  setShowEditor]  = useState(false);
-  // Para reactivar el editor: cambiar false → true
+  const sectionRef    = useRef<HTMLDivElement>(null);
+  const imgDesktopRef = useRef<HTMLImageElement>(null);
+  const imgMobileRef  = useRef<HTMLImageElement>(null);
 
-  // Zoom targets editables
-  const [targets, setTargets] = useState<ZoomTargets>(() =>
-    Object.fromEntries(
-      Object.entries(ZOOM_TARGETS_DEFAULT).map(([k, v]) => [k, { x: v.x, y: v.y }])
-    ) as ZoomTargets
+  const [activeIdx, setActiveIdx] = useState(-1);
+  const [zoom, setZoom]           = useState({ scale: 1, tx: 0, ty: 0 });
+  const [isMobile, setIsMobile]   = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < MOBILE_BP : false
   );
 
-  // Dot positions editables — inicializadas desde los % default de CUENCAS
-  const [dots, setDots] = useState<DotPositions>(() => ({
-    azangaro:   { x: 48.0, y: 15.5 },
-    lagunillas: { x: 45.0, y: 37.5 },
-    pucara:     { x: 43.0, y: 25.0 },
-    ilave:      { x: 59.5, y: 60.0 },
-    illpa:      { x: 43.0, y: 45.0 },
-    suches:     { x: 46.0, y: 12.0 },
-    ramis:      { x: 54.0, y: 46.5 },
-    huancane:   { x: 67.0, y: 25.5 },
-  }));
+  // ── Editor: cambiar a true para activar en desarrollo ──
+  const [showEditor, setShowEditor] = useState(false);
+
+  const [zoomD, setZoomD] = useState<ZoomTargets>(() => ({ ...ZOOM_DESKTOP }));
+  const [dotsD, setDotsD] = useState<DotPositions>(() => ({ ...DOTS_DESKTOP }));
+  const [zoomM, setZoomM] = useState<ZoomTargets>(() => ({ ...ZOOM_MOBILE }));
+  const [dotsM, setDotsM] = useState<DotPositions>(() => ({ ...DOTS_MOBILE }));
+
+  const zoomTargets  = isMobile ? zoomM : zoomD;
+  const dotPositions = isMobile ? dotsM : dotsD;
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < MOBILE_BP);
+    window.addEventListener("resize", check, { passive: true });
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const mapRectD = useMapRect(imgDesktopRef, DESKTOP_RATIO);
+  const mapRectM = useMapRect(imgMobileRef,  MOBILE_RATIO);
+  const mapRect  = isMobile ? mapRectM : mapRectD;
 
   const activeId: CuencaId | null = activeIdx >= 0 ? CUENCAS[activeIdx].id : null;
 
-  const handleZoomChange = (id: CuencaId, axis: "x" | "y", val: number) => {
-    const clamped = clampT(val);
-    setTargets(prev => ({ ...prev, [id]: { ...prev[id], [axis]: clamped } }));
-    if (id === activeId) {
-      setZoom(prev => ({ ...prev, [axis === "x" ? "tx" : "ty"]: clamped }));
-    }
+  const handleZoom = (id: CuencaId, axis: "x" | "y", val: number) => {
+    const c = clampT(val);
+    if (isMobile) setZoomM(p => ({ ...p, [id]: { ...p[id], [axis]: c } }));
+    else          setZoomD(p => ({ ...p, [id]: { ...p[id], [axis]: c } }));
+    if (id === activeId) setZoom(p => ({ ...p, [axis === "x" ? "tx" : "ty"]: c }));
   };
-
-  const handleDotChange = (id: CuencaId, axis: "x" | "y", val: number) => {
-    setDots(prev => ({ ...prev, [id]: { ...prev[id], [axis]: clampDot(val) } }));
+  const handleDot = (id: CuencaId, axis: "x" | "y", val: number) => {
+    const c = clampDot(val);
+    if (isMobile) setDotsM(p => ({ ...p, [id]: { ...p[id], [axis]: c } }));
+    else          setDotsD(p => ({ ...p, [id]: { ...p[id], [axis]: c } }));
   };
 
   useEffect(() => {
     const SCREENS = 9;
-    const handleScroll = () => {
-      const el = sectionRef.current;
-      if (!el) return;
+    const onScroll = () => {
+      const el = sectionRef.current; if (!el) return;
       const { top, height } = el.getBoundingClientRect();
-      const scrollable = height - window.innerHeight;
-      const progress   = Math.max(0, Math.min(1, -top / scrollable));
-      const step       = progress * SCREENS;
-      const idx        = Math.floor(step) - 1;
-
-      if (idx < 0) {
-        setActiveIdx(-1);
-        setZoom({ scale: 1, tx: 0, ty: 0 });
-        return;
-      }
-      const cuenca = CUENCAS[Math.min(idx, CUENCAS.length - 1)];
-      const target = targets[cuenca.id];
-      setActiveIdx(Math.min(idx, CUENCAS.length - 1));
-      setZoom({ scale: SCALE, tx: clampT(target.x), ty: clampT(target.y) });
+      const progress = Math.max(0, Math.min(1, -top / (height - window.innerHeight)));
+      const idx      = Math.floor(progress * SCREENS) - 1;
+      if (idx < 0) { setActiveIdx(-1); setZoom({ scale: 1, tx: 0, ty: 0 }); return; }
+      const ci      = Math.min(idx, CUENCAS.length - 1);
+      const targets = window.innerWidth < MOBILE_BP ? zoomM : zoomD;
+      const t       = targets[CUENCAS[ci].id];
+      setActiveIdx(ci);
+      setZoom({ scale: SCALE, tx: clampT(t.x), ty: clampT(t.y) });
     };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [targets]);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [zoomD, zoomM]);
 
   const active    = activeIdx >= 0 ? CUENCAS[activeIdx] : null;
   const activeCfg = active ? LEVELS[active.level] : null;
+
+  const imgTransform  = `scale(${zoom.scale}) translate(${zoom.tx}%,${zoom.ty}%)`;
+  const imgTransition = "transform 0.75s cubic-bezier(0.25,0.46,0.45,0.94)";
+
+  // Tamaños responsivos del dot/label
+  const dotSize    = isMobile ? 8  : 14;
+  const ringSize   = isMobile ? 18 : 30;
+  const labelSize  = isMobile ? "clamp(6px,2.2vw,8px)" : "clamp(9px,1.1vw,12px)";
+  const shadowGlow = isMobile
+    ? `0 0 0 2px {color}33, 0 0 6px {color}`
+    : `0 0 0 4px {color}33, 0 0 14px {color}`;
+
+  // Progreso (0–1) para barra superior
+  const progressPct = active ? ((activeIdx + 1) / CUENCAS.length) * 100 : 0;
 
   return (
     <div id="mapatiti" ref={sectionRef} style={{ position: "relative", height: "900vh" }}>
       <div style={{ position: "sticky", top: 0, height: "100vh", overflow: "hidden", background: "#151B1B" }}>
 
-        {/* Imagen del mapa */}
+        {/* ── Barra de progreso (top) ── */}
+        <div style={{
+          position: "absolute", top: 0, left: 0, height: 2, zIndex: 40,
+          width: `${progressPct}%`,
+          background: activeCfg ? activeCfg.color : "transparent",
+          transition: "width 0.6s ease, background-color 0.5s ease",
+          boxShadow: activeCfg ? `0 0 8px ${activeCfg.color}` : "none",
+        }} />
+
+        {/* ── Imagen desktop ── */}
         <img
-          src={MAP_IMAGE}
-          alt="Mapa cuencas hidrográficas del Lago Titicaca"
+          ref={imgDesktopRef}
+          src="/mapa_titicaca.png"
+          alt="Mapa Lago Titicaca desktop"
           style={{
-            position: "absolute", inset: 0,
-            width: "100%", height: "100%",
+            position: "absolute", inset: 0, width: "100%", height: "100%",
             objectFit: "contain", objectPosition: "center",
-            transform: `scale(${zoom.scale}) translate(${zoom.tx}%, ${zoom.ty}%)`,
-            transition: "transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94)",
-            transformOrigin: "center center",
-            userSelect: "none",
+            transform: imgTransform, transition: imgTransition,
+            transformOrigin: "center center", userSelect: "none",
+            willChange: "transform", display: isMobile ? "none" : "block",
           }}
         />
 
-        {/* Vignette */}
+        {/* ── Imagen mobile ── */}
+        <img
+          ref={imgMobileRef}
+          src="/mapa_titicaca_mobile.png"
+          alt="Mapa Lago Titicaca móvil"
+          style={{
+            position: "absolute", inset: 0, width: "100%", height: "100%",
+            objectFit: "contain", objectPosition: "center",
+            transform: imgTransform, transition: imgTransition,
+            transformOrigin: "center center", userSelect: "none",
+            willChange: "transform", display: isMobile ? "block" : "none",
+          }}
+        />
+
+        {/* ── Overlay dots (siguen el zoom de la imagen) ── */}
+        <div style={{
+          position: "absolute",
+          left: mapRect.left, top: mapRect.top,
+          width: mapRect.width, height: mapRect.height,
+          pointerEvents: "none",
+          transform: imgTransform,
+          transition: imgTransition,
+          transformOrigin: "center center",
+        }}>
+          {CUENCAS.map((c, i) => {
+            const cfg      = LEVELS[c.level];
+            const isActive = activeIdx === i;
+            const dot      = dotPositions[c.id];
+            return (
+              <div key={c.id} style={{
+                position: "absolute",
+                left: dot.x + "%", top: dot.y + "%",
+                transform: "translate(-50%,-50%)",
+                opacity: isActive ? 1 : 0,
+                transition: "opacity 0.45s ease",
+                display: "flex", flexDirection: "column", alignItems: "center", gap: isMobile ? 2 : 4,
+              }}>
+                {/* Anillo pulsante */}
+                <div style={{
+                  position: "absolute",
+                  width: ringSize, height: ringSize, borderRadius: "50%",
+                  border: `${isMobile ? 1 : 1.5}px solid ${cfg.color}`,
+                  animation: isActive ? "ringPulse 1.6s ease-out infinite" : "none",
+                  opacity: 0.7,
+                }} />
+                {/* Dot */}
+                <div style={{
+                  width: dotSize, height: dotSize, borderRadius: "50%",
+                  background: cfg.color, flexShrink: 0,
+                  boxShadow: `0 0 0 ${isMobile ? 2 : 4}px ${cfg.color}33, 0 0 ${isMobile ? 6 : 14}px ${cfg.color}`,
+                }} />
+                {/* Nombre cuenca */}
+                <span style={{
+                  fontFamily: "'Citizen OT', 'CitizenOT', serif",
+                  fontSize: labelSize,
+                  fontWeight: 600,
+                  color: "#fff",
+                  letterSpacing: "0.04em",
+                  textShadow: "0 1px 6px rgba(0,0,0,0.95), 0 0 12px rgba(0,0,0,0.8)",
+                  whiteSpace: "nowrap",
+                  userSelect: "none",
+                  marginTop: isMobile ? 1 : 2,
+                }}>
+                  {c.shortName}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Viñeta radial */}
         <div style={{
           position: "absolute", inset: 0, pointerEvents: "none",
-          background: "radial-gradient(ellipse at center, transparent 45%, rgba(13,21,23,0.6) 100%)",
+          background: "radial-gradient(ellipse at center,transparent 40%,rgba(13,21,23,0.6) 100%)",
         }} />
 
-        {/* Leyenda — abajo derecha */}
+        {/* ── Leyenda (desktop) / compacta (mobile) ── */}
         <div style={{
-          position: "absolute", bottom: "clamp(16px, 3vw, 32px)", right: "clamp(12px, 2vw, 32px)",
+          position: "absolute",
+          bottom: "clamp(16px,3vw,32px)",
+          right:  "clamp(12px,2vw,32px)",
           zIndex: 30,
-          background: "rgba(18,24,27,0.92)", border: "1px solid rgba(255,255,255,0.1)",
-          borderRadius: 10, padding: "clamp(10px,1.5vw,18px) clamp(12px,1.8vw,22px)",
-          backdropFilter: "blur(14px)", minWidth: "clamp(160px,18vw,220px)",
+          background: "rgba(18,24,27,0.92)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          borderRadius: 10,
+          padding: isMobile
+            ? "8px 10px"
+            : "clamp(10px,1.5vw,18px) clamp(12px,1.8vw,22px)",
+          backdropFilter: "blur(14px)",
+          minWidth: isMobile ? "auto" : "clamp(160px,18vw,220px)",
         }}>
-          <p style={{ color: "#90A4AE", fontSize: "clamp(9px,1vw,10px)", letterSpacing: "0.14em", fontWeight: 700, margin: "0 0 10px", textTransform: "uppercase" }}>
+          <p style={{ color:"#90A4AE", fontSize: isMobile ? 8 : "clamp(9px,1vw,10px)", letterSpacing:"0.14em", fontWeight:700, margin:"0 0 8px", textTransform:"uppercase" }}>
             Leyenda
           </p>
           {Object.entries(LEVELS).map(([key, cfg]) => (
-            <div key={key} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
-              <div style={{ width: 12, height: 12, borderRadius: "50%", flexShrink: 0, marginTop: 2, background: cfg.color, boxShadow: `0 0 6px ${cfg.color}` }} />
+            <div key={key} style={{ display:"flex", alignItems:"flex-start", gap: isMobile ? 6 : 10, marginBottom: isMobile ? 5 : 8 }}>
+              <div style={{ width: isMobile ? 8 : 12, height: isMobile ? 8 : 12, borderRadius:"50%", flexShrink:0, marginTop:2, background:cfg.color, boxShadow:`0 0 6px ${cfg.color}` }} />
               <div>
-                <p style={{ color: "#fff", fontSize: "clamp(10px,1.1vw,12px)", fontWeight: 700, margin: 0 }}>{cfg.label}</p>
-                <p style={{ color: "#78909C", fontSize: "clamp(9px,0.9vw,11px)", margin: "1px 0 0" }}>{cfg.sub}</p>
+                <p style={{ color:"#fff", fontSize: isMobile ? 9 : "clamp(10px,1.1vw,12px)", fontWeight:700, margin:0 }}>
+                  {cfg.label}
+                </p>
+                {!isMobile && (
+                  <p style={{ color:"#78909C", fontSize:"clamp(9px,0.9vw,11px)", margin:"1px 0 0" }}>{cfg.sub}</p>
+                )}
               </div>
             </div>
           ))}
         </div>
 
-        {/* Marcadores — solo visible cuando es su turno */}
-        {CUENCAS.map((c, i) => {
-          const cfg      = LEVELS[c.level];
-          const isActive = activeIdx === i;
-          const dotPos   = dots[c.id];
-          return (
-            <div
-              key={c.id}
-              style={{
-                position: "absolute",
-                left: `${dotPos.x}%`,
-                top:  `${dotPos.y}%`,
-                transform: "translate(-50%,-50%)",
-                zIndex: 20,
-                // Solo visible cuando es su turno
-                opacity: isActive ? 1 : 0,
-                pointerEvents: "none",
-                transition: "opacity 0.35s ease",
-              }}
-            >
-              {/* Popup — comentado temporalmente
-              <div style={{
-                position: "absolute", bottom: "calc(100% + 12px)", left: "50%",
-                width: "clamp(170px,20vw,210px)",
-                background: "rgba(13,21,23,0.95)", border: `1.5px solid ${cfg.color}`,
-                borderRadius: 10, padding: "10px 14px", backdropFilter: "blur(12px)",
-                boxShadow: `0 4px 24px rgba(0,0,0,0.5), 0 0 12px ${cfg.color}33`,
-                opacity: isActive ? 1 : 0,
-                transform: isActive ? "translateX(-50%) translateY(0)" : "translateX(-50%) translateY(6px)",
-                pointerEvents: "none",
-                transition: "opacity 0.35s, transform 0.35s",
-              }}>
-                <span style={{
-                  display: "inline-block", background: cfg.color, color: "#fff",
-                  fontSize: 9, fontWeight: 800, letterSpacing: "0.1em",
-                  padding: "2px 8px", borderRadius: 20, marginBottom: 6, textTransform: "uppercase",
-                }}>
-                  {c.name}
-                </span>
-                <p style={{ color: "#fff", fontSize: "clamp(14px,1.5vw,18px)", fontWeight: 800, margin: "0 0 2px", lineHeight: 1.1 }}>
-                  {c.contaminant}: {c.value}
-                </p>
-                <p style={{ color: "#90A4AE", fontSize: "clamp(10px,1vw,11px)", margin: 0 }}>
-                  Excede límite permitido:{" "}
-                  <span style={{ color: cfg.color, fontWeight: 700 }}>{c.excede}</span>
-                </p>
-                <div style={{
-                  position: "absolute", bottom: -7, left: "50%", transform: "translateX(-50%)",
-                  borderLeft: "6px solid transparent", borderRight: "6px solid transparent",
-                  borderTop: `7px solid ${cfg.color}`,
-                }} />
-              </div>
-              */}
-
-              {/* Dot */}
-              <div style={{
-                width: 16, height: 16,
-                borderRadius: "50%", background: cfg.color,
-                boxShadow: `0 0 0 5px ${cfg.color}33, 0 0 16px ${cfg.color}`,
-                transition: "all 0.35s",
-              }} />
-            </div>
-          );
-        })}
-
-        {/* Card detalle activo */}
+        {/* ── Card detalle cuenca activa ── */}
         <div style={{
           position: "absolute",
           bottom: "clamp(16px,3vw,28px)",
-          left: "clamp(12px,2vw,28px)",
-          zIndex: 30, width: "clamp(200px,22vw,260px)",
+          left:   "clamp(12px,2vw,28px)",
+          zIndex: 30,
+          width: isMobile ? "clamp(170px,55vw,210px)" : "clamp(200px,22vw,260px)",
           opacity: active ? 1 : 0,
-          transform: active ? "translateY(0)" : "translateY(10px)",
+          transform: active ? "translateY(0)" : "translateY(12px)",
           transition: "opacity 0.4s, transform 0.4s",
           pointerEvents: "none",
         }}>
           {active && activeCfg && (
             <div style={{
-              background: "rgba(13,21,23,0.95)", border: `1.5px solid ${activeCfg.color}`,
-              borderRadius: 12, padding: "clamp(10px,1.5vw,14px) clamp(12px,1.8vw,18px)",
-              backdropFilter: "blur(14px)",
-              boxShadow: `0 8px 32px rgba(0,0,0,0.5), 0 0 20px ${activeCfg.color}33`,
+              background: "rgba(13,21,23,0.96)",
+              border: `1.5px solid ${activeCfg.color}`,
+              borderRadius: 12,
+              padding: isMobile ? "10px 12px" : "clamp(10px,1.5vw,14px) clamp(12px,1.8vw,18px)",
+              backdropFilter: "blur(16px)",
+              boxShadow: `0 8px 32px rgba(0,0,0,0.6), 0 0 24px ${activeCfg.color}22`,
             }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                <div style={{ width: 8, height: 8, borderRadius: "50%", background: activeCfg.color, boxShadow: `0 0 8px ${activeCfg.color}` }} />
-                <span style={{ color: activeCfg.color, fontSize: "clamp(9px,0.9vw,10px)", fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+              {/* Badge nivel */}
+              <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom: isMobile ? 5 : 8 }}>
+                <div style={{ width: isMobile ? 6 : 8, height: isMobile ? 6 : 8, borderRadius:"50%", background:activeCfg.color, boxShadow:`0 0 8px ${activeCfg.color}` }} />
+                <span style={{ color:activeCfg.color, fontSize: isMobile ? 8 : "clamp(9px,0.9vw,10px)", fontWeight:800, letterSpacing:"0.12em", textTransform:"uppercase" }}>
                   {activeCfg.label}
                 </span>
               </div>
-              <p style={{ color: "#cfd8dc", fontSize: "clamp(10px,1vw,12px)", fontWeight: 600, margin: "0 0 4px" }}>{active.name}</p>
-              <p style={{ color: "#fff", fontSize: "clamp(16px,2vw,22px)", fontWeight: 900, margin: "0 0 4px", lineHeight: 1 }}>
+              {/* Nombre cuenca */}
+              <p style={{ color:"#cfd8dc", fontSize: isMobile ? 9 : "clamp(10px,1vw,12px)", fontWeight:600, margin:"0 0 3px" }}>
+                {active.name}
+              </p>
+              {/* Valor principal */}
+              <p style={{ color:"#fff", fontSize: isMobile ? "clamp(13px,4vw,15px)" : "clamp(16px,2vw,22px)", fontWeight:900, margin:"0 0 3px", lineHeight:1 }}>
                 {active.contaminant}:{" "}
                 <span style={{ color: activeCfg.color }}>{active.value}</span>
               </p>
-              <p style={{ color: "#90A4AE", fontSize: "clamp(10px,1vw,11px)", margin: "0 0 10px" }}>
-                Excede límite permitido: <strong style={{ color: "#fff" }}>{active.excede}</strong>
+              {/* Excedencia */}
+              <p style={{ color:"#90A4AE", fontSize: isMobile ? 8 : "clamp(10px,1vw,11px)", margin:"0 0 10px" }}>
+                Excede límite: <strong style={{ color: "#fff" }}>{active.excede}</strong>
               </p>
-              <div style={{ display: "flex", gap: 4, alignItems: "center" }}>
+              {/* Indicador de progreso (barras) */}
+              <div style={{ display:"flex", gap:3, alignItems:"center" }}>
                 {CUENCAS.map((_, i) => (
                   <div key={i} style={{
                     height: 3, borderRadius: 2,
-                    width: i === activeIdx ? 18 : 4,
-                    background: i === activeIdx ? activeCfg.color : "rgba(255,255,255,0.15)",
-                    transition: "all 0.3s",
+                    width:  i === activeIdx ? (isMobile ? 14 : 18) : (isMobile ? 3 : 4),
+                    background: i === activeIdx ? activeCfg.color : i < activeIdx ? activeCfg.color+"66" : "rgba(255,255,255,0.12)",
+                    transition: "all 0.35s",
                   }} />
                 ))}
-                <span style={{ color: "#546E7A", fontSize: 10, marginLeft: 6 }}>
+                <span style={{ color:"#546E7A", fontSize: isMobile ? 8 : 10, marginLeft: 5 }}>
                   {activeIdx + 1}/{CUENCAS.length}
                 </span>
               </div>
@@ -493,26 +492,39 @@ export const MapaTiticacaSection = () => {
           )}
         </div>
 
-        {/* Título */}
+        {/* ── Título ── */}
         <div style={{
-          position: "absolute", top: 20, left: "50%", transform: "translateX(-50%)",
+          position: "absolute", top: isMobile ? 16 : 20,
+          left: "50%", transform: "translateX(-50%)",
           textAlign: "center", zIndex: 30, pointerEvents: "none", whiteSpace: "nowrap",
         }}>
-          <h2 style={{ color: "#fff", fontSize: "clamp(12px, 2vw, 20px)", fontWeight: 800, letterSpacing: "0.15em", textTransform: "uppercase", margin: 0, textShadow: "0 2px 16px rgba(0,0,0,0.9)" }}>
+          <h2 style={{
+            fontFamily: "'Citizen OT', 'CitizenOT', serif",
+            color: "#fff",
+            fontSize: isMobile ? "clamp(11px,3.5vw,14px)" : "clamp(13px,2vw,20px)",
+            fontWeight: 800, letterSpacing: "0.15em",
+            textTransform: "uppercase", margin: 0,
+            textShadow: "0 2px 16px rgba(0,0,0,0.9)",
+          }}>
             Cuenca del Lago Titicaca
           </h2>
-          <p style={{ color: "#90A4AE", fontSize: "clamp(9px,1vw,11px)", margin: "3px 0 0", letterSpacing: "0.08em" }}>
+          <p style={{
+            color: "#546E7A",
+            fontSize: isMobile ? "clamp(8px,2.2vw,10px)" : "clamp(9px,1vw,11px)",
+            margin: "3px 0 0", letterSpacing: "0.08em",
+            fontFamily: "'Citizen OT', 'CitizenOT', serif",
+          }}>
             Monitoreo de contaminantes · 8 cuencas hidrográficas
           </p>
         </div>
 
-        {/* Scroll hint */}
+        {/* ── Scroll hint (solo al inicio) ── */}
         {!active && (
           <div style={{
             position: "absolute", bottom: 32, left: "50%", transform: "translateX(-50%)",
             textAlign: "center", zIndex: 30, animation: "nudge 2s ease-in-out infinite",
           }}>
-            <p style={{ color: "#546E7A", fontSize: "clamp(9px,1vw,11px)", letterSpacing: "0.12em", margin: "0 0 6px" }}>
+            <p style={{ color:"#546E7A", fontSize:"clamp(8px,1vw,11px)", letterSpacing:"0.12em", margin:"0 0 6px", fontFamily:"'Citizen OT','CitizenOT',serif" }}>
               SCROLL PARA EXPLORAR
             </p>
             <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -521,24 +533,48 @@ export const MapaTiticacaSection = () => {
           </div>
         )}
 
+        {/* ── Botón abrir editor (dev) ── */}
+        {!showEditor && (
+          <button
+            onClick={() => setShowEditor(true)}
+            style={{
+              position:"absolute", top:16, right:16, zIndex:40,
+              background:"rgba(10,16,20,0.85)",
+              border:`1px solid ${isMobile ? "#7B61FF55" : "#E91E8C55"}`,
+              color: isMobile ? "#7B61FF" : "#E91E8C",
+              borderRadius:8, padding:"5px 10px",
+              fontSize:9, fontWeight:700, cursor:"pointer",
+              letterSpacing:"0.1em", textTransform:"uppercase",
+              backdropFilter:"blur(10px)",
+            }}
+          >
+            {isMobile ? "📱" : "🖥"} Editor
+          </button>
+        )}
       </div>
 
-      {/* Panel editor — para reactivar: cambiar showEditor a true en el useState */}
+      {/* ── Panel editor ── */}
       {showEditor && (
         <EditorPanel
-          targets={targets}
-          dots={dots}
+          device={isMobile ? "mobile" : "desktop"}
+          accentColor={isMobile ? "#7B61FF" : "#E91E8C"}
+          zoomTargets={zoomTargets}
+          dotPositions={dotPositions}
           activeId={activeId}
-          onZoomChange={handleZoomChange}
-          onDotChange={handleDotChange}
+          onZoomChange={handleZoom}
+          onDotChange={handleDot}
           onClose={() => setShowEditor(false)}
         />
       )}
 
       <style>{`
         @keyframes nudge {
-          0%, 100% { transform: translateX(-50%) translateY(0); }
-          50%       { transform: translateX(-50%) translateY(6px); }
+          0%,100% { transform: translateX(-50%) translateY(0); }
+          50%      { transform: translateX(-50%) translateY(7px); }
+        }
+        @keyframes ringPulse {
+          0%   { transform: translate(-50%,-50%) scale(1); opacity: 0.7; }
+          100% { transform: translate(-50%,-50%) scale(2.8); opacity: 0; }
         }
       `}</style>
     </div>
