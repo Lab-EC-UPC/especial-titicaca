@@ -12,9 +12,9 @@ import victorStand from "../assets/testimonials/images/victor-stand.png";
 import type { Testimonial } from "../types/TestimonialType";
 import feliciana_1_audio from "../assets/audios/feliciana_1.mp3";
 import feliciana_2_audio from "../assets/audios/feliciana_2.mp3";
+import feliciana_3_audio from "../assets/audios/feliciana_3.mp3";
 import juliana_1_audio from "../assets/audios/juliana_1.mp3";
 import juliana_2_audio from "../assets/audios/juliana_2.mp3";
-import juliana_3_audio from "../assets/audios/juliana_3.mp3";
 import victor_1_audio from "../assets/audios/victor_1.mp3";
 
 export const TESTIMONIAL_BACKGROUND = bg;
@@ -24,22 +24,22 @@ export const TESTIMONIAL_SUBTITLE = "Haz click en los pobladores para conocer su
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: 1,
-    name: "Feliciana Suaña",
+    name: "Juliana Churata",
     testimony: [
       {
         id: 1,
         text: "La contaminación viene de ese río. Nosotros no tomamos, solo a nuestros animales les hacemos tomar. No estoy bien; me duele todo mi cuerpo, todo, todito. Mi oído ya no escucha.",
-        audioSrc: feliciana_1_audio,
+        audioSrc: juliana_1_audio,
       },
       {
         id: 2,
         text: "Mis pies me duelen demasiado. Ahora tengo que cubrirlos con trapos. Ya no puedo caminar como antes; se me hace imposible ir lejos, solo logro avanzar distancias muy cortas. ",
-        audioSrc: feliciana_2_audio,
+        audioSrc: juliana_2_audio,
       },
     ],
     backgroundImage: bgPersonView,
-    characterImage: feliciana,
-    seatedImage: felicianaSeated,
+    characterImage: juliana,
+    seatedImage: julianaSeated,
     position: { left: "50%", bottom: "0%", width: "26%" },
   },
   {
@@ -59,27 +59,27 @@ export const TESTIMONIALS: Testimonial[] = [
   },
   {
     id: 3,
-    name: "Juliana Churata",
+    name: "Feliciana Suaña",
     testimony: [
       {
         id: 1,
         text: "Yo estoy enferma por metales pesados desde hace cuatro años. Me dolía toda la parte interna de mi cuerpo y no me permitía comer. Desde pequeña, criábamos animales y consumíamos el agua de esa laguna.",
-        audioSrc: juliana_1_audio,
+        audioSrc: feliciana_1_audio,
       },
       {
         id: 2,
         text: "Desde ahora ya no lo consumimos. Ya no han venido de nuevo a hacerme el análisis. Me dijeron que dentro de cuatro años debía hacerme analizar, pero no me han hecho los análisis. Ahora no se sabe si hay o no.",
-        audioSrc: juliana_2_audio,
+        audioSrc: feliciana_2_audio,
       },
       {
         id: 3,
         text: "Mi hija también tiene metal pesado y no ha recibido\ntratamiento en su colegio. Esto es grave, aquí en Puno ya falleció la señora Rufina y también el señor Alberto Paucar. Según los análisis, a causa del metal pesado.",
-        audioSrc: juliana_3_audio,
+        audioSrc: feliciana_3_audio,
       },
     ],
     backgroundImage: bgPersonView,
-    characterImage: juliana,
-    seatedImage: julianaSeated,
+    characterImage: feliciana,
+    seatedImage: felicianaSeated,
     position: { left: "50%", bottom: "0%", width: "26%" },
   },
 ];
