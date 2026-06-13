@@ -3,6 +3,8 @@
  */
 import bg from "../assets/testimonials/images/testimonials-background.png";
 import bgPersonView from "../assets/testimonials/images/capachica-landscape-background.png";
+import bgMobile from "../assets/testimonials/images/testimonials-background-mobile.png";
+import bgPersonViewMobile from "../assets/testimonials/images/capachica-landscape-background-mobile.png";
 import feliciana from "../assets/testimonials/images/feliciana-character.png";
 import juliana from "../assets/testimonials/images/juliana-character.png";
 import victor from "../assets/testimonials/images/victor-character.png";
@@ -18,6 +20,7 @@ import juliana_2_audio from "../assets/audios/juliana_2.mp3";
 import victor_1_audio from "../assets/audios/victor_1.mp3";
 
 export const TESTIMONIAL_BACKGROUND = bg;
+export const TESTIMONIAL_BACKGROUND_MOBILE = bgMobile;
 export const TESTIMONIAL_TITLE = "LAS VOCES QUE NADIE ESCUCHA";
 export const TESTIMONIAL_SUBTITLE = "Haz click en los pobladores para conocer su historia";
 
@@ -38,6 +41,7 @@ export const TESTIMONIALS: Testimonial[] = [
       },
     ],
     backgroundImage: bgPersonView,
+    backgroundImageMobile: bgPersonViewMobile,
     characterImage: juliana,
     seatedImage: julianaSeated,
     position: { left: "50%", bottom: "0%", width: "26%" },
@@ -53,6 +57,7 @@ export const TESTIMONIALS: Testimonial[] = [
       },
     ],
     backgroundImage: bgPersonView,
+    backgroundImageMobile: bgPersonViewMobile,
     characterImage: victor,
     seatedImage: victorStand,
     position: { left: "50%", bottom: "0%", width: "24%" },
@@ -78,6 +83,7 @@ export const TESTIMONIALS: Testimonial[] = [
       },
     ],
     backgroundImage: bgPersonView,
+    backgroundImageMobile: bgPersonViewMobile,
     characterImage: feliciana,
     seatedImage: felicianaSeated,
     position: { left: "50%", bottom: "0%", width: "26%" },

@@ -95,12 +95,13 @@ export const CapachicaSection = () => {
             {/* ── Overlays ─────────────────────────────────────────────────── */}
 
             {/* 1. Párrafo introductorio totora */}
-
-            <Message
-                start={0.0}
-                end={0.08}
-                text="Los totorales del lago se están reduciendo drásticamente. Esta planta es vital porque purifica el agua de forma natural y sostiene la economía de la zona (pesca, artesanía y forraje). Pobladores de Capachica reportan que las alteraciones morfológicas en la planta han suspendido su uso tradicional para consumo alimenticio."
-            />
+            <Message start={0.0} end={0.08}>
+                Los totorales del lago se están reduciendo drásticamente. Esta planta es
+                vital porque purifica el agua de forma natural y sostiene la economía de
+                la zona (pesca, artesanía y forraje). Pobladores de Capachica reportan
+                que las deformaciones en la planta han suspendido su uso tradicional
+                para consumo alimenticio.
+            </Message>
 
             {/* Capítulo de la totora: comparador interactivo (arrastrar ←/→) */}
             <div
@@ -117,11 +118,13 @@ export const CapachicaSection = () => {
 
             {/* 2. Párrafo introductorio ciclo de vida */}
 
-            <Message
-                start={0.16}
-                end={0.20}
-                text="La contaminación del lago Titicaca está afectando directamente la calidad de vida de aproximadamente 42 mil habitantes, especialmente de quienes viven en las islas flotantes y en sus orillas. Estas comunidades dependen del lago para actividades esenciales como la pesca, el acceso al agua y el turismo."
-            />
+            <Message start={0.16} end={0.20}>
+                La contaminación del lago Titicaca está afectando directamente
+                la calidad de vida de aproximadamente 42 mil habitantes,
+                especialmente de quienes viven en las islas flotantes y en sus
+                orillas. Estas comunidades dependen del lago para actividades
+                esenciales como la pesca, el acceso al agua y el turismo.
+            </Message>
 
             {/* Título del capítulo ciclo de vida */}
             <ChapterTitle
@@ -165,11 +168,13 @@ export const CapachicaSection = () => {
             />
 
             {/* Párrafo final del Ciclo de Vida */}
-            <Message
-                start={0.53}
-                end={0.58}
-                text="Los entrevistados reportan frecuentes problemas gastrointestinales, afecciones en la piel y dolores de cabeza asociados al contacto con ríos y canales. Mientras que, los productores de Capachica describen casos de infecciones oculares, pérdida de peso y deterioro físico en alpacas y vacunos, situaciones que terminan con el sacrificio de los animales."
-            />
+            <Message start={0.53} end={0.58}>
+                Los entrevistados reportan frecuentes problemas gastrointestinales
+                afecciones en la piel y dolores de cabeza asociados al contacto con ríos
+                y canales. Mientras que, los productores de Capachica describen casos
+                de infecciones oculares, pérdida de peso y deterioro físico en alpacas y
+                vacunos, situaciones que terminan con el sacrificio de los animales.
+            </Message>
 
             {/* 3. Sección de Testimonios */}
 
@@ -187,11 +192,11 @@ export const CapachicaSection = () => {
 
             {/* Párrafo */}
 
-            <Message
-                start={0.67}
-                end={0.71}
-                text="También se reportan casos de enfermedades renales que atribuyen a años de exposición a metales pesados. Los monitoreos han identificado arsénico, plomo y mercurio en distintos ríos de la cuenca, sustancias asociadas a daños crónicos en los riñones y el sistema nervioso."
-                >
+            <Message start={0.67}  end={0.71} >
+                También se reportan casos de enfermedades renales que atribuyen a
+                años de exposición a metales pesados. Los monitoreos han identificado
+                arsénico, plomo y mercurio en distintos ríos de la cuenca, sustancias
+                asociadas a daños crónicos en los riñones y el sistema nervioso.
             </Message>
 
             {/* 4. Mapa de Triangulaciones */}
@@ -209,23 +214,22 @@ export const CapachicaSection = () => {
 
             {/* 5. Parrafos finales */}
 
-            <Message
-                start={0.82}
-                end={0.86}
-                text="Los reclamos de las comunidades no son recientes. Desde hace más de una década, pobladores de distintas provincias de Puno alertan sobre descargas que llegan a ríos y afluentes vinculados al Titicaca."
-                >
+            <Message start={0.82} end={0.86}>
+                Los reclamos de las comunidades no son recientes. Desde hace más de
+                una década, pobladores de distintas provincias de Puno alertan sobre
+                descargas que llegan a ríos y afluentes vinculados al Titicaca.
             </Message>
 
-            <Message
-                start={0.87}
-                end={0.92}
-                text="Aunque los riesgos han sido reconocidos por las autoridades, muchas comunidades siguen enfrentando dificultades para acceder a atención especializada. A ello se suman retrasos en proyectos de infraestructura sanitaria que permanecen pendientes en la región."
-                >
+            <Message start={0.87} end={0.92}>
+                Aunque los riesgos han sido reconocidos por las autoridades, muchas
+                comunidades siguen enfrentando dificultades para acceder a atención
+                especializada. A ello se suman retrasos en proyectos de infraestructura
+                sanitaria que permanecen pendientes en la región.
             </Message>
 
             {/* 6. Título del capítulo promesas sin respuestas */}
             <EndingGradientOverlay start={0.94} end={1.00} />
-            
+
             <ChapterTitle
                 start={0.94}
                 end={1.00}
