@@ -79,18 +79,18 @@ export const PtarTiticacaSection = () => {
             letterSpacing: "0.005em",
           }}
         >
-          El proyecto{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>"PTAR Titicaca"</strong>{" "}
-          estructuró una inversión estimada entre los{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>590 y 630 millones de soles</strong>.
-          El diseño técnico contemplaba la construcción de{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>6 plantas de tratamiento</strong>{" "}
-          de aguas residuales nuevas y la reingeniería de otras{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>4 infraestructuras</strong>{" "}
-          existentes en 10 localidades de la región, planificando la instalación de más de{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>54 kilómetros de colectores</strong>{" "}
-          con un horizonte de operación de{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>30 años</strong>.
+          En{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>2019</strong>, el proyecto{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>PTAR Titicaca</strong>{" "}
+          (Plantas de Tratamiento de Aguas Residuales) prometía tratar los
+          desagües de Puno y Juliaca mediante una inversión de{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>más de S/ 860 millones</strong>.
+          No obstante, las obras iniciadas en{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>2021</strong>{" "}
+          acumularon retrasos y observaciones de la Contraloría, y el contrato
+          terminó siendo{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>anulado en 2023</strong>{" "}
+          tras la paralización de los trabajos.
         </p>
       </div>
     </section>

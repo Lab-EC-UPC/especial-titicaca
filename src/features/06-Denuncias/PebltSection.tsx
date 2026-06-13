@@ -79,19 +79,21 @@ export const PebltSection = () => {
             letterSpacing: "0.005em",
           }}
         >
-          El análisis de las asignaciones financieras muestra un incremento
-          presupuestal: la{" "}
+          Aunque el{" "}
           <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
-            Unidad Ejecutora 005: Proyecto Especial Binacional Lago Titicaca (PEBLT)
+            Proyecto Especial Binacional Lago Titicaca (PEBLT)
           </strong>{" "}
-          pasó de un presupuesto institucional de{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>14.5 millones de soles en 2017</strong>{" "}
+          incrementó su presupuesto de{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>S/ 14,5 millones en 2017</strong>{" "}
           a{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>28.9 millones de soles para el ejercicio fiscal 2026</strong>.
-          A pesar de la evolución financiera, los componentes de saneamiento e
-          infraestructura muestran{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>paralizaciones contractuales, obras inconclusas y retrasos</strong>{" "}
-          en su puesta en operación.
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>S/ 28,9 millones en 2026</strong>,
+          el aumento de recursos no se ha traducido en mayores avances en la
+          cuenca. Contraloría reporta{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
+            obras paralizadas desde 2014
+          </strong>
+          , proyectos inconclusos, deficiencias constructivas e indicios de pagos
+          por trabajos que no habrían sido ejecutados.
         </p>
       </div>
     </section>
