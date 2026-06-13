@@ -4,6 +4,7 @@
 export interface TestimonyItem {
   id: number;
   text: string;
+  audioSrc: string;
 }
 
 export interface Testimonial {
@@ -13,7 +14,6 @@ export interface Testimonial {
   backgroundImage: string;
   characterImage: string;
   seatedImage: string;
-  audioSrc: string;
   position: {
     left: string;
     bottom: string;
