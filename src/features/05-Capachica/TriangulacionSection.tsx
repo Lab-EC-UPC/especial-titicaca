@@ -1,118 +1,144 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import StoryPopup from "../../components/StoryPopup";
-import mapaTriangulacion from "../../assets/images/Capachica/TriangulacionSection/mapa-triangulacion.png";
-import botonRetroceder from "../../assets/images/Capachica/TriangulacionSection/boton-retroceder.png";
-import cruz from "../../assets/images/Capachica/TriangulacionSection/cruz.png";
-import Leyenda from "../../components/Leyenda";
-import CardInformation from "../../components/CardInformation";
+import CardRoute from "../../components/CardRoute";
+import PunoProvinceMap, { PROVINCES } from "./components/PunoProvinceMap";
+import RecorridoSVG, { cardAnim } from "./components/RecorridoSVG";
+import ProvinceView from "./components/ProvinceView";
+import mapaInicio from "../../assets/images/Capachica/TriangulacionSection/maps/mapa-inicio.png";
+import mapaRuta from "../../assets/images/Capachica/TriangulacionSection/maps/mapa-ruta.png";
+import mapaSeleccionPuno from "../../assets/images/Capachica/TriangulacionSection/maps/mapa-seleccion-puno.png";
+import botonCerrar from "../../assets/images/Capachica/TriangulacionSection/boton-cerrar.png";
+import mapaCarabaya      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-carabaya.png";
+import mapaElCollao      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-collao.png";
+import mapaPuno          from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-puno.png";
+import mapaChucuito      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-chucuito.png";
+import mapaYunguyo       from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-yunguyo.png";
+import mapaSanRoman      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-sanroman.png";
+import mapaLampa         from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-lampa.png";
+import mapaHuancane      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-huancane.png";
+import mapaMoho          from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-moho.png";
+import mapaAzangaro      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-azarango.png";
+import mapaSanAntonio    from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-sanantonio.png";
+import mapaSandia        from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-sandia.png";
+import mapaMelgar        from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-melgar.png";
 
-type Zona = "segura" | "riesgo" | "critica";
-
-const ZONA_COLORES: Record<Zona, string> = {
-  segura:  "#00C2B2",
-  riesgo:  "#FFCA0F",
-  critica: "#FF0000",
+const PROVINCE_MAPS: Record<string, string> = {
+  carabaya:              mapaCarabaya,
+  "el-collao":           mapaElCollao,
+  puno:                  mapaPuno,
+  chucuito:              mapaChucuito,
+  yunguyo:               mapaYunguyo,
+  "san-roman":           mapaSanRoman,
+  lampa:                 mapaLampa,
+  huancane:              mapaHuancane,
+  moho:                  mapaMoho,
+  azangaro:              mapaAzangaro,
+  "san-antonio-de-putina": mapaSanAntonio,
+  sandia:                mapaSandia,
+  melgar:                mapaMelgar,
 };
 
-const CRUCES: { top: string; left: string; zona?: Zona }[] = [
-  { top: "8%",  left: "12%", zona: "segura"  },
-  { top: "15%", left: "55%", zona: "riesgo"  },
-  { top: "22%", left: "80%", zona: "critica" },
-  { top: "35%", left: "25%" },
-  { top: "45%", left: "90%" },
-  { top: "55%", left: "40%" },
-  { top: "65%", left: "72%" },
-  { top: "75%", left: "18%" },
-  { top: "85%", left: "60%" },
-  { top: "50%", left: "5%"  },
-  { top: "5%",  left: "40%" },
-  { top: "10%", left: "70%" },
-  { top: "28%", left: "48%" },
-  { top: "30%", left: "88%" },
-  { top: "40%", left: "62%" },
-  { top: "48%", left: "30%" },
-  { top: "58%", left: "85%" },
-  { top: "62%", left: "15%" },
-  { top: "70%", left: "50%" },
-  { top: "78%", left: "80%" },
-  { top: "82%", left: "35%" },
-  { top: "88%", left: "22%" },
-  { top: "92%", left: "75%" },
-  { top: "20%", left: "10%" },
-];
+type View = "story" | "route" | "map" | "province";
 
 export const TriangulacionSection = () => {
-  const [showStory, setShowStory] = useState(false);
-  const [selectedCruz, setSelectedCruz] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [view, setView] = useState<View>("story");
+  const [step, setStep] = useState(0);
+  const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
+  const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
 
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShowStory(true);
-        } else {
-          setShowStory(false);
-        }
-      },
-      { threshold: 0.4 }
-    );
-
-    if (sectionRef.current) observer.observe(sectionRef.current);
-    return () => observer.disconnect();
-  }, []);
+    if (view !== "route") return;
+    setStep(1);
+    const t1 = setTimeout(() => setStep(2), 3500);
+    const t2 = setTimeout(() => setStep(3), 7000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
+  }, [view]);
 
   return (
-    <div ref={sectionRef} id="triangulacion" className="bg-violet-200">
-      <div className="w-full h-screen flex flex-col">
-        <h2 className="text-2xl font-inter font-semibold text-center py-6">
-          Mapa por Triangulaciones
-        </h2>
+    <div
+      id="triangulacion"
+      className={`relative w-full ${view === "province" ? "bg-[#151B1B]" : "bg-[#304551]"} h-screen`}
+    >
+      <div className="relative h-screen overflow-hidden">
 
-        <div className="relative flex-1 w-full bg-[#C7C7C7]">
-          {showStory && <StoryPopup onClose={() => setShowStory(false)} />}
+        {view !== "province" && (
+          <img
+            src={view === "map" ? mapaSeleccionPuno : view === "route" ? mapaRuta : mapaInicio}
+            alt="Mapa Triangulación"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        )}
 
-          <div className="absolute top-4 left-4">
-            <img src={botonRetroceder} alt="Boton Retroceder" className="w-[60px]" />
-          </div>
+        {view === "story" && (
+          <div className="absolute inset-0 bg-black/25 backdrop-blur-sm" />
+        )}
 
-          {CRUCES.map((pos, i) => (
-            <div
-              key={i}
-              className="absolute cursor-pointer"
-              style={{ top: pos.top, left: pos.left }}
-              onClick={() => setSelectedCruz(i)}
+        {view === "route" && <RecorridoSVG step={step} />}
+
+        {view === "story" && (
+          <p className="absolute top-14 left-1/2 -translate-x-1/2 z-10 font-citizen font-bold text-white text-xl sm:text-3xl whitespace-nowrap">
+            MINERÍA Y COBERTURA DE SALUD EN PUNO
+          </p>
+        )}
+
+        {view === "map" && (
+          <>
+            <PunoProvinceMap
+              hoveredId={hoveredProvince}
+              selectedId={selectedProvince}
+              onHover={setHoveredProvince}
+              onLeave={() => setHoveredProvince(null)}
+              onSelect={(id) => { setSelectedProvince(id); setView("province"); }}
+            />
+            <button
+              onClick={() => { setView("story"); setSelectedProvince(null); }}
+              className="absolute top-8 left-8 z-10 cursor-pointer hover:opacity-80 transition-opacity"
             >
-              {pos.zona && (
-                <div
-                  className="absolute w-15 h-15 rounded-full -top-[18px] -left-[18px]"
-                  style={{ backgroundColor: ZONA_COLORES[pos.zona], opacity: 0.30 }}
-                />
-              )}
-              <img src={cruz} alt="" className="relative w-6" />
+              <img src={botonCerrar} alt="Cerrar" className="w-12 h-12" />
+            </button>
+            <p className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 font-elza text-white/70 text-sm transition-opacity duration-200">
+              {hoveredProvince
+                ? PROVINCES.find((p) => p.id === hoveredProvince)?.name
+                : selectedProvince
+                ? PROVINCES.find((p) => p.id === selectedProvince)?.name
+                : "Haz clic en cada provincia para conocer más información"}
+            </p>
+          </>
+        )}
+
+        {view === "province" && selectedProvince && (
+          <ProvinceView
+            selectedProvince={selectedProvince}
+            provinceMap={PROVINCE_MAPS[selectedProvince] ?? mapaInicio}
+            onBack={() => { setView("map"); setSelectedProvince(null); }}
+            onClose={() => { setView("story"); setSelectedProvince(null); }}
+          />
+        )}
+
+        {view === "story" && (
+          <StoryPopup onShowRoute={() => setView("route")} />
+        )}
+
+        {view === "route" && (
+          <>
+            <div className="absolute z-10" style={{ left: "10%", top: "38%", ...cardAnim(step >= 1) }}>
+              <CardRoute number={1} color="#13A383" className="w-[300px]">
+                Arturo salió de su pueblo natal en busca de un lugar con mayor acceso a la salud para tratarse. Viajó durante siete horas rumbo a Arequipa y así atenderse en un establecimiento de salud más especializado.
+              </CardRoute>
             </div>
-          ))}
-
-          {selectedCruz !== null && (
-            <div
-              className="absolute z-10"
-              style={{
-                top: `calc(${CRUCES[selectedCruz].top} - 120px)`,
-                left: `calc(${CRUCES[selectedCruz].left} + 30px)`,
-              }}
-            >
-              <CardInformation onClose={() => setSelectedCruz(null)} />
+            <div className="absolute z-10" style={{ left: "73%", top: "52%", ...cardAnim(step >= 2) }}>
+              <CardRoute number={2} color="#C03A84" className="w-[300px]">
+                Regresó a Coata con un diagnóstico claro y recién pudo iniciar su tratamiento en San Román.
+              </CardRoute>
             </div>
-          )}
+            <div className="absolute z-10" style={{ left: "70%", top: "23%", ...cardAnim(step >= 3) }}>
+              <CardRoute number={3} color="#FFFFFF" className="w-[335px]" onNext={() => setView("map")}>
+                Ya de regreso en Coata, debía recorrer 13 kilómetros diarios para recibir tratamiento en una clínica privada.
+              </CardRoute>
+            </div>
+          </>
+        )}
 
-          <div className="flex h-full justify-center items-center">
-            <img src={mapaTriangulacion} alt="Mapa por Triangulaciones" className="w-[800px]" />
-          </div>
-
-          <div className="absolute bottom-18 left-16">
-            <Leyenda />
-          </div>
-        </div>
       </div>
     </div>
   );

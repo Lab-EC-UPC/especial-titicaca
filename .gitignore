@@ -11,6 +11,9 @@ dist
 dist-ssr
 *.local
 
+# MCP config (contains API tokens)
+.mcp.json
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -21,6 +24,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+Tempfigma_resp.json
+.claude/settings.json
 
 # Local AI / Beads
 .env
