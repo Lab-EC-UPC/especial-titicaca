@@ -290,9 +290,6 @@ export const MapaTiticacaSection = () => {
   const dotSize    = isMobile ? 8  : 14;
   const ringSize   = isMobile ? 18 : 30;
   const labelSize  = isMobile ? "clamp(6px,2.2vw,8px)" : "clamp(9px,1.1vw,12px)";
-  const shadowGlow = isMobile
-    ? `0 0 0 2px {color}33, 0 0 6px {color}`
-    : `0 0 0 4px {color}33, 0 0 14px {color}`;
 
   // Progreso (0–1) para barra superior
   const progressPct = active ? ((activeIdx + 1) / CUENCAS.length) * 100 : 0;

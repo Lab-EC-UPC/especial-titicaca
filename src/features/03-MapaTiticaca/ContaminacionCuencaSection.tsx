@@ -16,7 +16,6 @@ export const ContaminacionCuencaSection = () => {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  /
   useEffect(() => {
     const handleScroll = () => {
       if (!sectionRef.current) return;
