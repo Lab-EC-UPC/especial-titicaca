@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 
 export type GalleryImage = {
     src: string;
-    alt: string;
     description: string;
     subtext: string;
 };
@@ -41,11 +40,14 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                         <div className="flex flex-col items-start gap-4">
                             <img
                                 src={img.src}
-                                alt={img.alt}
+                                alt={img.description}
                                 className="max-h-[45vh] w-auto max-w-full object-contain"
                             />
 
-                            <div data-gallery-text className="flex flex-col items-start gap-1 text-left md:ml-5 ml-0 opacity-0">
+                            <div
+                                data-gallery-text
+                                className="flex flex-col items-start gap-1 text-left md:ml-5 ml-0 opacity-0"
+                            >
                                 <p
                                     className="text-xs md:text-lg"
                                     style={{

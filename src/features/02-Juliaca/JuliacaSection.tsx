@@ -83,7 +83,6 @@ export const JuliacaSection = () => {
             </ScrollMessage>
 
             <ScrollMessage start={0.2} end={0.3}>
-                <ScrollMessage.Chapter>Capítulo I</ScrollMessage.Chapter>
                 <ScrollMessage.Heading>
                     SIGUIENDO
                     <br />
@@ -111,26 +110,22 @@ export const JuliacaSection = () => {
                 images={[
                     {
                         src: galeria01,
-                        alt: "Descripción de 10 palabras",
-                        description: "Descripción de 10 palabras",
+                        description: "Orillas del Lago Titicaca, ciudad de Puno",
                         subtext: "El comercio / 1980",
                     },
                     {
                         src: galeria02,
-                        alt: "Descripción de 10 palabras",
-                        description: "Descripción de 10 palabras",
+                        description: "Desborde del lago Titicaca",
                         subtext: "El comercio / 1986",
                     },
                     {
                         src: galeria03,
-                        alt: "Descripción de 10 palabras",
-                        description: "Descripción de 10 palabras",
+                        description: "Embarcaciones en el puerto de Puno",
                         subtext: "Reynaldo Yucra / 2026",
                     },
                     {
                         src: galeria04,
-                        alt: "Descripción de 10 palabras",
-                        description: "Descripción de 10 palabras",
+                        description: "Embarcaciones en el muelle de Puno",
                         subtext: "Reynaldo Yucra / 2026",
                     },
                 ]}
