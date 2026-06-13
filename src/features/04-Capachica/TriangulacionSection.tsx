@@ -8,10 +8,34 @@ import mapaInicio from "../../assets/images/Capachica/TriangulacionSection/maps/
 import mapaRuta from "../../assets/images/Capachica/TriangulacionSection/maps/mapa-ruta.png";
 import mapaSeleccionPuno from "../../assets/images/Capachica/TriangulacionSection/maps/mapa-seleccion-puno.png";
 import botonCerrar from "../../assets/images/Capachica/TriangulacionSection/boton-cerrar.png";
-import mapaCarabaya from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-carabaya.png";
+import mapaCarabaya      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-carabaya.png";
+import mapaElCollao      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-collao.png";
+import mapaPuno          from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-puno.png";
+import mapaChucuito      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-chucuito.png";
+import mapaYunguyo       from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-yunguyo.png";
+import mapaSanRoman      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-sanroman.png";
+import mapaLampa         from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-lampa.png";
+import mapaHuancane      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-huancane.png";
+import mapaMoho          from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-moho.png";
+import mapaAzangaro      from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-azarango.png";
+import mapaSanAntonio    from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-sanantonio.png";
+import mapaSandia        from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-sandia.png";
+import mapaMelgar        from "../../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-melgar.png";
 
 const PROVINCE_MAPS: Record<string, string> = {
-  carabaya: mapaCarabaya,
+  carabaya:              mapaCarabaya,
+  "el-collao":           mapaElCollao,
+  puno:                  mapaPuno,
+  chucuito:              mapaChucuito,
+  yunguyo:               mapaYunguyo,
+  "san-roman":           mapaSanRoman,
+  lampa:                 mapaLampa,
+  huancane:              mapaHuancane,
+  moho:                  mapaMoho,
+  azangaro:              mapaAzangaro,
+  "san-antonio-de-putina": mapaSanAntonio,
+  sandia:                mapaSandia,
+  melgar:                mapaMelgar,
 };
 
 type View = "story" | "route" | "map" | "province";

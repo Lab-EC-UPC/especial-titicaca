@@ -44,7 +44,7 @@ export const PROVINCE_SALUD_POPUPS: Record<string, SaludPopupData[]> = {
       clasificacion: "Centros de salud o centros médicos y/o centros de salud con camas de internamiento",
     },
   ],
-  collao: [
+  "el-collao": [
     {
       zona: "critica", provincia: "El Collao", cantidadTotal: 39, activo: 39, desactivado: 0,
       categoria: "Posta básica (I-1) y Puesto c/médico (I-2)",
@@ -112,7 +112,7 @@ export const PROVINCE_SALUD_POPUPS: Record<string, SaludPopupData[]> = {
       clasificacion: "Hospitales o clínicas de atención general",
     },
   ],
-  sanroman: [
+  "san-roman": [
     {
       zona: "critica", provincia: "San Román", cantidadTotal: 24, activo: 24, desactivado: 0,
       categoria: "Posta básica (I-1) y Puesto c/médico (I-2)",
@@ -192,7 +192,7 @@ export const PROVINCE_SALUD_POPUPS: Record<string, SaludPopupData[]> = {
       clasificacion: "Hospitales o clínicas de atención general",
     },
   ],
-  sanantonio: [
+  "san-antonio-de-putina": [
     {
       zona: "critica", provincia: "San Antonio de Putina", cantidadTotal: 6, activo: 6, desactivado: 0,
       categoria: "Posta básica (I-1) y Puesto c/médico (I-2)",
@@ -243,9 +243,9 @@ export const PROVINCE_SALUD_POPUPS: Record<string, SaludPopupData[]> = {
 export const PROVINCE_MARKERS: Record<string, { salud: SaludMarker[]; mineria: MineriaMarker[] }> = {
   carabaya: {
     mineria: [
-      { x: 793,  y: 503, tipo: "informal", nombre: "Ollachea", eessMasCercano: "KCANA (I-2)",         distanciaKm: 2.4, descripcion: "Con cobertura a 2.4 km del EESS más cercano" },
-      { x: 1045, y: 615, tipo: "informal", nombre: "Carabaya Norte",   eessMasCercano: "TAHUANA (I-1)",        distanciaKm: 0.3, descripcion: "Con cobertura a 0.3 km del EESS más cercano" },
-      { x: 1012, y: 906, tipo: "informal", nombre: "Crucero",  eessMasCercano: "IPRESS CRUCERO (I-4)", distanciaKm: 0.8, descripcion: "Con cobertura a 0.8 km del EESS más cercano" },
+      { x: 793,  y: 503, tipo: "informal", nombre: "Ollachea",      eessMasCercano: "KCANA (I-2)",         distanciaKm: 2.4, descripcion: "Con cobertura a 2.4 km del EESS más cercano" },
+      { x: 1045, y: 615, tipo: "informal", nombre: "Carabaya Norte", eessMasCercano: "TAHUANA (I-1)",       distanciaKm: 0.3, descripcion: "Con cobertura a 0.3 km del EESS más cercano" },
+      { x: 1012, y: 906, tipo: "informal", nombre: "Crucero",        eessMasCercano: "IPRESS CRUCERO (I-4)", distanciaKm: 0.8, descripcion: "Con cobertura a 0.8 km del EESS más cercano" },
     ],
     salud: [
       { x: 728,  y: 725, tipo: "segura"  },
@@ -289,4 +289,59 @@ export const PROVINCE_MARKERS: Record<string, { salud: SaludMarker[]; mineria: M
       { x: 1072, y: 981, tipo: "critica" },
     ],
   },
+  "el-collao":           { salud: [], mineria: [] },
+  puno:                  { salud: [], mineria: [] },
+  chucuito:              { salud: [], mineria: [] },
+  yunguyo:               { salud: [], mineria: [] },
+  "san-roman":           { salud: [], mineria: [] },
+  lampa:                 { salud: [], mineria: [] },
+  huancane:              { salud: [], mineria: [] },
+  moho:                  { salud: [], mineria: [] },
+  azangaro:              { salud: [], mineria: [] },
+  "san-antonio-de-putina": { salud: [], mineria: [] },
+   sandia: {
+    salud: [
+      { x:  820, y:  800, tipo: "segura"  },
+      { x:  845, y:  790, tipo: "riesgo"  },
+      { x:  700, y:  420, tipo: "riesgo"  },
+      { x:  830, y:  560, tipo: "riesgo"  },
+      { x:  670, y:  660, tipo: "riesgo"  },
+      { x:  790, y:  720, tipo: "riesgo"  },
+      { x: 1060, y:  210, tipo: "riesgo"  },
+      { x: 1315, y:  309, tipo: "riesgo"  },
+      { x: 1400, y:  310, tipo: "riesgo"  },
+      { x:  920, y:  880, tipo: "riesgo"  },
+      { x:  580, y:  430, tipo: "critica"  },
+      { x:  660, y:  470, tipo: "critica"  },
+      { x: 1435, y:  516, tipo: "critica"  },
+      { x: 1421, y:  476, tipo: "critica"  },
+      { x:  763, y:  550, tipo: "critica"  },
+      { x: 1452, y:  551, tipo: "critica"  },
+      { x:  568, y:  570, tipo: "critica"  },
+      { x:  593, y:  577, tipo: "critica"  },
+      { x:  600, y:  645, tipo: "critica"  },
+      { x:  614, y:  654, tipo: "critica"  },
+      { x:  643, y:  728, tipo: "critica"  },
+      { x:  660, y:  638, tipo: "critica"  },
+      { x:  672, y:  648, tipo: "critica"  },
+      { x:  681, y:  698, tipo: "critica"  },
+      { x:  696, y:  704, tipo: "critica"  },
+      { x:  718, y:  657, tipo: "critica"  },
+      { x:  726, y:  664, tipo: "critica"  },
+      { x:  734, y:  724, tipo: "critica"  },
+      { x:  762, y:  764, tipo: "critica"  },
+      { x:  788, y:  763, tipo: "critica"  },
+      { x:  810, y:  789, tipo: "critica"  },
+      { x:  838, y:  765, tipo: "critica"  },
+      { x:  852, y:  790, tipo: "critica"  },
+      { x:  866, y:  781, tipo: "critica"  },
+      { x:  894, y:  778, tipo: "critica"  },
+      { x:  864, y:  824, tipo: "critica"  },
+    ],
+    mineria: [
+
+    ],
+  },
+  
+  melgar:                { salud: [], mineria: [] },
 };

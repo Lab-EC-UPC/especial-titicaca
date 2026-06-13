@@ -44,7 +44,7 @@ export default function ProvinceView({ selectedProvince, provinceMap, onBack, on
         className="absolute inset-0 w-full h-full object-contain"
       />
 
-      <div className="absolute top-8 left-8 z-10 flex gap-3">
+      <div className="absolute top-8 left-8 z-20 flex gap-3">
         <button onClick={onBack} className="cursor-pointer hover:opacity-80 transition-opacity">
           <img src={botonAtras} alt="Volver" className="w-12 h-12" />
         </button>
