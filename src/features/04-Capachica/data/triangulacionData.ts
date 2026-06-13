@@ -242,64 +242,92 @@ export const PROVINCE_SALUD_POPUPS: Record<string, SaludPopupData[]> = {
 
 export const PROVINCE_MARKERS: Record<string, { salud: SaludMarker[]; mineria: MineriaMarker[] }> = {
   carabaya: {
-    mineria: [
-      { x: 793,  y: 503, tipo: "informal", nombre: "Ollachea",      eessMasCercano: "KCANA (I-2)",         distanciaKm: 2.4, descripcion: "Con cobertura a 2.4 km del EESS más cercano" },
-      { x: 1045, y: 615, tipo: "informal", nombre: "Carabaya Norte", eessMasCercano: "TAHUANA (I-1)",       distanciaKm: 0.3, descripcion: "Con cobertura a 0.3 km del EESS más cercano" },
-      { x: 1012, y: 906, tipo: "informal", nombre: "Crucero",        eessMasCercano: "IPRESS CRUCERO (I-4)", distanciaKm: 0.8, descripcion: "Con cobertura a 0.8 km del EESS más cercano" },
-    ],
     salud: [
-      { x: 728,  y: 725, tipo: "segura"  },
-      { x: 750,  y: 718, tipo: "riesgo"  },
-      { x: 735,  y: 274, tipo: "riesgo"  },
-      { x: 653,  y: 313, tipo: "riesgo"  },
-      { x: 688,  y: 530, tipo: "riesgo"  },
-      { x: 651,  y: 623, tipo: "riesgo"  },
-      { x: 1009, y: 779, tipo: "riesgo"  },
-      { x: 1030, y: 679, tipo: "riesgo"  },
-      { x: 1035, y: 777, tipo: "riesgo"  },
-      { x: 860,  y: 848, tipo: "riesgo"  },
-      { x: 743,  y:  86, tipo: "critica" },
-      { x: 797,  y: 142, tipo: "critica" },
-      { x: 800,  y: 288, tipo: "critica" },
-      { x: 810,  y: 186, tipo: "critica" },
-      { x: 797,  y: 242, tipo: "critica" },
-      { x: 511,  y: 447, tipo: "critica" },
-      { x: 535,  y: 447, tipo: "critica" },
-      { x: 560,  y: 447, tipo: "critica" },
-      { x: 765,  y: 438, tipo: "critica" },
-      { x: 778,  y: 546, tipo: "critica" },
-      { x: 780,  y: 565, tipo: "critica" },
-      { x: 505,  y: 685, tipo: "critica" },
-      { x: 555,  y: 697, tipo: "critica" },
-      { x: 555,  y: 582, tipo: "critica" },
-      { x: 648,  y: 750, tipo: "critica" },
-      { x: 661,  y: 622, tipo: "critica" },
-      { x: 765,  y: 612, tipo: "critica" },
-      { x: 838,  y: 824, tipo: "critica" },
-      { x: 961,  y: 595, tipo: "critica" },
-      { x: 1000, y: 677, tipo: "critica" },
-      { x: 1067, y: 640, tipo: "critica" },
-      { x: 1074, y: 599, tipo: "critica" },
-      { x: 1097, y: 642, tipo: "critica" },
-      { x: 1131, y: 644, tipo: "critica" },
-      { x: 1144, y: 598, tipo: "critica" },
-      { x: 1039, y: 779, tipo: "critica" },
-      { x: 1068, y: 942, tipo: "critica" },
-      { x: 1076, y: 960, tipo: "critica" },
-      { x: 1072, y: 981, tipo: "critica" },
+      { x:  728, y:  725, tipo: "segura"  },
+      { x:  750, y:  718, tipo: "riesgo"  },
+      { x:  735, y:  274, tipo: "riesgo"  },
+      { x:  653, y:  313, tipo: "riesgo"  },
+      { x:  688, y:  530, tipo: "riesgo"  },
+      { x:  651, y:  623, tipo: "riesgo"  },
+      { x: 1009, y:  779, tipo: "riesgo"  },
+      { x: 1030, y:  679, tipo: "riesgo"  },
+      { x: 1035, y:  777, tipo: "riesgo"  },
+      { x:  860, y:  848, tipo: "riesgo"  },
+      { x:  743, y:   86, tipo: "critica"  },
+      { x:  797, y:  142, tipo: "critica"  },
+      { x:  800, y:  288, tipo: "critica"  },
+      { x:  810, y:  186, tipo: "critica"  },
+      { x:  797, y:  242, tipo: "critica"  },
+      { x:  511, y:  447, tipo: "critica"  },
+      { x:  535, y:  447, tipo: "critica"  },
+      { x:  560, y:  447, tipo: "critica"  },
+      { x:  765, y:  438, tipo: "critica"  },
+      { x:  778, y:  546, tipo: "critica"  },
+      { x:  780, y:  565, tipo: "critica"  },
+      { x:  505, y:  685, tipo: "critica"  },
+      { x:  555, y:  697, tipo: "critica"  },
+      { x:  555, y:  582, tipo: "critica"  },
+      { x:  648, y:  750, tipo: "critica"  },
+      { x:  661, y:  622, tipo: "critica"  },
+      { x:  765, y:  612, tipo: "critica"  },
+      { x:  838, y:  824, tipo: "critica"  },
+      { x:  961, y:  595, tipo: "critica"  },
+      { x: 1000, y:  677, tipo: "critica"  },
+      { x: 1067, y:  640, tipo: "critica"  },
+      { x: 1074, y:  599, tipo: "critica"  },
+      { x: 1097, y:  642, tipo: "critica"  },
+      { x: 1131, y:  644, tipo: "critica"  },
+      { x: 1144, y:  598, tipo: "critica"  },
+      { x: 1039, y:  779, tipo: "critica"  },
+      { x: 1068, y:  942, tipo: "critica"  },
+      { x: 1076, y:  960, tipo: "critica"  },
+      { x: 1072, y:  981, tipo: "critica"  },
+    ],
+    mineria: [
+      { x:  793, y:  503, tipo: "informal", nombre: "Ollachea", eessMasCercano: "KCANA (I-2)", distanciaKm: 2.4, descripcion: "Con cobertura a 2.4 km del EESS más cercano" },
+      { x: 1048, y:  630, tipo: "informal", nombre: "Carabaya Norte", eessMasCercano: "TAHUANA (I-1)", distanciaKm: 0.3, descripcion: "Con cobertura a 0.3 km del EESS más cercano" },
+      { x:  968, y:  921, tipo: "informal", nombre: "Crucero", eessMasCercano: "IPRESS CRUCERO (I-4)", distanciaKm: 0.8, descripcion: "Con cobertura a 0.8 km del EESS más cercano" },
     ],
   },
   "el-collao":           { salud: [], mineria: [] },
   puno:                  { salud: [], mineria: [] },
   chucuito:              { salud: [], mineria: [] },
   yunguyo:               { salud: [], mineria: [] },
-  "san-roman":           { salud: [], mineria: [] },
+    "san-roman": {
+    salud: [
+
+    ],
+    mineria: [
+      { x:  863, y:  646, tipo: "formal", nombre: "Arasi-Aruntani", eessMasCercano: "CENTRO SALUD SANTA LUCIA (I-4)", distanciaKm: 13.6, descripcion: "*Con cobertura a 13.6 km del EESS más cercano" },
+    ],
+  },
   lampa:                 { salud: [], mineria: [] },
   huancane:              { salud: [], mineria: [] },
   moho:                  { salud: [], mineria: [] },
-  azangaro:              { salud: [], mineria: [] },
-  "san-antonio-de-putina": { salud: [], mineria: [] },
-   sandia: {
+    azangaro: {
+    salud: [
+
+    ],
+    mineria: [
+      { x:  903, y:  511, tipo: "informal", nombre: "S.A. de Poto", eessMasCercano: "V.ROSARIO SOLLOCOTA (I-1)", distanciaKm: 4, descripcion: "*Con cobertura a 4 km del EESS más cercano" },
+      { x:  985, y:  535, tipo: "formal", nombre: "Corani-Bear Creek", eessMasCercano: "MORORCO (I-2)", distanciaKm: 2.4, descripcion: "*Con cobertura a 2.4 km del EESS más cercano" },
+    ],
+  },
+    
+  "san-antonio-de-putina": {
+    salud: [
+
+    ],
+    mineria: [
+      { x:  605, y:  325, tipo: "formal", nombre: "Untuca-Cori Puno", eessMasCercano: "CAPILLA PAMPA (I-1)", distanciaKm: 13.3, descripcion: "*Con cobertura a 13.3 km del EESS más cercano" },
+      { x: 1072, y:  623, tipo: "informal", nombre: "Pampa Blanca", eessMasCercano: "TRAPICHE (I-1)", distanciaKm: 7.6, descripcion: " *Con cobertura a 7.6 km del EESS más cercano" },
+      { x:  855, y:  587, tipo: "informal", nombre: "Lunar de Oro", eessMasCercano: "ANANEA (I-3)", distanciaKm: 9, descripcion: "*Con cobertura a 9 km del EESS más cercano" },
+      { x:  897, y:  556, tipo: "informal", nombre: "Cerro Lunar", eessMasCercano: "ANANEA (I-3)", distanciaKm: 5.8, descripcion: "*Con cobertura a 5.8 km del EESS más cercano" },
+      { x:  987, y:  548, tipo: "informal", nombre: "Ananea", eessMasCercano: "ANANEA (I-3)", distanciaKm: 1.1, descripcion: "*Con cobertura a 1.1 km del EESS más cercano" },
+      { x:  953, y:  495, tipo: "informal", nombre: "La Rinconada", eessMasCercano: "ANANEA (I-3)", distanciaKm: 5.2, descripcion: " *Con cobertura a 5.2 km del EESS más cercano" },
+    ],
+  },
+     sandia: {
     salud: [
       { x:  820, y:  800, tipo: "segura"  },
       { x:  845, y:  790, tipo: "riesgo"  },
@@ -339,9 +367,20 @@ export const PROVINCE_MARKERS: Record<string, { salud: SaludMarker[]; mineria: M
       { x:  864, y:  824, tipo: "critica"  },
     ],
     mineria: [
-
+      { x: 1163, y:  935, tipo: "informal", nombre: "Cuyo Cuyo", eessMasCercano: "CUYO CUYO (I-3)", distanciaKm: 2.2, descripcion: "*Con cobertura a 2.2 km del EESS más cercano" },
+      { x: 1244, y:  874, tipo: "informal", nombre: "Sina", eessMasCercano: "QUIACA (I-2)", distanciaKm: 1, descripcion: "*Con cobertura a 1 km del EESS más cercano" },
+      { x: 1170, y:  757, tipo: "informal", nombre: "Sandia", eessMasCercano: "QUENEQUE (I-1)", distanciaKm: 1.9, descripcion: "*Con cobertura a 1.9 km del EESS más cercano" },
+      { x: 1028, y:  703, tipo: "informal", nombre: "Limbani", eessMasCercano: "EESS más cercano: LIMBANI (I-3)", distanciaKm: 1.1, descripcion: "*Con cobertura a 1.1 km del EESS más cercano" },
+      { x:  985, y:  689, tipo: "informal", nombre: "Alto Inambari", eessMasCercano: "LIMBANI (I-3)", distanciaKm: 8.5, descripcion: "*Con cobertura a 8.5 km del EESS más cercano" },
     ],
   },
   
-  melgar:                { salud: [], mineria: [] },
+    melgar: {
+    salud: [
+
+    ],
+    mineria: [
+      { x:  959, y:  136, tipo: "formal", nombre: "San Rafael-Minsur", eessMasCercano: "PULSO SALUD SAN RAFAEL (I-2)", distanciaKm: 2.5, descripcion: "*Con cobertura a 2.5 km del EESS más cercano" },
+    ],
+  },
 };

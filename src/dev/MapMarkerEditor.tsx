@@ -19,42 +19,42 @@ import mapaSanAntonio    from "../assets/images/Capachica/TriangulacionSection/m
 import mapaSandia        from "../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-sandia.png";
 import mapaMelgar        from "../assets/images/Capachica/TriangulacionSection/maps/maps-zoom/mapa-melgar.png";
 
-type ESaludMarker  = SaludMarker  & { id: number };
+type ESaludMarker   = SaludMarker   & { id: number };
 type EMineriaMarker = MineriaMarker & { id: number };
-type TabMode = "salud" | "mineria";
-type SaludTipo = "segura" | "riesgo" | "critica";
+type TabMode    = "salud" | "mineria";
+type SaludTipo  = "segura" | "riesgo" | "critica";
 type MineriaTipo = "formal" | "informal";
 
 const PROVINCE_MAP_IMAGES: Record<string, string> = {
-  carabaya:               mapaCarabaya,
-  "el-collao":            mapaElCollao,
-  puno:                   mapaPuno,
-  chucuito:               mapaChucuito,
-  yunguyo:                mapaYunguyo,
-  "san-roman":            mapaSanRoman,
-  lampa:                  mapaLampa,
-  huancane:               mapaHuancane,
-  moho:                   mapaMoho,
-  azangaro:               mapaAzangaro,
+  carabaya:                mapaCarabaya,
+  "el-collao":             mapaElCollao,
+  puno:                    mapaPuno,
+  chucuito:                mapaChucuito,
+  yunguyo:                 mapaYunguyo,
+  "san-roman":             mapaSanRoman,
+  lampa:                   mapaLampa,
+  huancane:                mapaHuancane,
+  moho:                    mapaMoho,
+  azangaro:                mapaAzangaro,
   "san-antonio-de-putina": mapaSanAntonio,
-  sandia:                 mapaSandia,
-  melgar:                 mapaMelgar,
+  sandia:                  mapaSandia,
+  melgar:                  mapaMelgar,
 };
 
 const PROVINCE_LABELS: Record<string, string> = {
-  carabaya:               "Carabaya",
-  "el-collao":            "El Collao",
-  puno:                   "Puno",
-  chucuito:               "Chucuito",
-  yunguyo:                "Yunguyo",
-  "san-roman":            "San Román",
-  lampa:                  "Lampa",
-  huancane:               "Huancané",
-  moho:                   "Moho",
-  azangaro:               "Azángaro",
+  carabaya:                "Carabaya",
+  "el-collao":             "El Collao",
+  puno:                    "Puno",
+  chucuito:                "Chucuito",
+  yunguyo:                 "Yunguyo",
+  "san-roman":             "San Román",
+  lampa:                   "Lampa",
+  huancane:                "Huancané",
+  moho:                    "Moho",
+  azangaro:                "Azángaro",
   "san-antonio-de-putina": "San Antonio de Putina",
-  sandia:                 "Sandia",
-  melgar:                 "Melgar",
+  sandia:                  "Sandia",
+  melgar:                  "Melgar",
 };
 
 const TIPO_COLORS: Record<string, string> = {
@@ -85,13 +85,12 @@ export function MapMarkerEditor({ onClose }: Props) {
 
   const svgRef       = useRef<SVGSVGElement>(null);
   const wasDragging  = useRef(false);
-  // Always-current refs to avoid stale closures in effects
   const saludRef     = useRef(salud);
   const mineriaRef   = useRef(mineria);
   saludRef.current   = salud;
   mineriaRef.current = mineria;
 
-  // Load province markers on change
+  // ── Load province ─────────────────────────────────────────────────────────
   useEffect(() => {
     const existing = PROVINCE_MARKERS[province];
     _uid = 0;
@@ -101,11 +100,11 @@ export function MapMarkerEditor({ onClose }: Props) {
     setHistory([]);
   }, [province]);
 
+  // ── SVG coords ────────────────────────────────────────────────────────────
   function getSVGCoords(e: React.MouseEvent | MouseEvent) {
     if (!svgRef.current) return null;
     const pt  = svgRef.current.createSVGPoint();
-    pt.x = e.clientX;
-    pt.y = e.clientY;
+    pt.x = e.clientX; pt.y = e.clientY;
     const ctm = svgRef.current.getScreenCTM();
     if (!ctm) return null;
     const p = pt.matrixTransform(ctm.inverse());
@@ -115,6 +114,7 @@ export function MapMarkerEditor({ onClose }: Props) {
     };
   }
 
+  // ── History ───────────────────────────────────────────────────────────────
   function snapshot() {
     setHistory(h => [...h.slice(-40), {
       salud:   [...saludRef.current],
@@ -132,7 +132,7 @@ export function MapMarkerEditor({ onClose }: Props) {
     });
   }
 
-  // Click on SVG background → add marker
+  // ── Add on click ──────────────────────────────────────────────────────────
   function handleSVGClick(e: React.MouseEvent<SVGSVGElement>) {
     if (wasDragging.current) { wasDragging.current = false; return; }
     const c = getSVGCoords(e);
@@ -141,15 +141,17 @@ export function MapMarkerEditor({ onClose }: Props) {
     if (tab === "salud") {
       setSalud(s => [...s, { x: c.x, y: c.y, tipo: saludTipo, id: nextId() }]);
     } else {
+      const newId = nextId();
       setMineria(m => [...m, {
         x: c.x, y: c.y, tipo: mineriaTipo,
         nombre: "Nuevo", eessMasCercano: "—", distanciaKm: 0,
-        id: nextId(),
+        id: newId,
       }]);
+      setSelected(newId);
     }
   }
 
-  // Mousedown on marker → start drag
+  // ── Drag ──────────────────────────────────────────────────────────────────
   function handleMarkerMouseDown(e: React.MouseEvent, id: number) {
     e.stopPropagation();
     snapshot();
@@ -158,18 +160,16 @@ export function MapMarkerEditor({ onClose }: Props) {
     wasDragging.current = false;
   }
 
-  // Drag effect
   useEffect(() => {
     if (dragId === null) return;
     function onMove(e: MouseEvent) {
       wasDragging.current = true;
       const c = getSVGCoords(e);
       if (!c) return;
-      if (tab === "salud") {
+      if (tab === "salud")
         setSalud(s => s.map(m => m.id === dragId ? { ...m, x: c.x, y: c.y } : m));
-      } else {
+      else
         setMineria(m => m.map(m => m.id === dragId ? { ...m, x: c.x, y: c.y } : m));
-      }
     }
     function onUp() { setDragId(null); }
     window.addEventListener("mousemove", onMove);
@@ -180,38 +180,38 @@ export function MapMarkerEditor({ onClose }: Props) {
     };
   }, [dragId, tab]);
 
-  // Keyboard shortcuts
+  // ── Keyboard ──────────────────────────────────────────────────────────────
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") { onClose(); return; }
-      if ((e.key === "Delete" || e.key === "Backspace") && selected !== null && !(e.target instanceof HTMLInputElement || e.target instanceof HTMLSelectElement)) {
+      const inField = e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLSelectElement;
+      if ((e.key === "Delete" || e.key === "Backspace") && selected !== null && !inField) {
         snapshot();
         if (tab === "salud") setSalud(s => s.filter(m => m.id !== selected));
         else setMineria(m => m.filter(m => m.id !== selected));
         setSelected(null);
       }
-      if ((e.ctrlKey || e.metaKey) && e.key === "z") {
-        e.preventDefault();
-        undo();
-      }
+      if ((e.ctrlKey || e.metaKey) && e.key === "z") { e.preventDefault(); undo(); }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [selected, tab, onClose]);
 
-  // When tipo changes, also update selected marker's tipo
+  // ── Marker update helpers ─────────────────────────────────────────────────
   function handleSaludTipoChange(t: SaludTipo) {
     setSaludTipo(t);
-    if (selected !== null && tab === "salud") {
+    if (selected !== null && tab === "salud")
       setSalud(s => s.map(m => m.id === selected ? { ...m, tipo: t } : m));
-    }
   }
 
   function handleMineriaTipoChange(t: MineriaTipo) {
     setMineriaTipo(t);
-    if (selected !== null && tab === "mineria") {
+    if (selected !== null && tab === "mineria")
       setMineria(m => m.map(m => m.id === selected ? { ...m, tipo: t } : m));
-    }
+  }
+
+  function patchMineria(id: number, patch: Partial<EMineriaMarker>) {
+    setMineria(m => m.map(m => m.id === id ? { ...m, ...patch } : m));
   }
 
   function deleteSelected() {
@@ -231,13 +231,18 @@ export function MapMarkerEditor({ onClose }: Props) {
     setHistory([]);
   }
 
+  // ── Code output ───────────────────────────────────────────────────────────
   function generateCode() {
     const pad = (n: number) => String(n).padStart(4);
     const saludLines = salud
       .map(m => `      { x: ${pad(m.x)}, y: ${pad(m.y)}, tipo: "${m.tipo}"  },`)
       .join("\n");
     const mineriaLines = mineria
-      .map(m => `      { x: ${pad(m.x)}, y: ${pad(m.y)}, tipo: "${m.tipo}", nombre: "${m.nombre}", eessMasCercano: "${m.eessMasCercano}", distanciaKm: ${m.distanciaKm} },`)
+      .map(m => {
+        let line = `      { x: ${pad(m.x)}, y: ${pad(m.y)}, tipo: "${m.tipo}", nombre: "${m.nombre}", eessMasCercano: "${m.eessMasCercano}", distanciaKm: ${m.distanciaKm}`;
+        if (m.descripcion) line += `, descripcion: "${m.descripcion}"`;
+        return line + " },";
+      })
       .join("\n");
     return `  ${province}: {\n    salud: [\n${saludLines}\n    ],\n    mineria: [\n${mineriaLines}\n    ],\n  },`;
   }
@@ -249,13 +254,14 @@ export function MapMarkerEditor({ onClose }: Props) {
     });
   }
 
-  const selectedSalud   = tab === "salud"   ? salud.find(m   => m.id === selected) : null;
-  const selectedMineria = tab === "mineria" ? mineria.find(m => m.id === selected) : null;
+  // ── Derived ───────────────────────────────────────────────────────────────
+  const selSalud   = tab === "salud"   ? salud.find(m   => m.id === selected) ?? null : null;
+  const selMineria = tab === "mineria" ? mineria.find(m => m.id === selected) ?? null : null;
 
   return (
     <div style={{ position: "fixed", inset: 0, zIndex: 99999, background: "#080E11", display: "flex", fontFamily: "monospace" }}>
 
-      {/* ── MAP AREA ─────────────────────────────────────────────────── */}
+      {/* ── MAP ──────────────────────────────────────────────────────── */}
       <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
         <img
           src={PROVINCE_MAP_IMAGES[province]}
@@ -274,72 +280,72 @@ export function MapMarkerEditor({ onClose }: Props) {
         >
           {/* Crosshair */}
           {hoverPos && dragId === null && (
-            <g opacity={0.45} pointerEvents="none">
-              <line x1={hoverPos.x} y1={0}    x2={hoverPos.x} y2={1080} stroke="#FFD060" strokeWidth={1} strokeDasharray="10 8" />
-              <line x1={0}          y1={hoverPos.y} x2={1920} y2={hoverPos.y} stroke="#FFD060" strokeWidth={1} strokeDasharray="10 8" />
-              <rect x={hoverPos.x + 10} y={hoverPos.y - 24} width={86} height={18} rx={4} fill="rgba(0,0,0,0.8)" />
-              <text x={hoverPos.x + 53} y={hoverPos.y - 11} fontSize={11} fill="#FFD060" textAnchor="middle">
+            <g opacity={0.4} pointerEvents="none">
+              <line x1={hoverPos.x} y1={0} x2={hoverPos.x} y2={1080} stroke="#FFD060" strokeWidth={1} strokeDasharray="10 8" />
+              <line x1={0} y1={hoverPos.y} x2={1920} y2={hoverPos.y} stroke="#FFD060" strokeWidth={1} strokeDasharray="10 8" />
+              <rect x={hoverPos.x + 10} y={hoverPos.y - 24} width={90} height={18} rx={4} fill="rgba(0,0,0,0.85)" />
+              <text x={hoverPos.x + 55} y={hoverPos.y - 11} fontSize={11} fill="#FFD060" textAnchor="middle">
                 {hoverPos.x}, {hoverPos.y}
               </text>
             </g>
           )}
 
-          {/* Salud markers */}
-          {tab === "salud" && salud.map(m => {
-            const isSelected = m.id === selected;
-            const r = m.tipo === "segura" ? 22 : isSelected ? 18 : 14;
-            return (
-              <circle
-                key={m.id}
-                cx={m.x} cy={m.y} r={r}
-                fill={TIPO_COLORS[m.tipo]}
-                stroke={isSelected ? "#FFD060" : "rgba(0,0,0,0.5)"}
-                strokeWidth={isSelected ? 3 : 1}
-                style={{ cursor: dragId === m.id ? "grabbing" : "grab" }}
-                onMouseDown={e => handleMarkerMouseDown(e, m.id)}
-              />
-            );
-          })}
+          {/* Salud circles */}
+          {tab === "salud" && salud.map(m => (
+            <circle key={m.id}
+              cx={m.x} cy={m.y}
+              r={m.tipo === "segura" ? 22 : m.id === selected ? 18 : 14}
+              fill={TIPO_COLORS[m.tipo]}
+              stroke={m.id === selected ? "#FFD060" : "rgba(0,0,0,0.5)"}
+              strokeWidth={m.id === selected ? 3 : 1}
+              style={{ cursor: dragId === m.id ? "grabbing" : "grab" }}
+              onMouseDown={e => handleMarkerMouseDown(e, m.id)}
+            />
+          ))}
 
-          {/* Minería markers (triangles) */}
-          {tab === "mineria" && mineria.map(m => {
-            const isSelected = m.id === selected;
-            const pts = `${m.x},${m.y - 18} ${m.x + 16},${m.y + 14} ${m.x - 16},${m.y + 14}`;
-            return (
+          {/* Minería triangles */}
+          {tab === "mineria" && mineria.map(m => (
+            <g key={m.id}
+              style={{ cursor: dragId === m.id ? "grabbing" : "grab" }}
+              onMouseDown={e => handleMarkerMouseDown(e, m.id)}
+            >
               <polygon
-                key={m.id}
-                points={pts}
+                points={`${m.x},${m.y - 20} ${m.x + 17},${m.y + 14} ${m.x - 17},${m.y + 14}`}
                 fill={TIPO_COLORS[m.tipo]}
-                stroke={isSelected ? "#FFD060" : "rgba(0,0,0,0.5)"}
-                strokeWidth={isSelected ? 3 : 1}
-                style={{ cursor: dragId === m.id ? "grabbing" : "grab" }}
-                onMouseDown={e => handleMarkerMouseDown(e, m.id)}
+                stroke={m.id === selected ? "#FFD060" : "rgba(0,0,0,0.5)"}
+                strokeWidth={m.id === selected ? 3 : 1}
               />
-            );
-          })}
+              {/* Label */}
+              {m.nombre !== "Nuevo" && (
+                <text x={m.x} y={m.y - 26} fontSize={10} fill="#FFD060" textAnchor="middle" pointerEvents="none">
+                  {m.nombre}
+                </text>
+              )}
+            </g>
+          ))}
         </svg>
       </div>
 
-      {/* ── CONTROL PANEL ────────────────────────────────────────────── */}
+      {/* ── PANEL ────────────────────────────────────────────────────── */}
       <div style={{
-        width: 290, background: "#0D161C",
+        width: 300, background: "#0D161C",
         borderLeft: "1px solid #1A3040",
         display: "flex", flexDirection: "column",
-        gap: 0, overflowY: "auto",
+        overflowY: "auto",
       }}>
 
         {/* Header */}
-        <div style={{ padding: "14px 16px 10px", borderBottom: "1px solid #1A3040", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ padding: "13px 16px 10px", borderBottom: "1px solid #1A3040", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ color: "#E0B040", fontSize: 12, letterSpacing: "0.15em", textTransform: "uppercase" }}>Map Editor</span>
-          <button onClick={onClose} style={btn("#0D161C", "#4A7A90")}>ESC</button>
+          <button onClick={onClose} style={S.btn("#0D161C", "#4A7A90")}>ESC</button>
         </div>
 
         <div style={{ padding: "12px 16px", display: "flex", flexDirection: "column", gap: 14 }}>
 
           {/* Province */}
           <div>
-            <div style={label}>Provincia</div>
-            <select value={province} onChange={e => setProvince(e.target.value)} style={select}>
+            <div style={S.label}>Provincia</div>
+            <select value={province} onChange={e => setProvince(e.target.value)} style={S.select}>
               {Object.entries(PROVINCE_LABELS).map(([k, v]) => (
                 <option key={k} value={k}>{v}</option>
               ))}
@@ -348,28 +354,25 @@ export function MapMarkerEditor({ onClose }: Props) {
 
           {/* Tab */}
           <div>
-            <div style={label}>Modo</div>
+            <div style={S.label}>Modo</div>
             <div style={{ display: "flex", gap: 6 }}>
               {(["salud", "mineria"] as TabMode[]).map(t => (
-                <button key={t} onClick={() => setTab(t)}
-                  style={{ ...btn(tab === t ? "#163040" : "#0D161C", tab === t ? "#3E9AC4" : "#2A5060"), flex: 1, textTransform: "capitalize" }}>
+                <button key={t} onClick={() => { setTab(t); setSelected(null); }}
+                  style={{ ...S.btn(tab === t ? "#163040" : "#0D161C", tab === t ? "#3E9AC4" : "#2A5060"), flex: 1, textTransform: "capitalize" }}>
                   {t}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Tipo – salud */}
-          {tab === "salud" && (
+          {/* ── SALUD CONTROLS ── */}
+          {tab === "salud" && (<>
             <div>
-              <div style={label}>Tipo</div>
+              <div style={S.label}>Tipo a agregar</div>
               <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
                 {(["segura", "riesgo", "critica"] as SaludTipo[]).map(t => (
                   <button key={t} onClick={() => handleSaludTipoChange(t)} style={{
-                    ...btn(
-                      saludTipo === t ? "rgba(224,176,64,0.12)" : "#0D161C",
-                      saludTipo === t ? "#E0B040" : "#2A5060",
-                    ),
+                    ...S.btn(saludTipo === t ? "rgba(224,176,64,0.12)" : "#0D161C", saludTipo === t ? "#E0B040" : "#2A5060"),
                     display: "flex", alignItems: "center", gap: 8,
                   }}>
                     <span style={{ width: 11, height: 11, borderRadius: "50%", background: TIPO_COLORS[t], flexShrink: 0 }} />
@@ -378,19 +381,38 @@ export function MapMarkerEditor({ onClose }: Props) {
                 ))}
               </div>
             </div>
-          )}
 
-          {/* Tipo – mineria */}
-          {tab === "mineria" && (
+            {/* Selected salud */}
+            {selSalud && (
+              <div style={{ borderTop: "1px solid #1A3040", paddingTop: 10 }}>
+                <div style={S.label}>Seleccionado</div>
+                <div style={{ color: "#FFD060", fontSize: 11, lineHeight: 1.9 }}>
+                  x: {selSalud.x} · y: {selSalud.y}<br />tipo: {selSalud.tipo}
+                </div>
+                <button onClick={deleteSelected} style={{ ...S.btn("rgba(180,30,30,0.15)", "#C05050"), marginTop: 8, width: "100%" }}>
+                  Eliminar (Del)
+                </button>
+              </div>
+            )}
+
+            {/* Salud stats */}
+            <div style={{ borderTop: "1px solid #1A3040", paddingTop: 10, fontSize: 11, color: "#4A7A90", lineHeight: 1.9 }}>
+              <div style={S.label}>Conteo</div>
+              <span style={{ color: TIPO_COLORS.segura }}>●</span> segura: {salud.filter(m => m.tipo === "segura").length}<br />
+              <span style={{ color: TIPO_COLORS.riesgo }}>●</span> riesgo: {salud.filter(m => m.tipo === "riesgo").length}<br />
+              <span style={{ color: TIPO_COLORS.critica }}>●</span> critica: {salud.filter(m => m.tipo === "critica").length}<br />
+              <span style={{ color: "#8AAABB" }}>total: {salud.length}</span>
+            </div>
+          </>)}
+
+          {/* ── MINERÍA CONTROLS ── */}
+          {tab === "mineria" && (<>
             <div>
-              <div style={label}>Tipo</div>
+              <div style={S.label}>Tipo a agregar</div>
               <div style={{ display: "flex", gap: 6 }}>
                 {(["formal", "informal"] as MineriaTipo[]).map(t => (
                   <button key={t} onClick={() => handleMineriaTipoChange(t)} style={{
-                    ...btn(
-                      mineriaTipo === t ? "rgba(224,176,64,0.12)" : "#0D161C",
-                      mineriaTipo === t ? "#E0B040" : "#2A5060",
-                    ),
+                    ...S.btn(mineriaTipo === t ? "rgba(224,176,64,0.12)" : "#0D161C", mineriaTipo === t ? "#E0B040" : "#2A5060"),
                     flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
                   }}>
                     <span style={{ width: 0, height: 0, borderLeft: "6px solid transparent", borderRight: "6px solid transparent", borderBottom: `10px solid ${TIPO_COLORS[t]}`, flexShrink: 0 }} />
@@ -399,79 +421,120 @@ export function MapMarkerEditor({ onClose }: Props) {
                 ))}
               </div>
             </div>
-          )}
 
-          {/* Stats */}
-          <div style={{ borderTop: "1px solid #1A3040", paddingTop: 10 }}>
-            <div style={label}>Conteo</div>
-            {tab === "salud" ? (
-              <div style={{ color: "#4A7A90", fontSize: 11, lineHeight: 1.8 }}>
-                <span style={{ color: TIPO_COLORS.segura }}>●</span> segura:&nbsp;&nbsp;{salud.filter(m => m.tipo === "segura").length}{"\n"}
-                <br />
-                <span style={{ color: TIPO_COLORS.riesgo }}>●</span> riesgo:&nbsp;&nbsp;{salud.filter(m => m.tipo === "riesgo").length}
-                <br />
-                <span style={{ color: TIPO_COLORS.critica }}>●</span> critica:&nbsp;{salud.filter(m => m.tipo === "critica").length}
-                <br />
-                <span style={{ color: "#8AAABB" }}>total:&nbsp;&nbsp;&nbsp;{salud.length}</span>
-              </div>
-            ) : (
-              <div style={{ color: "#4A7A90", fontSize: 11, lineHeight: 1.8 }}>
-                <span style={{ color: TIPO_COLORS.formal }}>▲</span> formal:&nbsp;&nbsp;&nbsp;{mineria.filter(m => m.tipo === "formal").length}
-                <br />
-                <span style={{ color: TIPO_COLORS.informal }}>▲</span> informal:&nbsp;{mineria.filter(m => m.tipo === "informal").length}
-                <br />
-                <span style={{ color: "#8AAABB" }}>total:&nbsp;&nbsp;&nbsp;&nbsp;{mineria.length}</span>
+            {/* Selected minería — editable fields */}
+            {selMineria && (
+              <div style={{ borderTop: "1px solid #1A3040", paddingTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={S.label}>Editar marcador seleccionado</div>
+
+                <div style={{ color: "#FFD060", fontSize: 10, marginBottom: 2 }}>
+                  x: {selMineria.x} · y: {selMineria.y}
+                </div>
+
+                {/* Tipo */}
+                <div style={{ display: "flex", gap: 6 }}>
+                  {(["formal", "informal"] as MineriaTipo[]).map(t => (
+                    <button key={t} onClick={() => patchMineria(selMineria.id, { tipo: t })} style={{
+                      ...S.btn(selMineria.tipo === t ? "rgba(224,176,64,0.12)" : "#0D161C", selMineria.tipo === t ? "#E0B040" : "#2A5060"),
+                      flex: 1, fontSize: 9,
+                    }}>
+                      {t}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Nombre */}
+                <div>
+                  <div style={S.label}>Nombre</div>
+                  <input
+                    value={selMineria.nombre}
+                    onChange={e => patchMineria(selMineria.id, { nombre: e.target.value })}
+                    style={S.input}
+                    placeholder="Ej. Ollachea"
+                  />
+                </div>
+
+                {/* EESS */}
+                <div>
+                  <div style={S.label}>EESS más cercano</div>
+                  <input
+                    value={selMineria.eessMasCercano}
+                    onChange={e => patchMineria(selMineria.id, { eessMasCercano: e.target.value })}
+                    style={S.input}
+                    placeholder="Ej. KCANA (I-2)"
+                  />
+                </div>
+
+                {/* Distancia */}
+                <div>
+                  <div style={S.label}>Distancia (km)</div>
+                  <input
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    value={selMineria.distanciaKm}
+                    onChange={e => patchMineria(selMineria.id, { distanciaKm: parseFloat(e.target.value) || 0 })}
+                    style={S.input}
+                  />
+                </div>
+
+                {/* Descripcion */}
+                <div>
+                  <div style={S.label}>Descripción (opcional)</div>
+                  <input
+                    value={selMineria.descripcion ?? ""}
+                    onChange={e => patchMineria(selMineria.id, { descripcion: e.target.value || undefined })}
+                    style={S.input}
+                    placeholder="Ej. Con cobertura a 2.4 km…"
+                  />
+                </div>
+
+                <button onClick={deleteSelected} style={{ ...S.btn("rgba(180,30,30,0.15)", "#C05050"), width: "100%" }}>
+                  Eliminar (Del)
+                </button>
               </div>
             )}
-          </div>
 
-          {/* Selected marker */}
-          {(selectedSalud || selectedMineria) && (
-            <div style={{ borderTop: "1px solid #1A3040", paddingTop: 10 }}>
-              <div style={label}>Seleccionado</div>
-              <div style={{ color: "#FFD060", fontSize: 11, lineHeight: 1.8 }}>
-                x: {(selectedSalud || selectedMineria)!.x}
-                <br />
-                y: {(selectedSalud || selectedMineria)!.y}
-                <br />
-                tipo: {(selectedSalud || selectedMineria)!.tipo}
-              </div>
-              <button onClick={deleteSelected} style={{ ...btn("rgba(180,30,30,0.15)", "#C05050"), marginTop: 8, width: "100%" }}>
-                Eliminar (Del)
-              </button>
+            {/* Minería stats */}
+            <div style={{ borderTop: "1px solid #1A3040", paddingTop: 10, fontSize: 11, color: "#4A7A90", lineHeight: 1.9 }}>
+              <div style={S.label}>Conteo</div>
+              <span style={{ color: TIPO_COLORS.formal }}>▲</span> formal: {mineria.filter(m => m.tipo === "formal").length}<br />
+              <span style={{ color: TIPO_COLORS.informal }}>▲</span> informal: {mineria.filter(m => m.tipo === "informal").length}<br />
+              <span style={{ color: "#8AAABB" }}>total: {mineria.length}</span>
             </div>
-          )}
+          </>)}
 
           {/* Undo / Reset */}
-          <div style={{ display: "flex", gap: 6 }}>
+          <div style={{ borderTop: "1px solid #1A3040", paddingTop: 10, display: "flex", gap: 6 }}>
             <button onClick={undo} disabled={history.length === 0}
-              style={{ ...btn("#0D161C", "#3E9AC4"), flex: 1, opacity: history.length === 0 ? 0.35 : 1 }}>
+              style={{ ...S.btn("#0D161C", "#3E9AC4"), flex: 1, opacity: history.length === 0 ? 0.3 : 1 }}>
               ↩ Deshacer
             </button>
-            <button onClick={resetProvince} style={{ ...btn("#0D161C", "#C05050"), flex: 1 }}>
+            <button onClick={resetProvince} style={{ ...S.btn("#0D161C", "#C05050"), flex: 1 }}>
               Reset
             </button>
           </div>
 
-          {/* Instructions */}
-          <div style={{ borderTop: "1px solid #1A3040", paddingTop: 10, color: "#2A5060", fontSize: 10, lineHeight: 1.9 }}>
-            <b style={{ color: "#3A6070" }}>Click</b> → agregar punto<br />
-            <b style={{ color: "#3A6070" }}>Drag</b>  → mover punto<br />
-            <b style={{ color: "#3A6070" }}>Del</b>   → eliminar seleccionado<br />
+          {/* Shortcuts */}
+          <div style={{ color: "#2A5060", fontSize: 10, lineHeight: 2 }}>
+            <b style={{ color: "#3A6070" }}>Click</b> → agregar &nbsp;
+            <b style={{ color: "#3A6070" }}>Drag</b> → mover<br />
+            <b style={{ color: "#3A6070" }}>Del</b> → eliminar &nbsp;
             <b style={{ color: "#3A6070" }}>Ctrl+Z</b> → deshacer<br />
-            <b style={{ color: "#3A6070" }}>Esc</b>   → cerrar
+            <b style={{ color: "#3A6070" }}>Esc</b> → cerrar
           </div>
 
           {/* Code output */}
           <div style={{ borderTop: "1px solid #1A3040", paddingTop: 12 }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-              <div style={label}>Código generado</div>
-              <button onClick={copyCode} style={btn(copied ? "rgba(19,163,131,0.2)" : "#0D161C", copied ? "#13A383" : "#3E9AC4")}>
+              <div style={S.label}>Código generado</div>
+              <button onClick={copyCode} style={S.btn(copied ? "rgba(19,163,131,0.2)" : "#0D161C", copied ? "#13A383" : "#3E9AC4")}>
                 {copied ? "¡Copiado!" : "Copiar"}
               </button>
             </div>
             <pre
-              onClick={() => navigator.clipboard?.writeText(generateCode())}
+              onClick={copyCode}
+              title="Click para copiar"
               style={{
                 background: "rgba(0,0,0,0.35)",
                 border: "1px solid #1A3040",
@@ -481,14 +544,13 @@ export function MapMarkerEditor({ onClose }: Props) {
                 fontSize: 9,
                 overflowX: "auto",
                 overflowY: "auto",
-                maxHeight: 220,
+                maxHeight: 200,
                 margin: 0,
                 whiteSpace: "pre",
                 userSelect: "all",
                 cursor: "pointer",
                 lineHeight: 1.5,
               }}
-              title="Click para copiar"
             >
               {generateCode()}
             </pre>
@@ -500,38 +562,50 @@ export function MapMarkerEditor({ onClose }: Props) {
   );
 }
 
-// ── Shared styles ────────────────────────────────────────────────────────────
+// ── Styles ────────────────────────────────────────────────────────────────────
 
-const label: React.CSSProperties = {
-  color: "#3A6070",
-  fontSize: 9,
-  textTransform: "uppercase",
-  letterSpacing: "0.12em",
-  marginBottom: 5,
-};
-
-const select: React.CSSProperties = {
-  width: "100%",
-  background: "#080E11",
-  border: "1px solid #1A3040",
-  borderRadius: 5,
-  color: "#8AAABB",
-  fontSize: 11,
-  padding: "6px 8px",
-  fontFamily: "monospace",
-  cursor: "pointer",
-};
-
-function btn(bg: string, border: string): React.CSSProperties {
-  return {
-    background: bg,
-    border: `1px solid ${border}`,
+const S = {
+  label: {
+    color: "#3A6070",
+    fontSize: 9,
+    textTransform: "uppercase" as const,
+    letterSpacing: "0.12em",
+    marginBottom: 4,
+  },
+  select: {
+    width: "100%",
+    background: "#080E11",
+    border: "1px solid #1A3040",
     borderRadius: 5,
-    color: border,
-    fontSize: 10,
-    padding: "5px 10px",
-    cursor: "pointer",
+    color: "#8AAABB",
+    fontSize: 11,
+    padding: "6px 8px",
     fontFamily: "monospace",
-    textAlign: "center",
-  };
-}
+    cursor: "pointer",
+  } as React.CSSProperties,
+  input: {
+    width: "100%",
+    background: "#080E11",
+    border: "1px solid #1A3040",
+    borderRadius: 5,
+    color: "#A8D4EE",
+    fontSize: 11,
+    padding: "5px 8px",
+    fontFamily: "monospace",
+    boxSizing: "border-box" as const,
+    outline: "none",
+  } as React.CSSProperties,
+  btn(bg: string, border: string): React.CSSProperties {
+    return {
+      background: bg,
+      border: `1px solid ${border}`,
+      borderRadius: 5,
+      color: border,
+      fontSize: 10,
+      padding: "5px 10px",
+      cursor: "pointer",
+      fontFamily: "monospace",
+      textAlign: "center",
+    };
+  },
+};
