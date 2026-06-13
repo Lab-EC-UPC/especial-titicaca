@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import StoryPopup from "../../components/StoryPopup";
 import CardRoute from "../../components/CardRoute";
 import PunoProvinceMap, { PROVINCES } from "./components/PunoProvinceMap";
@@ -45,39 +45,21 @@ export const TriangulacionSection = () => {
   const [step, setStep] = useState(0);
   const [hoveredProvince, setHoveredProvince] = useState<string | null>(null);
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
-  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (view !== "route") return;
     setStep(1);
-
-    const handleScroll = () => {
-      const section = sectionRef.current;
-      if (!section) return;
-      const { top, height } = section.getBoundingClientRect();
-      const scrolled = -top / (height - window.innerHeight);
-      if (scrolled >= 0.66) setStep(3);
-      else if (scrolled >= 0.33) setStep(2);
-      else setStep(1);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [view]);
-
-  useEffect(() => {
-    if (view === "map" && sectionRef.current) {
-      sectionRef.current.scrollIntoView({ behavior: "instant" });
-    }
+    const t1 = setTimeout(() => setStep(2), 3500);
+    const t2 = setTimeout(() => setStep(3), 7000);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, [view]);
 
   return (
     <div
-      ref={sectionRef}
       id="triangulacion"
-      className={`relative w-full ${view === "province" ? "bg-[#151B1B]" : "bg-[#304551]"} ${view === "route" ? "h-[300vh]" : "h-screen"}`}
+      className={`relative w-full ${view === "province" ? "bg-[#151B1B]" : "bg-[#304551]"} h-screen`}
     >
-      <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="relative h-screen overflow-hidden">
 
         {view !== "province" && (
           <img
