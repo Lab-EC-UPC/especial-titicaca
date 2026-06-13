@@ -1,7 +1,6 @@
 /**
  * Testimonial card with multi-step navigation between testimony fragments.
  */
-import { useState } from "react";
 import closeIcon from "../../assets/testimonials/icons/close-icon.png";
 import nextIcon from "../../assets/testimonials/icons/next-icon.png";
 import type { TestimonyItem } from "../../types/TestimonialType";
@@ -9,16 +8,13 @@ import type { TestimonyItem } from "../../types/TestimonialType";
 interface TestimonialCardProps {
   name: string;
   testimony: TestimonyItem[];
+  currentIndex: number;
+  onNext: () => void;
   onClose: () => void;
 }
 
-export const TestimonialCard = ({ name, testimony, onClose }: TestimonialCardProps) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export const TestimonialCard = ({ name, testimony, currentIndex, onNext, onClose }: TestimonialCardProps) => {
   const isLast = currentIndex === testimony.length - 1;
-
-  const handleNext = () => {
-    if (!isLast) setCurrentIndex((prev) => prev + 1);
-  };
 
   return (
     <div className="absolute bottom-10 left-1/2 z-20 w-[92vw] -translate-x-1/2 sm:bottom-14 md:bottom-20 md:w-197.5 md:max-w-[92vw]">
@@ -34,7 +30,7 @@ export const TestimonialCard = ({ name, testimony, onClose }: TestimonialCardPro
           </p>
         </div>
         <button
-          onClick={isLast ? onClose : handleNext}
+          onClick={isLast ? onClose : onNext}
           aria-label={isLast ? "Cerrar testimonio" : "Continuar testimonio"}
           className="absolute bottom-0 left-1/2 flex h-9 w-9 -translate-x-1/2 translate-y-1/2 items-center justify-center transition-opacity duration-300 hover:opacity-80 sm:h-10 sm:w-10 md:h-11 md:w-11"
         >

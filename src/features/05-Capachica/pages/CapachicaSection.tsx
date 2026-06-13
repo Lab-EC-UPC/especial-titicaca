@@ -11,6 +11,8 @@ import animationVideoMobile from "../assets/videos/animation_mobile.mp4";
 import { TestimonialSection } from "./TestimonialSection";
 import { TriangulacionSection } from "../TriangulacionSection";
 import { TotoraSection } from "../Totora";
+import { EndingGradientOverlay } from "../components/animations/EndingGradientOverlay";
+
 
 gsap.registerPlugin(useGSAP);
 
@@ -222,6 +224,8 @@ export const CapachicaSection = () => {
             </Message>
 
             {/* 6. Título del capítulo promesas sin respuestas */}
+            <EndingGradientOverlay start={0.94} end={1.00} />
+            
             <ChapterTitle
                 start={0.94}
                 end={1.00}

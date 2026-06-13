@@ -4,23 +4,17 @@ import { TestimonialBackground } from "../components/testimonials/TestimonialBac
 import { TestimonialPersonView } from "../components/testimonials/TestimonialPersonView";
 
 export const TestimonialSection = () => {
-  const { selectedId, isPlaying, selectPerson, closePerson, toggleAudio } =
-    useTestimonial();
+  const { selectedId, selectPerson, closePerson } = useTestimonial();
 
-  const selectedTestimonial =
-    TESTIMONIALS.find((t) => t.id === selectedId) ?? null;
+  const selectedTestimonial = TESTIMONIALS.find((t) => t.id === selectedId) ?? null;
 
   return (
-    <div
-      id="testimonios"
-      className="relative w-full h-full"
-    >
+    <div id="testimonios" className="relative w-full h-full">
       {selectedTestimonial ? (
         <TestimonialPersonView
+          key={selectedTestimonial.id}
           testimonial={selectedTestimonial}
-          isPlaying={isPlaying}
           onClose={closePerson}
-          onToggleAudio={() => toggleAudio(selectedTestimonial.audioSrc)}
         />
       ) : (
         <TestimonialBackground
