@@ -11,6 +11,7 @@ type Props = {
   isInView: boolean;
   onHoverStart: () => void;
   onHoverEnd: () => void;
+  onToggle: () => void;
   onArrived: () => void;
   variants: Variants;
 };
@@ -19,7 +20,7 @@ const SIDE_VIEW_STYLE = { height: "100%", width: "auto", maxWidth: "100%", displ
 
 export const SpeciesCard = ({
   item, index, isHovered, arrived, isInView,
-  onHoverStart, onHoverEnd, onArrived, variants,
+  onHoverStart, onHoverEnd, onToggle, onArrived, variants,
 }: Props) => {
   const hasFrontal = Boolean(item.FrontalComponent);
 
@@ -30,7 +31,11 @@ export const SpeciesCard = ({
       onAnimationComplete={(def) => { if (def === "visible") onArrived(); }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      style={{ cursor: "default" }}
+      onTap={onToggle}
+      role="button"
+      tabIndex={0}
+      aria-pressed={isHovered}
+      style={{ cursor: "pointer" }}
     >
       <motion.span
         aria-hidden
