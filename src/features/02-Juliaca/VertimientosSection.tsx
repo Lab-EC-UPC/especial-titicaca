@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 const MOBILE_BP = 768;
 const TOTAL_FRAMES = 8;
 
-export const VertimientosSection = () => {
+export const VertimientosSection = ({ start }: { start?: number }) => {
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth < MOBILE_BP : false,
   );
@@ -20,7 +20,7 @@ export const VertimientosSection = () => {
   return (
     <div
       data-vertimientos-section
-      data-start={0.67}
+      data-start={start ?? 0.67}
       data-images={8}
       data-snap={140}
       data-transition={50}

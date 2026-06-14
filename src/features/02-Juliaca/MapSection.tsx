@@ -10,7 +10,7 @@ import {
 type XY = { x: number; y: number };
 const DOTS = DOTS_DESKTOP as Record<CuencaId, XY>;
 
-export const MapSection = () => {
+export const MapSection = ({ start }: { start?: number }) => {
   const [isMobile, setIsMobile] = useState(() =>
     typeof window !== "undefined" ? window.innerWidth < MOBILE_BP : false,
   );
@@ -24,7 +24,7 @@ export const MapSection = () => {
   return (
     <div
       data-map-section
-      data-start={0.48}
+      data-start={start ?? 0.48}
       data-images={8}
       data-snap={160}
       data-transition={60}

@@ -146,7 +146,7 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <MapSection />
+            <MapSection start={0.52} />
 
             <ScrollMessage start={0.55} end={0.65}>
                 <ScrollMessage.Paragraph>
@@ -162,7 +162,7 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <VertimientosSection />
+            <VertimientosSection start={0.7} />
 
             <ScrollMessage start={0.75} end={0.85}>
                 <ScrollMessage.Paragraph>
