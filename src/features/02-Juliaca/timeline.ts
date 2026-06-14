@@ -113,7 +113,6 @@ function blockEndRatio(block: Block, blocks: Block[], totalScroll: number) {
 
 function setupGallery(tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) {
     const bStart = blockStartRatio(block, blocks, totalScroll);
-    const bEnd = blockEndRatio(block, blocks, totalScroll);
     const bDur = block.width / totalScroll;
 
     const state = { pos: 0 };
@@ -170,7 +169,7 @@ function setupGallery(tl: GSAPTimeline, block: Block, blocks: Block[], totalScro
     };
 }
 
-function setupMap(tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) {
+function setupMap(_tl: GSAPTimeline, block: Block, _blocks: Block[], _totalScroll: number) {
     const cuencaEls =
         block.element.querySelectorAll<HTMLElement>("[data-map-cuenca]");
     const cardEls =
@@ -194,7 +193,7 @@ function setupMap(tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: 
     };
 }
 
-function setupVertimientos(tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) {
+function setupVertimientos(_tl: GSAPTimeline, block: Block, _blocks: Block[], _totalScroll: number) {
     const frameEls =
         block.element.querySelectorAll<HTMLElement>("[data-vertimientos-frame]");
     const titleEl = block.element.querySelector<HTMLElement>("[data-vertimientos-title]");

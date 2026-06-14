@@ -4,8 +4,8 @@ import gsap from "gsap";
 import { createScrollTimeline } from "./timeline";
 import { ScrollMessage } from "./ScrollMessage";
 import { Gallery } from "./Gallery";
-import { MapSection } from "./MapSection";
-import { VertimientosSection } from "./VertimientosSection";
+import { MapaTiticacaSection } from "../03-MapaTiticaca/MapaTiticacaSection";
+import { ContaminacionCuencaSection } from "../03-MapaTiticaca/ContaminacionCuencaSection";
 import "./juliaca.css";
 
 import comVideo from "./assets/juliaca_com.mp4";
@@ -146,7 +146,7 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <MapSection start={0.52} />
+            <MapaTiticacaSection start={0.52} />
 
             <ScrollMessage start={0.55} end={0.65}>
                 <ScrollMessage.Paragraph>
@@ -162,7 +162,7 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <VertimientosSection start={0.7} />
+            <ContaminacionCuencaSection start={0.7} />
 
             <ScrollMessage start={0.75} end={0.85}>
                 <ScrollMessage.Paragraph>
