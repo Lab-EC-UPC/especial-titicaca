@@ -100,7 +100,7 @@ export const HeaderSection = () => {
       </CoverMessage>
 
       <CoverMessage at={92}>
-        <h2 className="text-xl font-normal leading-[1.15] tracking-tight sm:text-3xl md:text-4xl">
+        <h2 className="text-base font-normal leading-[1.15] tracking-tight sm:text-3xl md:text-4xl">
           ¿Cómo llegó el Titicaca a esta situación si sus problemas eran
           conocidos desde hace mucho?
         </h2>

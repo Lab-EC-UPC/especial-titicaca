@@ -20,8 +20,8 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
   const [index, setIndex] = useState(0);
   const count = images.length;
 
-  const goTo = (i: number) => setIndex((i + count) % count);
-  const next = () => goTo(index + 1);
+  const goTo = (i: number) => setIndex(((i % count) + count) % count);
+  const next = () => setIndex((prev) => (prev + 1) % count);
 
   const current = images[index];
   const upcoming = images[(index + 1) % count];
@@ -73,7 +73,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
           className="relative flex w-full flex-col items-center"
           style={{ maxWidth: "min(620px, 92vw)" }}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.button
               type="button"
               key={index}
@@ -83,7 +83,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+              transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] as const }}
             >
               <img
                 src={current.src}

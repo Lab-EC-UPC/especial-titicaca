@@ -162,6 +162,7 @@ export const Fauna = () => {
               isInView={isInView}
               onHoverStart={() => setHoveredIndex(i)}
               onHoverEnd={() => setHoveredIndex(null)}
+              onToggle={() => setHoveredIndex((prev) => (prev === i ? null : i))}
               onArrived={() => markArrived(i)}
               variants={animalVariants}
             />
