@@ -4,6 +4,8 @@ import gsap from "gsap";
 import { createScrollTimeline } from "./timeline";
 import { ScrollMessage } from "./ScrollMessage";
 import { Gallery } from "./Gallery";
+import { MapSection } from "./MapSection";
+import { VertimientosSection } from "./VertimientosSection";
 import "./juliaca.css";
 
 import comVideo from "./assets/juliaca_com.mp4";
@@ -74,7 +76,7 @@ export const JuliacaSection = () => {
                 preload="auto"
             />
 
-            <ScrollMessage start={0.05} end={0.15}>
+            <ScrollMessage start={0.03} end={0.13}>
                 <ScrollMessage.Paragraph>
                     Lo que observas aquí es solo una parte de la historia.
                     <br />
@@ -82,7 +84,7 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
-            <ScrollMessage start={0.2} end={0.3}>
+            <ScrollMessage start={0.18} end={0.3}>
                 <ScrollMessage.Heading>
                     SIGUIENDO
                     <br />
@@ -144,6 +146,8 @@ export const JuliacaSection = () => {
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
 
+            <MapSection />
+
             <ScrollMessage start={0.55} end={0.65}>
                 <ScrollMessage.Paragraph>
                     En el río Coata, el arsénico llegó a triplicar el límite establecido por
@@ -157,6 +161,8 @@ export const JuliacaSection = () => {
                     del valor de referencia para la protección del riego y la ganadería.
                 </ScrollMessage.Paragraph>
             </ScrollMessage>
+
+            <VertimientosSection />
 
             <ScrollMessage start={0.75} end={0.85}>
                 <ScrollMessage.Paragraph>

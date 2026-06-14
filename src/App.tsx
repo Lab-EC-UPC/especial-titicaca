@@ -2,8 +2,8 @@ import "./index.css";
 import { useState, useEffect } from "react";
 import { HeaderSection } from "./features/01-Header/HeaderSection";
 import { JuliacaSection } from "./features/02-Juliaca/JuliacaSection";
-import { MapaTiticacaSection } from "./features/03-MapaTiticaca/MapaTiticacaSection";
-import { ContaminacionCuencaSection } from "./features/03-MapaTiticaca/ContaminacionCuencaSection";
+
+
 import { FloraFaunaSection } from "./features/04-FloraFauna/FloraFaunaSection";
 import { CapachicaSection } from "./features/05-Capachica/pages/CapachicaSection";
 import { DenunciasSection } from "./features/06-Denuncias/DenunciasSection";
@@ -51,8 +51,8 @@ function App() {
       <main>
         <div id="inicio">        <HeaderSection />       </div>
         <div id="juliaca">          <JuliacaSection />          </div>
-        <div id="mapatiti">          <MapaTiticacaSection />          </div>
-        <div id="cuencas">          <ContaminacionCuencaSection />          </div>
+
+
         <div id="florafauna">          <FloraFaunaSection />          </div>
         <div id="capachica">        <CapachicaSection />       </div>
         <div id="denuncias"> <DenunciasSection /> </div>

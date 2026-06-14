@@ -11,36 +11,52 @@ type Scene = {
     end: number;
 };
 
+type Block = {
+    element: HTMLElement;
+    startPx: number;
+    endPx: number;
+    width: number;
+    images: number;
+    snap: number;
+    transition: number;
+    type: string;
+    update: ((progress: number, tl: GSAPTimeline) => void) | null;
+};
+
+// ─── Scene extraction ─────────────────────────────────────────────────────────
+
+const BLOCK_SELECTORS = ["[data-gallery]", "[data-map-section]", "[data-vertimientos-section]"];
+
 function getScenes(container: HTMLElement): Scene[] {
     return Array.from(
-        container.querySelectorAll<HTMLElement>("[data-start][data-end]")
+        container.querySelectorAll<HTMLElement>("[data-start][data-end]"),
     )
-        .filter((el) => !el.closest("[data-gallery]"))
+        .filter((el) => !BLOCK_SELECTORS.some((s) => el.closest(s)))
         .map((element) => ({
             element,
             start: Number(element.dataset.start),
             end: Number(element.dataset.end),
         }))
         .filter(
-            (scene) =>
-                !Number.isNaN(scene.start) &&
-                !Number.isNaN(scene.end) &&
-                scene.start >= 0 &&
-                scene.end <= 1 &&
-                scene.start < scene.end
+            (s) =>
+                !Number.isNaN(s.start) &&
+                !Number.isNaN(s.end) &&
+                s.start >= 0 &&
+                s.end <= 1 &&
+                s.start < s.end,
         );
 }
 
-function getGalleryConfig(container: HTMLElement): {
-    element: HTMLElement;
-    startPx: number;
-    endPx: number;
-    images: number;
-    width: number;
-    snap: number;
-    transition: number;
-} | null {
-    const el = container.querySelector<HTMLElement>("[data-gallery]");
+// ─── Block config (generic — reads data-start, data-images, data-snap) ────────
+
+const BLOCK_TYPE: Record<string, string> = {
+    "[data-gallery]": "gallery",
+    "[data-map-section]": "map",
+    "[data-vertimientos-section]": "vertimientos",
+};
+
+function getBlock(container: HTMLElement, selector: string): Block | null {
+    const el = container.querySelector<HTMLElement>(selector);
     if (!el) return null;
 
     const start = Number(el.dataset.start);
@@ -48,9 +64,10 @@ function getGalleryConfig(container: HTMLElement): {
     const snap = Number(el.dataset.snap);
     if ([start, images, snap].some(Number.isNaN)) return null;
 
-    const transition = el.dataset.transition !== undefined
-        ? Number(el.dataset.transition)
-        : Math.round(snap * 0.7);
+    const transition =
+        el.dataset.transition !== undefined
+            ? Number(el.dataset.transition)
+            : Math.round(snap * 0.7);
     const width = images * (snap + transition);
 
     return {
@@ -61,20 +78,182 @@ function getGalleryConfig(container: HTMLElement): {
         width,
         snap,
         transition,
+        type: BLOCK_TYPE[selector] ?? selector,
+        update: null,
     };
 }
 
+function collectBlocks(container: HTMLElement): Block[] {
+    return BLOCK_SELECTORS.map((s) => getBlock(container, s))
+        .filter((b): b is Block => b !== null)
+        .sort((a, b) => a.startPx - b.startPx);
+}
+
+// ─── Block helpers ────────────────────────────────────────────────────────────
+
+function getOffsetBefore(px: number, blocks: Block[]) {
+    return blocks
+        .filter((b) => px > b.startPx)
+        .reduce((sum, b) => sum + b.width, 0);
+}
+
+function getRatio(px: number, blocks: Block[], totalScroll: number) {
+    return (px + getOffsetBefore(px, blocks)) / totalScroll;
+}
+
+function blockStartRatio(block: Block, blocks: Block[], totalScroll: number) {
+    return (block.startPx + getOffsetBefore(block.startPx, blocks)) / totalScroll;
+}
+
+function blockEndRatio(block: Block, blocks: Block[], totalScroll: number) {
+    return (block.endPx + getOffsetBefore(block.startPx, blocks)) / totalScroll;
+}
+
+// ─── Per-type setup ───────────────────────────────────────────────────────────
+
+function setupGallery(tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) {
+    const bStart = blockStartRatio(block, blocks, totalScroll);
+    const bEnd = blockEndRatio(block, blocks, totalScroll);
+    const bDur = block.width / totalScroll;
+
+    const state = { pos: 0 };
+    const perImage = bDur / block.images;
+    const totalPerImg = block.snap + block.transition;
+    const hold = perImage * (block.snap / totalPerImg);
+    const trans = perImage * (block.transition / totalPerImg);
+
+    for (let i = 0; i < block.images; i++) {
+        const cycleStart = bStart + i * perImage;
+        if (i < block.images - 1) {
+            tl.to(state, { pos: i, duration: hold, ease: "none" }, cycleStart);
+            tl.to(
+                state,
+                { pos: i + 1, duration: trans, ease: "none" },
+                cycleStart + hold,
+            );
+        } else {
+            tl.to(state, { pos: i, duration: hold, ease: "none" }, cycleStart);
+        }
+    }
+
+    const imageEls =
+        block.element.querySelectorAll<HTMLElement>("[data-gallery-image]");
+
+    block.update = () => {
+        const pos = state.pos;
+        const vw = window.innerWidth;
+
+        imageEls.forEach((el) => {
+            const i = Number(el.dataset.galleryImage);
+            const dist = i - pos;
+            const absDist = Math.abs(dist);
+
+            if (absDist >= 1.5) {
+                el.style.opacity = "0";
+                return;
+            }
+
+            const spread = vw < 768 ? 0.5 : 0.45;
+            const x = dist * vw * spread;
+            const scale = 1 - absDist * 0.4;
+            const opacity = 1 - absDist * 0.65;
+
+            el.style.opacity = String(opacity);
+            el.style.transform = `translateX(calc(-50% + ${x}px)) translateY(-50%) scale(${scale})`;
+
+            const textEl =
+                el.querySelector<HTMLElement>("[data-gallery-text]");
+            if (textEl) {
+                textEl.style.opacity = absDist < 0.3 ? "1" : "0";
+            }
+        });
+    };
+}
+
+function setupMap(tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) {
+    const cuencaEls =
+        block.element.querySelectorAll<HTMLElement>("[data-map-cuenca]");
+    const cardEls =
+        block.element.querySelectorAll<HTMLElement>("[data-map-card]");
+
+    block.update = (progress) => {
+        const activeIdx = Math.min(
+            Math.max(0, Math.floor(progress * block.images)),
+            block.images - 1,
+        );
+
+        cuencaEls.forEach((el) => {
+            const i = Number(el.dataset.mapCuenca);
+            el.style.opacity = i === activeIdx ? "1" : "0";
+        });
+
+        cardEls.forEach((el) => {
+            const i = Number(el.dataset.mapCard);
+            el.style.opacity = i === activeIdx ? "1" : "0";
+        });
+    };
+}
+
+function setupVertimientos(tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) {
+    const frameEls =
+        block.element.querySelectorAll<HTMLElement>("[data-vertimientos-frame]");
+    const titleEl = block.element.querySelector<HTMLElement>("[data-vertimientos-title]");
+    const dotEls =
+        block.element.querySelectorAll<HTMLElement>("[data-vertimientos-dot]");
+
+    block.update = (progress) => {
+        const activeIdx = Math.min(
+            Math.max(0, Math.floor(progress * block.images)),
+            block.images - 1,
+        );
+        const frame = activeIdx + 1;
+
+        frameEls.forEach((el) => {
+            const f = Number(el.dataset.vertimientosFrame);
+            el.style.opacity = f === frame ? "1" : "0";
+        });
+
+        if (titleEl) {
+            titleEl.style.opacity = frame === 1 ? "1" : "0";
+        }
+
+        dotEls.forEach((el) => {
+            const f = Number(el.dataset.vertimientosDot);
+            const isActive = f === frame;
+            const isPast = f < frame;
+            el.style.width = isActive ? "10px" : "8px";
+            el.style.height = isActive ? "10px" : "8px";
+            el.style.background = isActive
+                ? "rgba(255,255,255,1)"
+                : isPast
+                    ? "rgba(255,255,255,0.5)"
+                    : "rgba(255,255,255,0.2)";
+            if (isActive) {
+                el.style.boxShadow = "0 0 6px rgba(255,255,255,0.6)";
+            } else {
+                el.style.boxShadow = "none";
+            }
+        });
+    };
+}
+
+const SETUP: Record<string, (tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) => void> = {
+    gallery: setupGallery,
+    map: setupMap,
+    vertimientos: setupVertimientos,
+};
+
+// ─── Main entry ───────────────────────────────────────────────────────────────
+
 export function createScrollTimeline(container: HTMLElement, video: HTMLVideoElement): GSAPTimeline {
     const scenes = getScenes(container);
-    const gallery = getGalleryConfig(container);
-    const extraScroll = gallery ? gallery.width : 0;
+    const blocks = collectBlocks(container);
+
+    const extraScroll = blocks.reduce((sum, b) => sum + b.width, 0);
     const totalScroll = SCROLL_DISTANCE + extraScroll;
     const fadeDuration = 0.02;
 
-    gsap.set(
-        scenes.map((scene) => scene.element),
-        { autoAlpha: 0, y: 10 }
-    );
+    gsap.set(scenes.map((s) => s.element), { autoAlpha: 0, y: 10 });
 
     const tl = gsap.timeline({
         defaults: { ease: "none" },
@@ -88,105 +267,61 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         },
     });
 
-    // --- video scrub ---
-    if (gallery) {
-        const gStart = gallery.startPx / totalScroll;
-        const gEnd = gallery.endPx / totalScroll;
-        const pauseTime = (gallery.startPx / SCROLL_DISTANCE) * video.duration;
+    // ── video scrub ────────────────────────────────────────────────────────
+    if (blocks.length > 0) {
+        let lastRatio = 0;
 
-        const holdStart = gStart + fadeDuration;
-        tl.to(video, { currentTime: pauseTime, duration: holdStart, ease: "none" }, 0);
-        tl.to(video, { currentTime: pauseTime, duration: gEnd - holdStart, ease: "none" }, holdStart);
-        tl.to(video, { currentTime: video.duration, duration: 1 - gEnd, ease: "none" }, gEnd);
+        for (const block of blocks) {
+            const bStart = blockStartRatio(block, blocks, totalScroll);
+            const bEnd = blockEndRatio(block, blocks, totalScroll);
+            const pauseTime = (block.startPx / SCROLL_DISTANCE) * video.duration;
+
+            tl.to(video, { currentTime: pauseTime, duration: bStart - lastRatio, ease: "none" }, lastRatio);
+            tl.to(video, { currentTime: pauseTime, duration: bEnd - bStart, ease: "none" }, bStart);
+
+            lastRatio = bEnd;
+        }
+
+        tl.to(video, { currentTime: video.duration, duration: 1 - lastRatio, ease: "none" }, lastRatio);
     } else {
         tl.to(video, { currentTime: video.duration, duration: 1, ease: "none" }, 0);
     }
 
-    // --- scenes ---
-    const convertPx = (oldProgress: number) => {
-        const px = oldProgress * SCROLL_DISTANCE;
-        if (gallery && px >= gallery.startPx) {
-            return (px + gallery.width) / totalScroll;
-        }
-        return px / totalScroll;
-    };
-
+    // ── scenes ─────────────────────────────────────────────────────────────
     scenes.forEach((scene) => {
+        const startAt = getRatio(scene.start * SCROLL_DISTANCE, blocks, totalScroll);
+        const endAt = getRatio(scene.end * SCROLL_DISTANCE, blocks, totalScroll);
 
-        // Fade in
-        tl.to(
-            scene.element,
-            { autoAlpha: 1, y: 0, duration: fadeDuration, ease: "power2.out" },
-            convertPx(scene.start)
-        );
-
-        // Fade out
-        tl.to(
-            scene.element,
-            { autoAlpha: 0, y: -5, duration: fadeDuration, ease: "power2.in" },
-            Math.max(convertPx(scene.end) - fadeDuration, convertPx(scene.start) + 0.01)
-        );
+        tl.to(scene.element, { autoAlpha: 1, y: 0, duration: fadeDuration, ease: "power2.out" }, startAt);
+        tl.to(scene.element, { autoAlpha: 0, y: -5, duration: fadeDuration, ease: "power2.in" }, Math.max(endAt - fadeDuration, startAt + 0.01));
     });
 
-    // Gallery
-    if (gallery) {
-        const gStart = gallery.startPx / totalScroll;
-        const gEnd = gallery.endPx / totalScroll;
-        const gDur = gallery.width / totalScroll;
+    // ── blocks: fade in/out + per-type setup ──────────────────────────────
+    for (const block of blocks) {
+        const bStart = blockStartRatio(block, blocks, totalScroll);
+        const bEnd = blockEndRatio(block, blocks, totalScroll);
 
-        tl.to(gallery.element, { autoAlpha: 1, duration: fadeDuration, ease: "power2.out" }, gStart);
-        tl.to(gallery.element, { autoAlpha: 0, duration: fadeDuration, ease: "power2.in" }, gEnd);
+        tl.to(block.element, { autoAlpha: 1, duration: fadeDuration, ease: "power2.out" }, bStart);
+        tl.to(block.element, { autoAlpha: 0, duration: fadeDuration, ease: "power2.in" }, bEnd);
 
-        // carousel state
-        const carouselState = { pos: 0 };
-        const perImage = gDur / gallery.images;
-        const totalPerImg = gallery.snap + gallery.transition;
-        const hold = perImage * (gallery.snap / totalPerImg);
-        const trans = perImage * (gallery.transition / totalPerImg);
-
-        for (let i = 0; i < gallery.images; i++) {
-            const cycleStart = gStart + i * perImage;
-            if (i < gallery.images - 1) {
-                tl.to(carouselState, { pos: i, duration: hold, ease: "none" }, cycleStart);
-                tl.to(carouselState, { pos: i + 1, duration: trans, ease: "none" }, cycleStart + hold);
-            } else {
-                tl.to(carouselState, { pos: i, duration: hold, ease: "none" }, cycleStart);
-            }
-        }
-
-        // image positioning callback
-        const imageEls = gallery.element.querySelectorAll<HTMLElement>("[data-gallery-image]");
-
-        tl.eventCallback("onUpdate", () => {
-            const pos = carouselState.pos;
-            const vw = window.innerWidth;
-
-            imageEls.forEach((el) => {
-                const i = Number(el.dataset.galleryImage);
-                const dist = i - pos;
-                const absDist = Math.abs(dist);
-
-                if (absDist >= 1.5) {
-                    el.style.opacity = "0";
-                    return;
-                }
-
-                const spread = vw < 768 ? 0.5 : 0.45;
-                const x = dist * vw * spread;
-                const scale = 1 - absDist * 0.4;
-                const opacity = 1 - absDist * 0.65;
-
-                el.style.opacity = String(opacity);
-                el.style.transform =
-                    `translateX(calc(-50% + ${x}px)) translateY(-50%) scale(${scale})`;
-
-                const textEl = el.querySelector<HTMLElement>("[data-gallery-text]");
-                if (textEl) {
-                    textEl.style.opacity = absDist < 0.3 ? "1" : "0";
-                }
-            });
-        });
+        SETUP[block.type]?.(tl, block, blocks, totalScroll);
     }
+
+    // ── onUpdate dispatch ──────────────────────────────────────────────────
+    tl.eventCallback("onUpdate", () => {
+        const t = tl.progress();
+
+        blocks.forEach((block) => {
+            if (!block.update) return;
+
+            const bStart = blockStartRatio(block, blocks, totalScroll);
+            const bEnd = blockEndRatio(block, blocks, totalScroll);
+            const bDur = (bEnd - bStart);
+            const progress = bDur > 0 ? Math.max(0, Math.min(1, (t - bStart) / bDur)) : 0;
+
+            block.update(progress, tl);
+        });
+    });
 
     return tl;
 }
