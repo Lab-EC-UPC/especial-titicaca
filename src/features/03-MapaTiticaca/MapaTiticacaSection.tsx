@@ -1,5 +1,15 @@
 import { useState, useEffect, useRef } from "react";
 
+// ─── IMÁGENES MOBILE POR CUENCA (frames pre-renderizados) ─────────────────────
+import imgAzangaro   from "./assets/cuenca_mobile_azangaro_1.png";
+import imgLagunillas from "./assets/cuenca_mobile_lagunillas_2.png";
+import imgPucara     from "./assets/cuenca_mobile_pucara_3.png";
+import imgIlave      from "./assets/cuenca_mobile_ilave_4.png";
+import imgIllpa      from "./assets/cuenca_mobile_illpa_5.png";
+import imgSuches     from "./assets/cuenca_mobile_suches_6.png";
+import imgRamis      from "./assets/cuenca_mobile_ramis_7.png";
+import imgHuancane   from "./assets/cuenca_mobile_huancane_8.png";
+
 // ─── PALETA ───────────────────────────────────────────────────────────────────
 const LEVELS = {
   critical: { color: "#E91E8C", label: "CRÍTICO",        sub: "Relaves mineros, drenaje ácido" },
@@ -82,6 +92,19 @@ const DOTS_MOBILE: DotPositions = {
   suches:     { x: 45.0, y: 13.5 },
   ramis:      { x: 34.0, y: 29.5 },
   huancane:   { x: 47.0, y: 20.0 },
+};
+
+// ─── IMAGEN PRE-RENDERIZADA POR CUENCA (solo mobile) ──────────────────────────
+// Cada frame ya contiene el mapa con el zoom hecho + punto + nombre + pop-up + leyenda.
+const CUENCA_IMAGES: Record<CuencaId, string> = {
+  azangaro:   imgAzangaro,
+  lagunillas: imgLagunillas,
+  pucara:     imgPucara,
+  ilave:      imgIlave,
+  illpa:      imgIllpa,
+  suches:     imgSuches,
+  ramis:      imgRamis,
+  huancane:   imgHuancane,
 };
 
 // ─── HOOK: área real de la imagen (objectFit:contain) ─────────────────────────
@@ -328,14 +351,35 @@ export const MapaTiticacaSection = () => {
           alt="Mapa Lago Titicaca móvil"
           style={{
             position: "absolute", inset: 0, width: "100%", height: "100%",
-            objectFit: "contain", objectPosition: "center",
+            objectFit: "cover", objectPosition: "center",
             transform: imgTransform, transition: imgTransition,
             transformOrigin: "center center", userSelect: "none",
             willChange: "transform", display: isMobile ? "block" : "none",
           }}
         />
 
-        {/* ── Overlay dots (siguen el zoom de la imagen) ── */}
+        {/* ── Mobile: frame pre-renderizado de la cuenca activa ──
+             El zoom de la imagen base sigue animando debajo; una vez hecho el
+             zoom, la imagen de la cuenca aparece encima (cross-fade). ── */}
+        {isMobile && CUENCAS.map((c, i) => (
+          <img
+            key={c.id}
+            src={CUENCA_IMAGES[c.id]}
+            alt={c.name}
+            style={{
+              position: "absolute", inset: 0, width: "100%", height: "100%",
+              objectFit: "contain", objectPosition: "center",
+              background: "#21292C", // = fondo del frame: las franjas del letterbox se funden, full-screen sin recortar
+              opacity: activeIdx === i ? 1 : 0,
+              transition: "opacity 0.55s ease",
+              transitionDelay: activeIdx === i ? "0.3s" : "0s",
+              pointerEvents: "none", userSelect: "none", zIndex: 5,
+            }}
+          />
+        ))}
+
+        {/* ── Overlay dots (siguen el zoom de la imagen) — solo desktop ── */}
+        {!isMobile && (
         <div style={{
           position: "absolute",
           left: mapRect.left, top: mapRect.top,
@@ -390,6 +434,7 @@ export const MapaTiticacaSection = () => {
             );
           })}
         </div>
+        )}
 
         {/* Viñeta radial */}
         <div style={{
@@ -397,7 +442,8 @@ export const MapaTiticacaSection = () => {
           background: "radial-gradient(ellipse at center,transparent 40%,rgba(13,21,23,0.6) 100%)",
         }} />
 
-        {/* ── Leyenda (desktop) / compacta (mobile) ── */}
+        {/* ── Leyenda — solo desktop (en mobile va incrustada en cada frame) ── */}
+        {!isMobile && (
         <div style={{
           position: "absolute",
           bottom: "clamp(16px,3vw,32px)",
@@ -429,8 +475,10 @@ export const MapaTiticacaSection = () => {
             </div>
           ))}
         </div>
+        )}
 
-        {/* ── Card detalle cuenca activa ── */}
+        {/* ── Card detalle cuenca activa — solo desktop (en mobile va en el frame) ── */}
+        {!isMobile && (
         <div style={{
           position: "absolute",
           bottom: "clamp(16px,3vw,28px)",
@@ -488,6 +536,7 @@ export const MapaTiticacaSection = () => {
             </div>
           )}
         </div>
+        )}
 
         {/* ── Título ── */}
         <div style={{
@@ -530,8 +579,8 @@ export const MapaTiticacaSection = () => {
           </div>
         )}
 
-        {/* ── Botón abrir editor (dev) ── */}
-        {!showEditor && (
+        {/* ── Botón abrir editor (dev) — oculto en desktop y móvil ── */}
+        {false && !showEditor && (
           <button
             onClick={() => setShowEditor(true)}
             style={{
