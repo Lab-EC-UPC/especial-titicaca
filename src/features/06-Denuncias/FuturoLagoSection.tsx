@@ -1,0 +1,104 @@
+// Sección CTA: invita a iniciar la predicción del futuro del lago
+export const FuturoLagoSection = () => {
+  return (
+    <section
+      id="futuro-lago"
+      style={{
+        background: "#2e3440",
+        fontFamily: "'Barlow Condensed', sans-serif",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        position: "relative",
+        overflow: "hidden",
+      }}
+    >
+      {/* Glow ambiental de fondo */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          width: "min(900px, 120vw)",
+          height: "min(900px, 120vw)",
+          transform: "translate(-50%, -50%)",
+          background:
+            "radial-gradient(circle, rgba(74,154,174,0.12) 0%, rgba(46,52,64,0) 65%)",
+          pointerEvents: "none",
+        }}
+      />
+
+      <div
+        style={{
+          position: "relative",
+          maxWidth: 720,
+          margin: "0 auto",
+          padding: "clamp(80px,12vh,140px) clamp(24px,7vw,48px)",
+          textAlign: "center",
+        }}
+      >
+        <h2
+          style={{
+            fontFamily: "'Barlow Condensed',sans-serif",
+            fontWeight: 700,
+            fontSize: "clamp(34px,6vw,68px)",
+            lineHeight: 1.05,
+            letterSpacing: "0.01em",
+            textTransform: "uppercase",
+            color: "#f0f2f5",
+            margin: "0 0 clamp(18px,3vh,28px)",
+          }}
+        >
+          El Futuro del Lago
+        </h2>
+
+        <p
+          style={{
+            fontFamily: "'Barlow',sans-serif",
+            fontWeight: 300,
+            fontSize: "clamp(16px,1.6vw,21px)",
+            lineHeight: 1.7,
+            color: "#c8cfd8",
+            margin: "0 auto clamp(36px,6vh,52px)",
+            maxWidth: 520,
+          }}
+        >
+          Explora el impacto de la contaminación y descubre el destino del
+          Titicaca para el 2050.
+        </p>
+
+        <button
+          type="button"
+          style={{
+            fontFamily: "'Barlow Condensed',sans-serif",
+            fontWeight: 600,
+            fontSize: "clamp(13px,1.4vw,16px)",
+            letterSpacing: "0.18em",
+            textTransform: "uppercase",
+            color: "#ffffff",
+            background: "#151B1B",
+            border: "none",
+            borderRadius: 0,
+            padding: "16px 40px",
+            cursor: "pointer",
+            transition: "background 0.25s, transform 0.25s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "#1f2727";
+            e.currentTarget.style.transform = "translateY(-2px)";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "#151B1B";
+            e.currentTarget.style.transform = "translateY(0)";
+          }}
+        >
+          Iniciar predicción
+        </button>
+      </div>
+    </section>
+  );
+};
+
+export default FuturoLagoSection;
