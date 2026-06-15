@@ -148,7 +148,7 @@ export const JuliacaSection = () => {
 
             <MapaTiticacaSection start={0.52} />
 
-            <ScrollMessage start={0.55} end={0.65}>
+            <ScrollMessage start={0.58} end={0.67}>
                 <ScrollMessage.Paragraph>
                     En el río Coata, el arsénico llegó a triplicar el límite establecido por
                     <br />
