@@ -1,8 +1,12 @@
+import { useState } from "react";
+import { ChevronDown } from "lucide-react";
 import logoLab from "./assets/logo-lab.png";
-import { CreditDepartment } from "./CreditDepartment";
+import { CreditGroupItem } from "./CreditGroupItem";
 import { CREDITS } from "./credits.data";
 
 export const FooterSection = () => {
+  const [openTitle, setOpenTitle] = useState<string | null>(null);
+
   return (
     <footer
       id="footer"
@@ -13,7 +17,7 @@ export const FooterSection = () => {
       }}
     >
       <div
-        className="mx-auto flex w-full max-w-5xl flex-col items-center px-6 text-center"
+        className="mx-auto flex w-full max-w-7xl flex-col items-center px-6 text-center"
         style={{
           paddingTop: "clamp(100px, 18vh, 200px)",
           paddingBottom: "clamp(100px, 18vh, 200px)",
@@ -30,13 +34,72 @@ export const FooterSection = () => {
           Créditos
         </h2>
 
+        {/* Acordeón de áreas (grilla de 4 columnas, sin tarjetas) */}
         <div
-          className="flex w-full flex-col items-center"
-          style={{ gap: "clamp(56px, 11vh, 110px)" }}
+          className="grid w-full grid-cols-2 md:grid-cols-4 items-start"
+          style={{ gap: "clamp(8px, 1.2vw, 16px)" }}
         >
-          {CREDITS.map((department) => (
-            <CreditDepartment key={department.title} department={department} />
-          ))}
+          {CREDITS.map((department) => {
+            const open = department.title === openTitle;
+            return (
+              <div key={department.title} className="flex w-full flex-col items-center">
+                <button
+                  onClick={() => setOpenTitle(open ? null : department.title)}
+                  className="flex w-full items-center justify-between text-left uppercase font-semibold transition-opacity"
+                  style={{
+                    fontSize: "clamp(12px, 1.4vw, 18px)",
+                    letterSpacing: "0.1em",
+                    lineHeight: 1.25,
+                    padding: "clamp(12px, 1.8vh, 20px) clamp(6px, 1vw, 12px)",
+                    cursor: "pointer",
+                    gap: 8,
+                    color: open ? "#FFFFFF" : "rgba(255,255,255,0.6)",
+                    background: "transparent",
+                  }}
+                >
+                  <span style={{ whiteSpace: "nowrap" }}>{department.title}</span>
+                  <ChevronDown
+                    aria-hidden
+                    style={{
+                      flexShrink: 0,
+                      width: "clamp(16px, 2vw, 22px)",
+                      height: "clamp(16px, 2vw, 22px)",
+                      transform: open ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.25s ease",
+                    }}
+                  />
+                </button>
+
+                {/* Integrantes: se despliegan dentro de la propia sección */}
+                <div
+                  className="w-full"
+                  style={{
+                    display: "grid",
+                    gridTemplateRows: open ? "1fr" : "0fr",
+                    transition: "grid-template-rows 0.35s ease",
+                  }}
+                >
+                  <div style={{ overflow: "hidden" }}>
+                    <div
+                      className="flex w-full flex-col items-start text-left"
+                      style={{
+                        gap: "clamp(18px, 3vh, 32px)",
+                        paddingTop: "clamp(16px, 3vh, 28px)",
+                        paddingBottom: "clamp(8px, 2vh, 16px)",
+                      }}
+                    >
+                      {department.groups.map((group) => (
+                        <CreditGroupItem
+                          key={group.role || group.names[0]}
+                          group={{ ...group, columns: undefined }}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         <img

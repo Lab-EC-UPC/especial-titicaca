@@ -24,28 +24,6 @@ function App() {
 
   return (
     <div>
-      
-      
-
-      <header className="w-full">
-        <h1 className="flex items-center justify-center bg-[#FFCB03] text-6xl font-bold p-5">
-          El Comercio
-        </h1>
-        <nav className="flex flex-wrap items-center justify-center gap-5 p-2 uppercase text-sm bg-white shadow-sm">
-          <p>Lo último</p>
-          <p>Editorial</p>
-          <p>Política</p>
-          <p>ECData</p>
-          <p>Mundo</p>
-          <p>Economía</p>
-          <p>DT</p>
-          <p>Suscriptores</p>
-          <p>Newsletters</p>
-          <p>Juegos</p>
-        </nav>
-      </header>
-
-
       {showEditor && <MapMarkerEditor onClose={() => setShowEditor(false)} />}
 
       <main>
