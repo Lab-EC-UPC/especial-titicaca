@@ -2,7 +2,6 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { createScrollTimeline } from "../utils/timeline";
-import { useVideoPreload } from "../../../hooks/useVideoPreload";
 import { Message } from "../components/animations/Message";
 import { ChapterTitle } from "../components/animations/ChapterTitle";
 import { Title } from "../components/animations/Title";
@@ -22,9 +21,6 @@ export const CapachicaSection = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const videoMobileRef = useRef<HTMLVideoElement>(null);
 
-    // Carga diferida: metadata→auto cuando la sección (muy abajo) se acerca.
-    useVideoPreload(sectionRef, [videoRef, videoMobileRef]);
-
     useGSAP(
         (_context, contextSafe) => {
             const section = sectionRef.current;
@@ -39,7 +35,7 @@ export const CapachicaSection = () => {
 
             const setupTimeline = contextSafe!(() => {
                 if (timeline) return;
-                timeline = createScrollTimeline(section, activeVideo, 1);
+                timeline = createScrollTimeline(section, activeVideo);
             });
 
             if (activeVideo.readyState >= 1) {
@@ -80,7 +76,7 @@ export const CapachicaSection = () => {
                 src={animationVideo}
                 muted
                 playsInline
-                preload="metadata"
+                preload="auto"
             />
 
             {/* ── Video de fondo (mobile) ──────────────────────────────────── */}
@@ -90,7 +86,7 @@ export const CapachicaSection = () => {
                 src={animationVideoMobile}
                 muted
                 playsInline
-                preload="metadata"
+                preload="auto"
             />
 
             {/* ── Gradiente sutil ──────────────────────────────────────────── */}

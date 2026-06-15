@@ -33,7 +33,6 @@ function getScenes(container: HTMLElement): Scene[] {
 export function createScrollTimeline(
     container: HTMLElement,
     video: HTMLVideoElement,
-    refreshPriority = 0,
 ): GSAPTimeline {
     const scenes = getScenes(container);
 
@@ -50,11 +49,10 @@ export function createScrollTimeline(
         scrollTrigger: {
             trigger: container,
             pin: true,
-            scrub: 0.45,
+            scrub: 0.30,
             anticipatePin: 1,
             start: "top top",
             end: `+=${SCROLL_DISTANCE}`,
-            refreshPriority,
         },
     });
 
@@ -69,11 +67,7 @@ export function createScrollTimeline(
     );
 
     scenes.forEach((scene) => {
-        // Fade proporcional al ancho de la escena: más ancho que el 0.01
-        // original (disolve suave, sin parpadeo) pero limitado para que toda
-        // escena alcance opacidad plena y mantenga un "hold" en el medio.
-        const span = scene.end - scene.start;
-        const fadeDuration = Math.min(0.05, span * 0.4);
+        const fadeDuration = 0.01;
 
         tl.to(
             scene.element,
@@ -94,7 +88,7 @@ export function createScrollTimeline(
                 duration: fadeDuration,
                 ease: "power2.in",
             },
-            Math.max(scene.end - fadeDuration, scene.start + fadeDuration),
+            Math.max(scene.end - fadeDuration, scene.start + 0.01),
         );
     });
 
