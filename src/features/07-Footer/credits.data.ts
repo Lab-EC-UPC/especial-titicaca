@@ -89,18 +89,6 @@ export const CREDITS: CreditDepartment[] = [
         ],
         columns: 4,
       },
-      {
-        role: "Pedidos y recopilación inicial de información",
-        names: [
-          "Renzo Peña",
-          "Maria Fe Chirinos",
-          "Gabriel Morales",
-          "Xiomara Yon",
-          "Sunmy Soto",
-          "Joaquín Suazo",
-        ],
-        columns: 4,
-      },
     ],
   },
   {
@@ -139,6 +127,23 @@ export const CREDITS: CreditDepartment[] = [
           "Greta Lomas",
           "Dana Toro",
           "Luciana López",
+        ],
+        columns: 4,
+      },
+    ],
+  },
+  {
+    title: "Pedidos y recopilación inicial",
+    groups: [
+      {
+        role: "",
+        names: [
+          "Renzo Peña",
+          "Maria Fe Chirinos",
+          "Gabriel Morales",
+          "Xiomara Yon",
+          "Sunmy Soto",
+          "Joaquín Suazo",
         ],
         columns: 4,
       },

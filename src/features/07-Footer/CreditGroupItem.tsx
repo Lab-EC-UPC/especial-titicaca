@@ -8,12 +8,12 @@ const namesLayout = (columns?: number): CSSProperties =>
         gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
         columnGap: "clamp(8px, 5vw, 56px)",
         rowGap: 6,
-        justifyItems: "center",
+        justifyItems: "start",
       }
-    : { display: "flex", flexDirection: "column", alignItems: "center", gap: 6 };
+    : { display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 6 };
 
 export const CreditGroupItem = ({ group }: { group: CreditGroup }) => (
-  <div className="flex flex-col items-center" style={{ gap: 6 }}>
+  <div className="flex flex-col items-start text-left" style={{ gap: 6 }}>
     {group.role && (
       <p
         className="uppercase font-light"

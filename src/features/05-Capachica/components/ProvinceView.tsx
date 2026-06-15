@@ -1,7 +1,9 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Leyenda from "../../../components/Leyenda";
 import PopupSaludInformation from "../../../components/PopupSaludInformation";
 import PopupMineriaInformation from "../../../components/PopupMineriaInformation";
+import TriCoordFinder from "./TriCoordFinder";
+import { useIsMobile } from "../hooks/useIsMobile";
 import botonCerrar from "../../../assets/images/Capachica/TriangulacionSection/boton-cerrar.png";
 import botonAtras from "../../../assets/images/Capachica/TriangulacionSection/Botón atrás.png";
 import {
@@ -22,9 +24,45 @@ export default function ProvinceView({ selectedProvince, provinceMap, onBack, on
   const [legendTab, setLegendTab] = useState<LegendTab>("salud");
   const [saludAnchor, setSaludAnchor] = useState<{ x: number; y: number; tipo: "segura" | "riesgo" | "critica" } | null>(null);
   const [mineriaPopup, setMineriaPopup] = useState<MineriaMarker | null>(null);
+  const [coordMode, setCoordMode] = useState(false);
   const svgRef = useRef<SVGSVGElement>(null);
+  const isMobile = useIsMobile();
+
+  // En móvil los marcadores se agrandan y añaden un área de toque transparente.
+  const rSegura = isMobile ? 30 : 22;
+  const rOtro = isMobile ? 20 : 14;
+  const hitR = isMobile ? 56 : 0;
+  const triScale = isMobile ? 1.6 : 1;
+  const triPts = `0,${-18 * triScale} ${16 * triScale},${14 * triScale} ${-16 * triScale},${14 * triScale}`;
+
+  const closePopups = () => {
+    setSaludAnchor(null);
+    setMineriaPopup(null);
+  };
+
+  // Atajo dev: Ctrl + Shift + C abre/cierra el buscador de coordenadas.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === "C" || e.key === "c")) {
+        e.preventDefault();
+        setCoordMode((v) => !v);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
 
   const markers = PROVINCE_MARKERS[selectedProvince];
+
+  if (coordMode) {
+    return (
+      <TriCoordFinder
+        provinceId={selectedProvince}
+        provinceMap={provinceMap}
+        onClose={() => setCoordMode(false)}
+      />
+    );
+  }
 
   function getScale() {
     const rect = svgRef.current!.getBoundingClientRect();
@@ -80,44 +118,52 @@ export default function ProvinceView({ selectedProvince, provinceMap, onBack, on
                   );
                 }}
               >
+                {hitR > 0 && (
+                  <circle cx={0} cy={0} r={hitR} fill="transparent" />
+                )}
                 <polygon
-                  points="0,-18 16,14 -16,14"
+                  points={triPts}
                   fill={m.tipo === "formal" ? "#13A383" : "#C03583"}
                 />
               </g>
             ))}
 
           {legendTab === "salud" &&
-            markers.salud.map((m, i) => (
-              <circle
-                key={i}
-                cx={m.x}
-                cy={m.y}
-                r={m.tipo === "segura" ? 22 : 14}
-                className="cursor-pointer"
-                fill={
-                  m.tipo === "segura" ? "#F4F4F4"
-                  : m.tipo === "riesgo" ? "#13A383"
-                  : "#C03583"
-                }
-                onClick={(e) => {
-                  e.stopPropagation();
-                  const { scale, offX, offY } = getScale();
-                  setMineriaPopup(null);
-                  setSaludAnchor(prev =>
-                    prev?.tipo === m.tipo ? null : {
-                      x: m.x * scale + offX,
-                      y: m.y * scale + offY,
-                      tipo: m.tipo,
+            markers.salud.map((m, i) => {
+              const onPick = (e: React.MouseEvent) => {
+                e.stopPropagation();
+                const { scale, offX, offY } = getScale();
+                setMineriaPopup(null);
+                setSaludAnchor(prev =>
+                  prev?.tipo === m.tipo ? null : {
+                    x: m.x * scale + offX,
+                    y: m.y * scale + offY,
+                    tipo: m.tipo,
+                  }
+                );
+              };
+              return (
+                <g key={i} className="cursor-pointer" onClick={onPick}>
+                  {hitR > 0 && (
+                    <circle cx={m.x} cy={m.y} r={hitR} fill="transparent" />
+                  )}
+                  <circle
+                    cx={m.x}
+                    cy={m.y}
+                    r={m.tipo === "segura" ? rSegura : rOtro}
+                    fill={
+                      m.tipo === "segura" ? "#F4F4F4"
+                      : m.tipo === "riesgo" ? "#13A383"
+                      : "#C03583"
                     }
-                  );
-                }}
-              />
-            ))}
+                  />
+                </g>
+              );
+            })}
         </svg>
       )}
 
-      {saludAnchor && (() => {
+      {!isMobile && saludAnchor && (() => {
         const popup = PROVINCE_SALUD_POPUPS[selectedProvince]?.find(p => p.zona === saludAnchor.tipo);
         if (!popup) return null;
         return (
@@ -130,7 +176,7 @@ export default function ProvinceView({ selectedProvince, provinceMap, onBack, on
         );
       })()}
 
-      {mineriaPopup && (
+      {!isMobile && mineriaPopup && (
         <div
           className="absolute z-20 pointer-events-none"
           style={{
@@ -148,9 +194,42 @@ export default function ProvinceView({ selectedProvince, provinceMap, onBack, on
         </div>
       )}
 
-      <div className="absolute bottom-8 right-8 z-10">
-        <Leyenda activeTab={legendTab} onTabChange={setLegendTab} />
-      </div>
+      {/* Móvil: información del marcador como bottom sheet */}
+      {isMobile && (saludAnchor || mineriaPopup) && (
+        <div className="fixed inset-0 z-40" onClick={closePopups}>
+          <div
+            className="absolute inset-x-0 bottom-0 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {(() => {
+              if (saludAnchor) {
+                const popup = PROVINCE_SALUD_POPUPS[selectedProvince]?.find(
+                  (p) => p.zona === saludAnchor.tipo
+                );
+                return popup ? <PopupSaludInformation {...popup} /> : null;
+              }
+              if (mineriaPopup) {
+                return (
+                  <PopupMineriaInformation
+                    tipo={mineriaPopup.tipo}
+                    nombre={mineriaPopup.nombre}
+                    eessMasCercano={mineriaPopup.eessMasCercano}
+                    distanciaKm={mineriaPopup.distanciaKm}
+                    descripcion={mineriaPopup.descripcion}
+                  />
+                );
+              }
+              return null;
+            })()}
+          </div>
+        </div>
+      )}
+
+      {!(isMobile && (saludAnchor || mineriaPopup)) && (
+        <div className="absolute z-10 bottom-4 inset-x-4 flex justify-center sm:bottom-8 sm:right-8 sm:inset-x-auto sm:left-auto sm:block">
+          <Leyenda activeTab={legendTab} onTabChange={setLegendTab} collapsible={isMobile} />
+        </div>
+      )}
     </>
   );
 }
