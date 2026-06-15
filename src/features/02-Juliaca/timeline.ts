@@ -3,7 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FADE_DURATION = 0.02;
+const FADE_PIXELS = 120;
 
 type Scene = {
     element: HTMLElement;
@@ -148,6 +148,8 @@ export function createVideoTimeline(
     const galleryStartPx = gallery ? gallery.start * scrollDistance : 0;
     const galleryEndPx = gallery ? galleryStartPx + gallery.width : 0;
 
+    const fadeDuration = Math.min(0.1, FADE_PIXELS / totalScroll);
+
     function timelineRatio(videoRatio: number) {
         const px = videoRatio * scrollDistance;
         const offset = gallery && px > galleryStartPx ? gallery.width : 0;
@@ -189,8 +191,8 @@ export function createVideoTimeline(
         const startAt = timelineRatio(scene.start);
         const endAt = timelineRatio(scene.end);
 
-        tl.to(scene.element, { autoAlpha: 1, y: 0, duration: FADE_DURATION, ease: "power2.out" }, startAt);
-        tl.to(scene.element, { autoAlpha: 0, y: -5, duration: FADE_DURATION, ease: "power2.in" }, Math.max(endAt - FADE_DURATION, startAt + 0.01));
+        tl.to(scene.element, { autoAlpha: 1, y: 0, duration: fadeDuration, ease: "power2.out" }, startAt);
+        tl.to(scene.element, { autoAlpha: 0, y: -5, duration: fadeDuration, ease: "power2.in" }, Math.max(endAt - fadeDuration, startAt + 0.01));
     });
 
     // ── gallery block ──────────────────────────────────────────────────
@@ -198,8 +200,8 @@ export function createVideoTimeline(
         const galleryStartRatio = galleryStartPx / totalScroll;
         const galleryEndRatio = galleryEndPx / totalScroll;
 
-        tl.to(gallery.element, { autoAlpha: 1, duration: FADE_DURATION, ease: "power2.out" }, galleryStartRatio);
-        tl.to(gallery.element, { autoAlpha: 0, duration: FADE_DURATION, ease: "power2.in" }, galleryEndRatio);
+        tl.to(gallery.element, { autoAlpha: 1, duration: fadeDuration, ease: "power2.out" }, galleryStartRatio);
+        tl.to(gallery.element, { autoAlpha: 0, duration: fadeDuration, ease: "power2.in" }, galleryEndRatio);
 
         setupGallery(tl, gallery, galleryStartRatio, totalScroll);
 

@@ -100,7 +100,7 @@ export const JuliacaSection = () => {
                 videoMob={mobVid02}
                 scrollDistance={720}
             >
-                <ScrollMessage start={0.333} end={0.833}>
+                <ScrollMessage start={0.167} end={0.722}>
                     <ScrollMessage.Paragraph>
                         En el río Coata, el arsénico llegó a triplicar el límite establecido por
                         <br />

@@ -65,7 +65,7 @@ export const VideoSection = ({
     );
 
     return (
-        <div className="relative isolate h-screen w-full overflow-hidden bg-black">
+        <div ref={sectionRef} className="relative isolate h-screen w-full overflow-hidden bg-black">
             <video
                 key={isMobile ? "mob" : "desk"}
                 ref={videoRef}
