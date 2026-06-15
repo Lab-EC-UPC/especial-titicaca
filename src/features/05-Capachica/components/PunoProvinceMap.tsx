@@ -23,17 +23,31 @@ export default function PunoProvinceMap({
   onHover,
   onLeave,
   onSelect,
+  viewBox = "0 0 1920 1080",
+  preserveAspectRatio = "xMidYMid slice",
+  standalone = false,
 }: {
   hoveredId: string | null;
   selectedId: string | null;
   onHover: (id: string) => void;
   onLeave: () => void;
   onSelect: (id: string) => void;
+  /** viewBox del SVG. Por defecto cubre el ráster 1920x1080; en móvil se
+   *  recorta al cluster de provincias para que llene la pantalla. */
+  viewBox?: string;
+  preserveAspectRatio?: string;
+  /** Cuando es true el mapa se dibuja por sí solo (relleno y bordes visibles
+   *  sin la imagen de fondo), pensado para la vista móvil a pantalla completa. */
+  standalone?: boolean;
 }) {
+  // Relleno/borde base de cada provincia cuando no está activa.
+  const baseFill = standalone ? "rgba(255,255,255,0.06)" : "transparent";
+  const baseStroke = standalone ? "rgba(255,255,255,0.28)" : "rgba(255,255,255,0.12)";
+
   return (
     <svg
-      viewBox="0 0 1920 1080"
-      preserveAspectRatio="xMidYMid slice"
+      viewBox={viewBox}
+      preserveAspectRatio={preserveAspectRatio}
       className="absolute inset-0 w-full h-full z-[6]"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -52,9 +66,9 @@ export default function PunoProvinceMap({
             <path
               key={id}
               d={d}
-              fill={isSelected ? "rgba(20,160,130,0.35)" : isHovered ? "rgba(255,255,255,0.18)" : "transparent"}
-              stroke={isSelected ? "#14A088" : isHovered ? "rgba(255,255,255,0.8)" : "rgba(255,255,255,0.12)"}
-              strokeWidth={isSelected || isHovered ? 2 : 0.5}
+              fill={isSelected ? "rgba(20,160,130,0.35)" : isHovered ? "rgba(255,255,255,0.18)" : baseFill}
+              stroke={isSelected ? "#14A088" : isHovered ? "rgba(255,255,255,0.8)" : baseStroke}
+              strokeWidth={isSelected || isHovered ? 2 : standalone ? 1 : 0.5}
               strokeLinecap="round"
               strokeLinejoin="round"
               className="cursor-pointer"

@@ -29,7 +29,7 @@ export default function PopupSaludInformation({
 
   return (
     <div
-      className="relative rounded-2xl pt-10 pb-7 px-7 w-[420px]"
+      className="relative rounded-2xl pt-10 pb-7 px-7 w-[min(420px,calc(100vw-2rem))]"
       style={{
         background: "rgba(217, 217, 217, 0.15)",
         backdropFilter: "blur(6px)",
