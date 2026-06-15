@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from "react";
 const TOTAL_FRAMES = 8;
 const MOBILE_BREAKPOINT = 768;
 
-export const ContaminacionCuencaSection = () => {
+export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const isStandalone = start === undefined;
   const [currentFrame, setCurrentFrame] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
 
-  
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < MOBILE_BREAKPOINT);
     checkMobile();
@@ -17,6 +17,7 @@ export const ContaminacionCuencaSection = () => {
   }, []);
 
   useEffect(() => {
+    if (!isStandalone) return;
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
@@ -31,29 +32,87 @@ export const ContaminacionCuencaSection = () => {
     window.addEventListener("scroll", handleScroll, { passive: true });
     handleScroll(); // Calcular al montar
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [isStandalone]);
 
   const getImageSrc = (frame: number) =>
     isMobile
       ? `/images/cuencasmobil${frame}.png`
       : `/images/cuencas${frame}.png`;
 
+  if (!isStandalone) {
+    return (
+      <div
+        data-vertimientos-section
+        data-start={start}
+        data-images={TOTAL_FRAMES}
+        data-snap={140}
+        data-transition={50}
+        className="absolute inset-0 z-20 opacity-0 pointer-events-none"
+        style={{ background: "#151B1B" }}
+      >
+        {Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1).map((frame) => (
+          <img
+            key={`${isMobile ? "mob" : "desk"}-${frame}`}
+            src={getImageSrc(frame)}
+            alt={`Vertimientos — frame ${frame} de ${TOTAL_FRAMES}`}
+            data-vertimientos-frame={frame}
+            className="absolute inset-0 w-full h-full object-contain select-none transition-opacity duration-500"
+            style={{ opacity: 0 }}
+            draggable={false}
+          />
+        ))}
+
+        <div
+          data-vertimientos-title
+          className="absolute top-[6%] md:top-[8%] left-1/2 -translate-x-1/2 z-10 text-center pointer-events-none w-full px-4"
+          style={{ opacity: 0 }}
+        >
+          <h2
+            className="text-white uppercase tracking-[0.18em] md:tracking-[0.22em] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
+            style={{ fontFamily: "'Citizen OT', sans-serif" }}
+          >
+            El rastro de los vertimientos
+          </h2>
+        </div>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2.5 z-10">
+          {Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1).map((frame) => (
+            <div
+              key={frame}
+              data-vertimientos-dot={frame}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: 8,
+                height: 8,
+                background: "rgba(255,255,255,0.2)",
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    
     <div
       id="cuencas"
       ref={sectionRef}
       style={{ height: `${TOTAL_FRAMES * 100}vh` }}
     >
-      {/*sticky*/}
-      <div className="sticky top-0 w-full h-screen bg-[#151B1B] overflow-hidden">
-
-        {/*Frames apilados*/}
+      <div
+        data-vertimientos-section
+        data-start={start ?? 0.67}
+        data-images={TOTAL_FRAMES}
+        data-snap={140}
+        data-transition={50}
+        className="sticky top-0 w-full h-screen bg-[#151B1B] overflow-hidden"
+      >
         {Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1).map((frame) => (
           <img
             key={`${isMobile ? "mob" : "desk"}-${frame}`}
             src={getImageSrc(frame)}
             alt={`Lago Titicaca — cuenca ${frame} de ${TOTAL_FRAMES}`}
+            data-vertimientos-frame={frame}
             loading="eager"
             draggable={false}
             className={[
@@ -64,8 +123,10 @@ export const ContaminacionCuencaSection = () => {
           />
         ))}
 
-        {/*Título principal*/}
-        <div className={`absolute top-[6%] md:top-[8%] left-1/2 -translate-x-1/2 z-10 text-center pointer-events-none w-full px-4 transition-opacity duration-500 ${currentFrame === 1 ? "opacity-100" : "opacity-0"}`}>
+        <div
+          data-vertimientos-title
+          className={`absolute top-[6%] md:top-[8%] left-1/2 -translate-x-1/2 z-10 text-center pointer-events-none w-full px-4 transition-opacity duration-500 ${currentFrame === 1 ? "opacity-100" : "opacity-0"}`}
+        >
           <h2
             className="text-white uppercase tracking-[0.18em] md:tracking-[0.22em] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
             style={{ fontFamily: "'Citizen OT', sans-serif" }}
@@ -79,6 +140,7 @@ export const ContaminacionCuencaSection = () => {
           {Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1).map((frame) => (
             <div
               key={frame}
+              data-vertimientos-dot={frame}
               aria-hidden
               className={[
                 "rounded-full transition-all duration-300",
