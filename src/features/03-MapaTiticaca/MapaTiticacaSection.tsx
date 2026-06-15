@@ -13,6 +13,7 @@ import imgHuancane from "./assets/cuenca_mobile_huancane_8.png";
 import {
     LEVELS,
     SCALE,
+    MAX_T,
     clampT,
     clampDot,
     DESKTOP_RATIO,

@@ -3,7 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const SCROLL_DISTANCE = 4000;
+const FADE_DURATION = 0.02;
 
 type Scene = {
     element: HTMLElement;
@@ -11,27 +11,22 @@ type Scene = {
     end: number;
 };
 
-type Block = {
+type GalleryBlock = {
     element: HTMLElement;
-    startPx: number;
-    endPx: number;
-    width: number;
+    start: number;
     images: number;
     snap: number;
     transition: number;
-    type: string;
-    update: ((progress: number, tl: GSAPTimeline) => void) | null;
+    width: number;
+    update: ((progress: number) => void) | null;
 };
 
 // ─── Scene extraction ─────────────────────────────────────────────────────────
-
-const BLOCK_SELECTORS = ["[data-gallery]", "[data-map-section]", "[data-vertimientos-section]"];
 
 function getScenes(container: HTMLElement): Scene[] {
     return Array.from(
         container.querySelectorAll<HTMLElement>("[data-start][data-end]"),
     )
-        .filter((el) => !BLOCK_SELECTORS.some((s) => el.closest(s)))
         .map((element) => ({
             element,
             start: Number(element.dataset.start),
@@ -47,16 +42,10 @@ function getScenes(container: HTMLElement): Scene[] {
         );
 }
 
-// ─── Block config (generic — reads data-start, data-images, data-snap) ────────
+// ─── Gallery block detection ──────────────────────────────────────────────────
 
-const BLOCK_TYPE: Record<string, string> = {
-    "[data-gallery]": "gallery",
-    "[data-map-section]": "map",
-    "[data-vertimientos-section]": "vertimientos",
-};
-
-function getBlock(container: HTMLElement, selector: string): Block | null {
-    const el = container.querySelector<HTMLElement>(selector);
+function getGallery(container: HTMLElement): GalleryBlock | null {
+    const el = container.querySelector<HTMLElement>("[data-gallery]");
     if (!el) return null;
 
     const start = Number(el.dataset.start);
@@ -72,58 +61,34 @@ function getBlock(container: HTMLElement, selector: string): Block | null {
 
     return {
         element: el,
-        startPx: start * SCROLL_DISTANCE,
-        endPx: start * SCROLL_DISTANCE + width,
+        start,
         images,
-        width,
         snap,
         transition,
-        type: BLOCK_TYPE[selector] ?? selector,
+        width,
         update: null,
     };
 }
 
-function collectBlocks(container: HTMLElement): Block[] {
-    return BLOCK_SELECTORS.map((s) => getBlock(container, s))
-        .filter((b): b is Block => b !== null)
-        .sort((a, b) => a.startPx - b.startPx);
-}
+// ─── Gallery animation setup ──────────────────────────────────────────────────
 
-// ─── Block helpers ────────────────────────────────────────────────────────────
-
-function getOffsetBefore(px: number, blocks: Block[]) {
-    return blocks
-        .filter((b) => px > b.startPx)
-        .reduce((sum, b) => sum + b.width, 0);
-}
-
-function getRatio(px: number, blocks: Block[], totalScroll: number) {
-    return (px + getOffsetBefore(px, blocks)) / totalScroll;
-}
-
-function blockStartRatio(block: Block, blocks: Block[], totalScroll: number) {
-    return (block.startPx + getOffsetBefore(block.startPx, blocks)) / totalScroll;
-}
-
-function blockEndRatio(block: Block, blocks: Block[], totalScroll: number) {
-    return (block.endPx + getOffsetBefore(block.startPx, blocks)) / totalScroll;
-}
-
-// ─── Per-type setup ───────────────────────────────────────────────────────────
-
-function setupGallery(tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) {
-    const bStart = blockStartRatio(block, blocks, totalScroll);
-    const bDur = block.width / totalScroll;
+function setupGallery(
+    tl: GSAPTimeline,
+    gallery: GalleryBlock,
+    galleryStartRatio: number,
+    totalScroll: number,
+) {
+    const galleryDur = gallery.width / totalScroll;
+    const perImage = galleryDur / gallery.images;
+    const totalPerImg = gallery.snap + gallery.transition;
+    const hold = perImage * (gallery.snap / totalPerImg);
+    const trans = perImage * (gallery.transition / totalPerImg);
 
     const state = { pos: 0 };
-    const perImage = bDur / block.images;
-    const totalPerImg = block.snap + block.transition;
-    const hold = perImage * (block.snap / totalPerImg);
-    const trans = perImage * (block.transition / totalPerImg);
 
-    for (let i = 0; i < block.images; i++) {
-        const cycleStart = bStart + i * perImage;
-        if (i < block.images - 1) {
+    for (let i = 0; i < gallery.images; i++) {
+        const cycleStart = galleryStartRatio + i * perImage;
+        if (i < gallery.images - 1) {
             tl.to(state, { pos: i, duration: hold, ease: "none" }, cycleStart);
             tl.to(
                 state,
@@ -136,9 +101,9 @@ function setupGallery(tl: GSAPTimeline, block: Block, blocks: Block[], totalScro
     }
 
     const imageEls =
-        block.element.querySelectorAll<HTMLElement>("[data-gallery-image]");
+        gallery.element.querySelectorAll<HTMLElement>("[data-gallery-image]");
 
-    block.update = () => {
+    gallery.update = () => {
         const pos = state.pos;
         const vw = window.innerWidth;
 
@@ -169,88 +134,27 @@ function setupGallery(tl: GSAPTimeline, block: Block, blocks: Block[], totalScro
     };
 }
 
-function setupMap(_tl: GSAPTimeline, block: Block, _blocks: Block[], _totalScroll: number) {
-    const cuencaEls =
-        block.element.querySelectorAll<HTMLElement>("[data-map-cuenca]");
-    const cardEls =
-        block.element.querySelectorAll<HTMLElement>("[data-map-card]");
-
-    block.update = (progress) => {
-        const activeIdx = Math.min(
-            Math.max(0, Math.floor(progress * block.images)),
-            block.images - 1,
-        );
-
-        cuencaEls.forEach((el) => {
-            const i = Number(el.dataset.mapCuenca);
-            el.style.opacity = i === activeIdx ? "1" : "0";
-        });
-
-        cardEls.forEach((el) => {
-            const i = Number(el.dataset.mapCard);
-            el.style.opacity = i === activeIdx ? "1" : "0";
-        });
-    };
-}
-
-function setupVertimientos(_tl: GSAPTimeline, block: Block, _blocks: Block[], _totalScroll: number) {
-    const frameEls =
-        block.element.querySelectorAll<HTMLElement>("[data-vertimientos-frame]");
-    const titleEl = block.element.querySelector<HTMLElement>("[data-vertimientos-title]");
-    const dotEls =
-        block.element.querySelectorAll<HTMLElement>("[data-vertimientos-dot]");
-
-    block.update = (progress) => {
-        const activeIdx = Math.min(
-            Math.max(0, Math.floor(progress * block.images)),
-            block.images - 1,
-        );
-        const frame = activeIdx + 1;
-
-        frameEls.forEach((el) => {
-            const f = Number(el.dataset.vertimientosFrame);
-            el.style.opacity = f === frame ? "1" : "0";
-        });
-
-        if (titleEl) {
-            titleEl.style.opacity = frame === 1 ? "1" : "0";
-        }
-
-        dotEls.forEach((el) => {
-            const f = Number(el.dataset.vertimientosDot);
-            const isActive = f === frame;
-            const isPast = f < frame;
-            el.style.width = isActive ? "10px" : "8px";
-            el.style.height = isActive ? "10px" : "8px";
-            el.style.background = isActive
-                ? "rgba(255,255,255,1)"
-                : isPast
-                    ? "rgba(255,255,255,0.5)"
-                    : "rgba(255,255,255,0.2)";
-            if (isActive) {
-                el.style.boxShadow = "0 0 6px rgba(255,255,255,0.6)";
-            } else {
-                el.style.boxShadow = "none";
-            }
-        });
-    };
-}
-
-const SETUP: Record<string, (tl: GSAPTimeline, block: Block, blocks: Block[], totalScroll: number) => void> = {
-    gallery: setupGallery,
-    map: setupMap,
-    vertimientos: setupVertimientos,
-};
-
 // ─── Main entry ───────────────────────────────────────────────────────────────
 
-export function createScrollTimeline(container: HTMLElement, video: HTMLVideoElement): GSAPTimeline {
-    const scenes = getScenes(container);
-    const blocks = collectBlocks(container);
+export function createVideoTimeline(
+    container: HTMLElement,
+    video: HTMLVideoElement,
+    scrollDistance = 2000,
+): GSAPTimeline {
+    const gallery = getGallery(container);
+    const extraScroll = gallery ? gallery.width : 0;
+    const totalScroll = scrollDistance + extraScroll;
 
-    const extraScroll = blocks.reduce((sum, b) => sum + b.width, 0);
-    const totalScroll = SCROLL_DISTANCE + extraScroll;
-    const fadeDuration = 0.02;
+    const galleryStartPx = gallery ? gallery.start * scrollDistance : 0;
+    const galleryEndPx = gallery ? galleryStartPx + gallery.width : 0;
+
+    function timelineRatio(videoRatio: number) {
+        const px = videoRatio * scrollDistance;
+        const offset = gallery && px > galleryStartPx ? gallery.width : 0;
+        return (px + offset) / totalScroll;
+    }
+
+    const scenes = getScenes(container);
 
     gsap.set(scenes.map((s) => s.element), { autoAlpha: 0, y: 10 });
 
@@ -266,61 +170,47 @@ export function createScrollTimeline(container: HTMLElement, video: HTMLVideoEle
         },
     });
 
-    // ── video scrub ────────────────────────────────────────────────────────
-    if (blocks.length > 0) {
-        let lastRatio = 0;
+    // ── video scrub ────────────────────────────────────────────────────
+    if (gallery) {
+        const beforeGallery = galleryStartPx / totalScroll;
+        const galleryDur = gallery.width / totalScroll;
+        const afterGallery = beforeGallery + galleryDur;
+        const pauseTime = gallery.start * video.duration;
 
-        for (const block of blocks) {
-            const bStart = blockStartRatio(block, blocks, totalScroll);
-            const bEnd = blockEndRatio(block, blocks, totalScroll);
-            const pauseTime = (block.startPx / SCROLL_DISTANCE) * video.duration;
-
-            tl.to(video, { currentTime: pauseTime, duration: bStart - lastRatio, ease: "none" }, lastRatio);
-            tl.to(video, { currentTime: pauseTime, duration: bEnd - bStart, ease: "none" }, bStart);
-
-            lastRatio = bEnd;
-        }
-
-        tl.to(video, { currentTime: video.duration, duration: 1 - lastRatio, ease: "none" }, lastRatio);
+        tl.to(video, { currentTime: pauseTime, duration: beforeGallery, ease: "none" }, 0);
+        tl.to(video, { currentTime: pauseTime, duration: galleryDur, ease: "none" }, beforeGallery);
+        tl.to(video, { currentTime: video.duration, duration: 1 - afterGallery, ease: "none" }, afterGallery);
     } else {
         tl.to(video, { currentTime: video.duration, duration: 1, ease: "none" }, 0);
     }
 
-    // ── scenes ─────────────────────────────────────────────────────────────
+    // ── scenes ─────────────────────────────────────────────────────────
     scenes.forEach((scene) => {
-        const startAt = getRatio(scene.start * SCROLL_DISTANCE, blocks, totalScroll);
-        const endAt = getRatio(scene.end * SCROLL_DISTANCE, blocks, totalScroll);
+        const startAt = timelineRatio(scene.start);
+        const endAt = timelineRatio(scene.end);
 
-        tl.to(scene.element, { autoAlpha: 1, y: 0, duration: fadeDuration, ease: "power2.out" }, startAt);
-        tl.to(scene.element, { autoAlpha: 0, y: -5, duration: fadeDuration, ease: "power2.in" }, Math.max(endAt - fadeDuration, startAt + 0.01));
+        tl.to(scene.element, { autoAlpha: 1, y: 0, duration: FADE_DURATION, ease: "power2.out" }, startAt);
+        tl.to(scene.element, { autoAlpha: 0, y: -5, duration: FADE_DURATION, ease: "power2.in" }, Math.max(endAt - FADE_DURATION, startAt + 0.01));
     });
 
-    // ── blocks: fade in/out + per-type setup ──────────────────────────────
-    for (const block of blocks) {
-        const bStart = blockStartRatio(block, blocks, totalScroll);
-        const bEnd = blockEndRatio(block, blocks, totalScroll);
+    // ── gallery block ──────────────────────────────────────────────────
+    if (gallery) {
+        const galleryStartRatio = galleryStartPx / totalScroll;
+        const galleryEndRatio = galleryEndPx / totalScroll;
 
-        tl.to(block.element, { autoAlpha: 1, duration: fadeDuration, ease: "power2.out" }, bStart);
-        tl.to(block.element, { autoAlpha: 0, duration: fadeDuration, ease: "power2.in" }, bEnd);
+        tl.to(gallery.element, { autoAlpha: 1, duration: FADE_DURATION, ease: "power2.out" }, galleryStartRatio);
+        tl.to(gallery.element, { autoAlpha: 0, duration: FADE_DURATION, ease: "power2.in" }, galleryEndRatio);
 
-        SETUP[block.type]?.(tl, block, blocks, totalScroll);
-    }
+        setupGallery(tl, gallery, galleryStartRatio, totalScroll);
 
-    // ── onUpdate dispatch ──────────────────────────────────────────────────
-    tl.eventCallback("onUpdate", () => {
-        const t = tl.progress();
-
-        blocks.forEach((block) => {
-            if (!block.update) return;
-
-            const bStart = blockStartRatio(block, blocks, totalScroll);
-            const bEnd = blockEndRatio(block, blocks, totalScroll);
-            const bDur = (bEnd - bStart);
-            const progress = bDur > 0 ? Math.max(0, Math.min(1, (t - bStart) / bDur)) : 0;
-
-            block.update(progress, tl);
+        tl.eventCallback("onUpdate", () => {
+            if (!gallery.update) return;
+            const t = tl.progress();
+            const gDur = galleryEndRatio - galleryStartRatio;
+            const progress = gDur > 0 ? Math.max(0, Math.min(1, (t - galleryStartRatio) / gDur)) : 0;
+            gallery.update(progress);
         });
-    });
+    }
 
     return tl;
 }
