@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { lenisScrollTo } from "../hooks/useSmoothScroll";
 
 const SECTIONS = [
   { id: "juliaca", label: "Juliaca", short: "01" },
@@ -96,7 +97,7 @@ export function StickyMenu() {
   const goTo = (id: string, x: number, y: number) => {
     triggerRipple(x, y);
     setTimeout(() => {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      lenisScrollTo(`#${id}`);
       if (isMobile) setOpen(false);
     }, 180);
   };

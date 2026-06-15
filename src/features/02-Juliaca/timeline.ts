@@ -3,7 +3,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FADE_PIXELS = 120;
+const FADE_PIXELS = 160;
 
 type Scene = {
     element: HTMLElement;
@@ -140,6 +140,7 @@ export function createVideoTimeline(
     container: HTMLElement,
     video: HTMLVideoElement,
     scrollDistance = 2000,
+    refreshPriority = 0,
 ): GSAPTimeline {
     const gallery = getGallery(container);
     const extraScroll = gallery ? gallery.width : 0;
@@ -169,6 +170,7 @@ export function createVideoTimeline(
             anticipatePin: 1,
             start: "top top",
             end: `+=${totalScroll}`,
+            refreshPriority,
         },
     });
 

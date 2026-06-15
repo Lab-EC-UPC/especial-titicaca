@@ -2,9 +2,9 @@ import { Fauna } from "./Fauna";
 import { SocialCarousel, type SocialImage } from "./SocialCarousel";
 
 // TODO: reemplazar estos placeholders por las 3 fotos reales del carrusel.
-import Muestra1 from "./assets/Muestra1.png";
-import Muestra2 from "./assets/Muestra2.png";
-import Muestra3 from "./assets/Muestra3.png";
+import Muestra1 from "./assets/Muestra1.webp";
+import Muestra2 from "./assets/Muestra2.webp";
+import Muestra3 from "./assets/Muestra3.webp";
 
 const SOCIAL_IMAGES: SocialImage[] = [
   {

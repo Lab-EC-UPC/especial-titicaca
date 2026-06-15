@@ -1,5 +1,8 @@
 import "./index.css";
+import "lenis/dist/lenis.css";
 import { useState, useEffect } from "react";
+import { useSmoothScroll } from "./hooks/useSmoothScroll";
+import { useScrollOrchestration } from "./hooks/useScrollOrchestration";
 import { HeaderSection } from "./features/01-Header/HeaderSection";
 import { JuliacaSection } from "./features/02-Juliaca/JuliacaSection";
 
@@ -12,6 +15,9 @@ import { MapMarkerEditor } from "./dev/MapMarkerEditor";
 
 function App() {
   const [showEditor, setShowEditor] = useState(false);
+
+  useSmoothScroll();
+  useScrollOrchestration();
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {

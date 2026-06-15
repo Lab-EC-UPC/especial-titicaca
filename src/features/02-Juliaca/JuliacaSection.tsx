@@ -48,6 +48,7 @@ export const JuliacaSection = () => {
                 videoCom={comVid01}
                 videoMob={mobVid01}
                 scrollDistance={2080}
+                refreshPriority={5}
             >
                 <ScrollMessage start={0.058} end={0.25}>
                     <ScrollMessage.Paragraph>
@@ -99,6 +100,7 @@ export const JuliacaSection = () => {
                 videoCom={comVid02}
                 videoMob={mobVid02}
                 scrollDistance={720}
+                refreshPriority={3}
             >
                 <ScrollMessage start={0.167} end={0.722}>
                     <ScrollMessage.Paragraph>
@@ -123,6 +125,7 @@ export const JuliacaSection = () => {
                 videoCom={comVid03}
                 videoMob={mobVid03}
                 scrollDistance={1200}
+                refreshPriority={2}
             >
                 <ScrollMessage start={0.167} end={0.5}>
                     <ScrollMessage.Paragraph>

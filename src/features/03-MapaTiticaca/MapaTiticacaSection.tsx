@@ -700,25 +700,52 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
 
     useEffect(() => {
         const SCREENS = 9;
-        const onScroll = () => {
+        // Throttle con rAF + memo del último estado, para no leer layout ni
+        // disparar setState (setZoom crea objeto nuevo → re-render) en cada
+        // evento de scroll, solo cuando realmente cambia el valor.
+        let ticking = false;
+        let raf = 0;
+        const last = { idx: -2, scale: -1, tx: NaN, ty: NaN };
+        const compute = () => {
+            ticking = false;
             const el = sectionRef.current;
             if (!el) return;
             const { top, height } = el.getBoundingClientRect();
             const progress = Math.max(0, Math.min(1, -top / (height - window.innerHeight)));
             const idx = Math.floor(progress * SCREENS) - 1;
             if (idx < 0) {
-                setActiveIdx(-1);
-                setZoom({ scale: 1, tx: 0, ty: 0 });
+                if (last.idx !== -1) {
+                    setActiveIdx(-1);
+                    setZoom({ scale: 1, tx: 0, ty: 0 });
+                    last.idx = -1; last.scale = 1; last.tx = 0; last.ty = 0;
+                }
                 return;
             }
             const ci = Math.min(idx, CUENCAS.length - 1);
             const targets = window.innerWidth < MOBILE_BP ? zoomM : zoomD;
             const t = targets[CUENCAS[ci].id];
-            setActiveIdx(ci);
-            setZoom({ scale: SCALE, tx: clampT(t.x), ty: clampT(t.y) });
+            const tx = clampT(t.x);
+            const ty = clampT(t.y);
+            if (ci !== last.idx) {
+                setActiveIdx(ci);
+                last.idx = ci;
+            }
+            if (last.scale !== SCALE || last.tx !== tx || last.ty !== ty) {
+                setZoom({ scale: SCALE, tx, ty });
+                last.scale = SCALE; last.tx = tx; last.ty = ty;
+            }
+        };
+        const onScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            raf = requestAnimationFrame(compute);
         };
         window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
+        compute();
+        return () => {
+            window.removeEventListener("scroll", onScroll);
+            cancelAnimationFrame(raf);
+        };
     }, [zoomD, zoomM]);
 
     const active = activeIdx >= 0 ? CUENCAS[activeIdx] : null;

@@ -18,7 +18,12 @@ export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
 
   useEffect(() => {
     if (!isStandalone) return;
-    const handleScroll = () => {
+    // Throttle con rAF: a lo sumo una lectura de layout (getBoundingClientRect)
+    // por frame, en vez de un reflow síncrono por cada evento de scroll.
+    let ticking = false;
+    let raf = 0;
+    const compute = () => {
+      ticking = false;
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const totalScrollable = rect.height - window.innerHeight;
@@ -26,13 +31,32 @@ export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
       const scrolled = Math.max(0, -rect.top);
       const progress = Math.min(1, scrolled / totalScrollable);
       const frame = Math.min(Math.floor(progress * TOTAL_FRAMES) + 1, TOTAL_FRAMES);
-      setCurrentFrame(frame);
+      setCurrentFrame(frame); // React descarta el update si el frame no cambió
+    };
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      raf = requestAnimationFrame(compute);
     };
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll(); // Calcular al montar
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    compute(); // Calcular al montar
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+    };
   }, [isStandalone]);
+
+  // Pre-decodificar los frames para que el cambio de opacidad no produzca un
+  // tirón al decodificar un PNG grande justo cuando se vuelve visible.
+  useEffect(() => {
+    for (let frame = 1; frame <= TOTAL_FRAMES; frame++) {
+      const img = new Image();
+      img.src = getImageSrc(frame);
+      img.decode?.().catch(() => {});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile]);
 
   const getImageSrc = (frame: number) =>
     isMobile

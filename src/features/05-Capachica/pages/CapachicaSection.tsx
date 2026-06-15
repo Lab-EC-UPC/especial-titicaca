@@ -2,6 +2,7 @@ import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { createScrollTimeline } from "../utils/timeline";
+import { useVideoPreload } from "../../../hooks/useVideoPreload";
 import { Message } from "../components/animations/Message";
 import { ChapterTitle } from "../components/animations/ChapterTitle";
 import { Title } from "../components/animations/Title";
@@ -21,6 +22,9 @@ export const CapachicaSection = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const videoMobileRef = useRef<HTMLVideoElement>(null);
 
+    // Carga diferida: metadata→auto cuando la sección (muy abajo) se acerca.
+    useVideoPreload(sectionRef, [videoRef, videoMobileRef]);
+
     useGSAP(
         (_context, contextSafe) => {
             const section = sectionRef.current;
@@ -35,7 +39,7 @@ export const CapachicaSection = () => {
 
             const setupTimeline = contextSafe!(() => {
                 if (timeline) return;
-                timeline = createScrollTimeline(section, activeVideo);
+                timeline = createScrollTimeline(section, activeVideo, 1);
             });
 
             if (activeVideo.readyState >= 1) {
@@ -67,7 +71,7 @@ export const CapachicaSection = () => {
         <section
             ref={sectionRef}
             id="capachica-animation1"
-            className="relative isolate h-screen w-full overflow-hidden bg-black"
+            className="relative isolate h-[100dvh] w-full overflow-hidden bg-black"
         >
             {/* ── Video de fondo (desktop / tablet) ───────────────────────── */}
             <video
@@ -76,7 +80,7 @@ export const CapachicaSection = () => {
                 src={animationVideo}
                 muted
                 playsInline
-                preload="auto"
+                preload="metadata"
             />
 
             {/* ── Video de fondo (mobile) ──────────────────────────────────── */}
@@ -86,7 +90,7 @@ export const CapachicaSection = () => {
                 src={animationVideoMobile}
                 muted
                 playsInline
-                preload="auto"
+                preload="metadata"
             />
 
             {/* ── Gradiente sutil ──────────────────────────────────────────── */}
