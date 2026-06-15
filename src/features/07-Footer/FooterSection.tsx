@@ -34,23 +34,26 @@ export const FooterSection = () => {
           Créditos
         </h2>
 
-        {/* Acordeón de áreas (grilla de 4 columnas, sin tarjetas) */}
+        {/* Acordeón de áreas (1 columna en móvil, 4 en desktop) */}
         <div
-          className="grid w-full grid-cols-2 md:grid-cols-4 items-start"
+          className="grid w-full grid-cols-1 md:grid-cols-4 items-start"
           style={{ gap: "clamp(8px, 1.2vw, 16px)" }}
         >
           {CREDITS.map((department) => {
             const open = department.title === openTitle;
             return (
-              <div key={department.title} className="flex w-full flex-col items-center">
+              <div
+                key={department.title}
+                className="flex w-full flex-col items-center border-b border-white/10 md:border-b-0"
+              >
                 <button
                   onClick={() => setOpenTitle(open ? null : department.title)}
                   className="flex w-full items-center justify-between text-left uppercase font-semibold transition-opacity"
                   style={{
-                    fontSize: "clamp(12px, 1.4vw, 18px)",
+                    fontSize: "clamp(13px, 1.4vw, 18px)",
                     letterSpacing: "0.1em",
                     lineHeight: 1.25,
-                    padding: "clamp(12px, 1.8vh, 20px) clamp(6px, 1vw, 12px)",
+                    padding: "clamp(14px, 1.8vh, 20px) clamp(2px, 1vw, 12px)",
                     cursor: "pointer",
                     gap: 8,
                     color: open ? "#FFFFFF" : "rgba(255,255,255,0.6)",
@@ -106,7 +109,7 @@ export const FooterSection = () => {
           src={logoLab}
           alt="Laboratorio EC UPC"
           style={{
-            width: "clamp(340px, 52vw, 640px)",
+            width: "clamp(220px, 60vw, 640px)",
             height: "auto",
             marginTop: "clamp(72px, 14vh, 140px)",
           }}
