@@ -614,7 +614,7 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                     <div
                         className="absolute z-30 text-center pointer-events-none"
                         style={{
-                            top: isMobile ? 16 : 20,
+                            top: isMobile ? 34 : 44,
                             left: "50%",
                             transform: "translateX(-50%)",
                             whiteSpace: "nowrap",
@@ -1161,7 +1161,7 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                 <div
                     style={{
                         position: "absolute",
-                        top: isMobile ? 16 : 20,
+                        top: isMobile ? 34 : 44,
                         left: "50%",
                         transform: "translateX(-50%)",
                         textAlign: "center",

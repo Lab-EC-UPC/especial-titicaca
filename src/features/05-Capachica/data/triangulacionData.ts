@@ -39,9 +39,9 @@ export const PROVINCE_SALUD_POPUPS: Record<string, SaludPopupData[]> = {
       clasificacion: "Centros de salud o centros médicos y/o centros de salud con camas de internamiento",
     },
     {
-      zona: "segura", provincia: "Carabaya", cantidadTotal: 8, activo: 8, desactivado: 0,
+      zona: "segura", provincia: "Carabaya", cantidadTotal: 1, activo: 1, desactivado: 0,
       categoria: "Centro de Salud (I-3) y Centro c/especialidades (I-4)",
-      clasificacion: "Centros de salud o centros médicos y/o centros de salud con camas de internamiento",
+      clasificacion: "Hospitales o clínicas de atención general",
     },
   ],
   "el-collao": [
@@ -282,9 +282,9 @@ export const PROVINCE_MARKERS: Record<string, { salud: SaludMarker[]; mineria: M
       { x: 1180, y: 596, tipo: "critica" },
     ],
     mineria: [
-      { x: 950, y: 901, tipo: "informal", nombre: "", eessMasCercano: "", distanciaKm: 0, descripcion: "" },
-      { x: 996, y: 652, tipo: "informal", nombre: "", eessMasCercano: "", distanciaKm: 0, descripcion: "" },
-      { x: 749, y: 566, tipo: "informal", nombre: "", eessMasCercano: "", distanciaKm: 0, descripcion: "" },
+      { x: 950, y: 901, tipo: "informal", nombre: "Crucero", eessMasCercano: "IPRESS CRUCERO (I-4)", distanciaKm: 0.8, descripcion: "Con cobertura a 0.8 km del EESS mas cercano" },
+      { x: 996, y: 652, tipo: "informal", nombre: "Carabaya Norte", eessMasCercano: "TAHUANA(I-1)", distanciaKm: 0.3, descripcion: "Con cobertura a 0.3 km del EESS mas cercano" },
+      { x: 749, y: 566, tipo: "informal", nombre: "Ollachea", eessMasCercano: "KCANA(I-2)", distanciaKm: 2.4, descripcion: "Con cobertura a 2.4 km del EESS mas cercano" },
     ],
 
   },

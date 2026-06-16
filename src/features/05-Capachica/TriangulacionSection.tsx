@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { lockScroll, unlockScroll } from "../../hooks/useSmoothScroll";
 import StoryPopup from "../../components/StoryPopup";
 import CardRoute from "../../components/CardRoute";
 import PunoProvinceMap, { PROVINCES } from "./components/PunoProvinceMap";
@@ -74,6 +75,17 @@ export const TriangulacionSection = () => {
   const [selectedProvince, setSelectedProvince] = useState<string | null>(null);
   const isMobile = useIsMobile();
 
+  // Al pulsar "Ver su ruta" el usuario entra en la experiencia interactiva
+  // (route/map/province): congelamos el scroll de la página para que no se
+  // desplace por debajo. Al volver a "story" (icono X) se reanuda.
+  useEffect(() => {
+    if (view === "story") unlockScroll();
+    else lockScroll();
+  }, [view]);
+
+  // Salvaguarda: si la sección se desmonta con el scroll bloqueado, reanúdalo.
+  useEffect(() => () => unlockScroll(), []);
+
   useEffect(() => {
     if (view !== "route") return;
     setStep(1);
@@ -112,6 +124,15 @@ export const TriangulacionSection = () => {
         )}
 
         {view === "route" && <RecorridoSVG step={step} />}
+
+        {view === "route" && (
+          <button
+            onClick={() => setView("story")}
+            className="absolute top-6 left-6 sm:top-8 sm:left-8 z-30 cursor-pointer hover:opacity-80 transition-opacity"
+          >
+            <img src={botonCerrar} alt="Cerrar" className="w-10 h-10 sm:w-12 sm:h-12" />
+          </button>
+        )}
 
         {view === "story" && (
           <p className="absolute top-14 left-1/2 -translate-x-1/2 z-10 font-citizen font-bold text-white text-base sm:text-3xl text-center whitespace-nowrap">

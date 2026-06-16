@@ -8,7 +8,7 @@ import { COVER_BANDS } from "./cover-data";
 
 gsap.registerPlugin(useGSAP);
 
-const YOUTUBE = "1XulRzFnTYE";
+const YOUTUBE = "KspkzwF-3fY";
 const youTubeId = getYouTubeId(YOUTUBE);
 
 export const HeaderSection = () => {

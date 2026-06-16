@@ -27,6 +27,26 @@ export function lenisScrollTo(
   if (el instanceof HTMLElement) el.scrollIntoView({ behavior: "smooth" });
 }
 
+/** Congela el scroll de la página (p.ej. mientras una experiencia interactiva
+ *  está abierta). Pausa Lenis; si no hay Lenis (prefers-reduced-motion) cae a
+ *  bloquear el overflow nativo del documento. */
+export function lockScroll() {
+  if (activeLenis) {
+    activeLenis.stop();
+    return;
+  }
+  document.documentElement.style.overflow = "hidden";
+}
+
+/** Reanuda el scroll de la página previamente congelado con lockScroll(). */
+export function unlockScroll() {
+  if (activeLenis) {
+    activeLenis.start();
+    return;
+  }
+  document.documentElement.style.overflow = "";
+}
+
 /**
  * Capa de scroll suave (inercial) para todo el documento.
  *
