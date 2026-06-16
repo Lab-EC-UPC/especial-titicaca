@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { createScrollTimeline } from "../utils/timeline";
@@ -6,8 +6,14 @@ import { Message } from "../components/animations/Message";
 import { ChapterTitle } from "../components/animations/ChapterTitle";
 import { Title } from "../components/animations/Title";
 import { CycleStep } from "../components/animations/CycleStep";
-import animationVideo from "../assets/videos/animation.mp4";
-import animationVideoMobile from "../assets/videos/animation_mobile.mp4";
+import pcVid01 from "../Capachica/capachica_pc_01.mp4";
+import pcVid02 from "../Capachica/capachica_pc_02.mp4";
+import pcVid03 from "../Capachica/capachica_pc_03.mp4";
+import pcVid04 from "../Capachica/capachica_pc_04.mp4";
+import celVid01 from "../Capachica/capachica_cel_01.mp4";
+import celVid02 from "../Capachica/capachica_cel_02.mp4";
+import celVid03 from "../Capachica/capachica_cel_03.mp4";
+import celVid04 from "../Capachica/capachica_cel_04.mp4";
 import { TestimonialSection } from "./TestimonialSection";
 import { TriangulacionSection } from "../TriangulacionSection";
 import { TotoraSection } from "../Totora";
@@ -16,51 +22,73 @@ import { EndingGradientOverlay } from "../components/animations/EndingGradientOv
 
 gsap.registerPlugin(useGSAP);
 
+// Fondo de Capachica troceado en 4 segmentos consecutivos (pc = desktop,
+// cel = móvil). Ver utils/timeline.ts: se scrubbean como una sola línea
+// continua para lograr scrub fluido + carga progresiva.
+const PC_SEGMENTS = [pcVid01, pcVid02, pcVid03, pcVid04];
+const CEL_SEGMENTS = [celVid01, celVid02, celVid03, celVid04];
+
 export const CapachicaSection = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const videoMobileRef = useRef<HTMLVideoElement>(null);
+    const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+    const [isMobile, setIsMobile] = useState(
+        () => typeof window !== "undefined" && window.innerWidth < 640,
+    );
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 640);
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
+    }, []);
 
     useGSAP(
         (_context, contextSafe) => {
             const section = sectionRef.current;
-            const video = videoRef.current;
-            const videoMobile = videoMobileRef.current;
-            if (!section || !video || !videoMobile) return;
+            const videos = videoRefs.current.filter(Boolean) as HTMLVideoElement[];
+            if (!section || videos.length !== PC_SEGMENTS.length) return;
 
-            const activeVideo =
-                window.matchMedia("(min-width: 640px)").matches ? video : videoMobile;
+            const sources = isMobile ? CEL_SEGMENTS : PC_SEGMENTS;
+
+            // Asigna la fuente (pc/cel) sobre los MISMOS elementos <video>, sin
+            // remontarlos. Tras load(), readyState vuelve a 0 y la timeline se
+            // (re)construye cuando los 4 clips tienen su metadata.
+            videos.forEach((v, i) => {
+                if (v.getAttribute("src") !== sources[i]) {
+                    v.setAttribute("src", sources[i]);
+                    v.load();
+                }
+            });
 
             let timeline: ReturnType<typeof createScrollTimeline> | null = null;
 
             const setupTimeline = contextSafe!(() => {
                 if (timeline) return;
-                timeline = createScrollTimeline(section, activeVideo);
+                // Necesitamos la duración de los 4 para mapear el scroll.
+                if (videos.some((v) => !v.duration || Number.isNaN(v.duration)))
+                    return;
+                timeline = createScrollTimeline(section, videos);
             });
 
-            if (activeVideo.readyState >= 1) {
-                setupTimeline();
-            } else {
-                activeVideo.addEventListener("loadedmetadata", setupTimeline, {
-                    once: true,
-                });
-            }
+            videos.forEach((v) =>
+                v.addEventListener("loadedmetadata", setupTimeline),
+            );
+            // Intento inmediato por si ya estaban cacheados.
+            setupTimeline();
 
             const onVisibility = contextSafe!(() => {
-                if (document.hidden) {
-                    video.pause();
-                    videoMobile.pause();
-                }
+                if (document.hidden) videos.forEach((v) => v.pause());
             });
 
             document.addEventListener("visibilitychange", onVisibility);
 
             return () => {
-                activeVideo.removeEventListener("loadedmetadata", setupTimeline);
+                videos.forEach((v) =>
+                    v.removeEventListener("loadedmetadata", setupTimeline),
+                );
                 document.removeEventListener("visibilitychange", onVisibility);
             };
         },
-        { scope: sectionRef },
+        { scope: sectionRef, dependencies: [isMobile] },
     );
 
     return (
@@ -69,25 +97,21 @@ export const CapachicaSection = () => {
             id="capachica-animation1"
             className="relative isolate h-[100dvh] w-full overflow-hidden bg-black"
         >
-            {/* ── Video de fondo (desktop / tablet) ───────────────────────── */}
-            <video
-                ref={videoRef}
-                className="absolute inset-0 hidden h-full w-full object-cover sm:block"
-                src={animationVideo}
-                muted
-                playsInline
-                preload="auto"
-            />
-
-            {/* ── Video de fondo (mobile) ──────────────────────────────────── */}
-            <video
-                ref={videoMobileRef}
-                className="absolute inset-0 block h-full w-full object-cover sm:hidden"
-                src={animationVideoMobile}
-                muted
-                playsInline
-                preload="auto"
-            />
+            {/* ── Fondo de video: 4 segmentos apilados; solo el activo es ──
+                visible. La fuente (pc/cel) se asigna por JS según isMobile. */}
+            {PC_SEGMENTS.map((_, i) => (
+                <video
+                    key={i}
+                    ref={(el) => {
+                        videoRefs.current[i] = el;
+                    }}
+                    className="absolute inset-0 h-full w-full object-cover"
+                    style={{ opacity: i === 0 ? 1 : 0 }}
+                    muted
+                    playsInline
+                    preload={i === 0 ? "auto" : "metadata"}
+                />
+            ))}
 
             {/* ── Gradiente sutil ──────────────────────────────────────────── */}
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.04)_45%,rgba(0,0,0,0.2))]" />

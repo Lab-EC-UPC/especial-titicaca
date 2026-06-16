@@ -22,6 +22,7 @@ export function useVideoPreload(
   sectionRef: RefObject<HTMLElement | null>,
   videoRefs: RefObject<HTMLVideoElement | null>[],
   rootMargin = "300% 0px 300% 0px",
+  eager = false,
 ) {
   // videoRefs suele ser un array literal nuevo en cada render; lo leemos vía
   // ref para que el efecto (y el observer) se cree una sola vez.
@@ -33,7 +34,7 @@ export function useVideoPreload(
     if (!section) return;
 
     // Si el navegador no soporta IntersectionObserver, cargamos sin diferir.
-    if (typeof IntersectionObserver === "undefined") {
+    if (eager || typeof IntersectionObserver === "undefined") {
       for (const ref of refsRef.current) {
         const v = ref.current;
         if (v) v.preload = "auto";

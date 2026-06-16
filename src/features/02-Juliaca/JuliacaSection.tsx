@@ -49,6 +49,7 @@ export const JuliacaSection = () => {
                 videoMob={mobVid01}
                 scrollDistance={2080}
                 refreshPriority={5}
+                eager
             >
                 <ScrollMessage start={0.058} end={0.25}>
                     <ScrollMessage.Paragraph>
