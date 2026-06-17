@@ -471,7 +471,7 @@ export const ProyectosBajoLaLupaSection = () => {
     >
       {/* ── Scoped styles — only inside #proyectos-lupa ── */}
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700&family=Barlow:wght@300;400;500&display=swap');
         #proyectos-lupa .dn-node { cursor: pointer; position: absolute; }
         #proyectos-lupa .dn-wrap { transition: transform 0.4s cubic-bezier(0.34,1.5,0.64,1); transform-origin: center center; }
         #proyectos-lupa .dn-node:hover .dn-wrap { filter: brightness(1.2); }

@@ -10,8 +10,6 @@ gsap.registerPlugin(useGSAP);
 type VideoSectionProps = {
     videoCom: string;
     videoMob: string;
-    posterCom?: string;
-    posterMob?: string;
     scrollDistance?: number;
     refreshPriority?: number;
     /** Empezar a descargar el video de inmediato (1ª sección, above-the-fold). */
@@ -22,8 +20,6 @@ type VideoSectionProps = {
 export const VideoSection = ({
     videoCom,
     videoMob,
-    posterCom,
-    posterMob,
     scrollDistance = 2000,
     refreshPriority = 0,
     eager = false,
@@ -40,7 +36,6 @@ export const VideoSection = ({
     }, []);
 
     const videoSrc = isMobile ? videoMob : videoCom;
-    const posterSrc = isMobile ? posterMob : posterCom;
 
     // Sube de metadata→auto y bufferiza el video al acercarse la sección.
     // `eager` lo precarga desde el montaje (útil para la 1ª sección).
@@ -88,11 +83,10 @@ export const VideoSection = ({
     );
 
     return (
-        <div ref={sectionRef} className="relative isolate h-[100dvh] w-full overflow-hidden bg-[#21292C]">
+        <div ref={sectionRef} className="relative isolate h-[100dvh] w-full overflow-hidden bg-black">
             <video
                 ref={videoRef}
                 className="absolute inset-0 h-full w-full object-cover"
-                poster={posterSrc}
                 muted
                 playsInline
                 preload={eager ? "auto" : "metadata"}

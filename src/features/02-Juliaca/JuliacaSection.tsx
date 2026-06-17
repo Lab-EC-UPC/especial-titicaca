@@ -17,18 +17,6 @@ import galeria02 from "./assets/galeria_02.webp";
 import galeria03 from "./assets/galeria_03.webp";
 import galeria04 from "./assets/galeria_04.webp";
 
-// Posters (1er frame) generados por scripts/optimize-videos.ps1 en
-// assets/videos/posters/<nombre>.webp. import.meta.glob es build-safe: si la
-// carpeta aún no existe, el mapa queda vacío y `poster()` devuelve undefined
-// (VideoSection cae a su color de fondo). Al correr el script, se auto-activan.
-const POSTERS = import.meta.glob("./assets/videos/posters/*.webp", {
-    eager: true,
-    query: "?url",
-    import: "default",
-}) as Record<string, string>;
-const poster = (name: string): string | undefined =>
-    POSTERS[`./assets/videos/posters/${name}.webp`];
-
 const GALLERY_IMAGES = [
     {
         src: galeria01,
@@ -59,8 +47,6 @@ export const JuliacaSection = () => {
             <VideoSection
                 videoCom={comVid01}
                 videoMob={mobVid01}
-                posterCom={poster("juliaca_bg_com_01")}
-                posterMob={poster("juliaca_bg_mob_01")}
                 scrollDistance={2080}
                 refreshPriority={5}
                 eager
@@ -107,12 +93,13 @@ export const JuliacaSection = () => {
                 </ScrollMessage>
             </VideoSection>
 
-            {/* ── Video 2: contaminación química (junto al Video 1) ── */}
+            {/* ── Mapa Titicaca (standalone) ── */}
+            <MapaTiticacaSection />
+
+            {/* ── Video 2: contaminación química ── */}
             <VideoSection
                 videoCom={comVid02}
                 videoMob={mobVid02}
-                posterCom={poster("juliaca_bg_com_02")}
-                posterMob={poster("juliaca_bg_mob_02")}
                 scrollDistance={720}
                 refreshPriority={3}
             >
@@ -131,9 +118,6 @@ export const JuliacaSection = () => {
                 </ScrollMessage>
             </VideoSection>
 
-            {/* ── Mapa Titicaca (standalone) ── */}
-            <MapaTiticacaSection />
-
             {/* ── Contaminación Cuenca (standalone) ── */}
             <ContaminacionCuencaSection />
 
@@ -141,8 +125,6 @@ export const JuliacaSection = () => {
             <VideoSection
                 videoCom={comVid03}
                 videoMob={mobVid03}
-                posterCom={poster("juliaca_bg_com_03")}
-                posterMob={poster("juliaca_bg_mob_03")}
                 scrollDistance={1200}
                 refreshPriority={2}
             >
