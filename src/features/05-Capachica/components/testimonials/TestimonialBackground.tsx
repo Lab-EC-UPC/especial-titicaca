@@ -28,9 +28,10 @@ interface TooltipState {
 interface TestimonialBackgroundProps {
   testimonials: Testimonial[];
   onSelectPerson: (id: number) => void;
+  hidden?: boolean;
 }
 
-export const TestimonialBackground = ({ testimonials, onSelectPerson }: TestimonialBackgroundProps) => {
+export const TestimonialBackground = ({ testimonials, onSelectPerson, hidden = false }: TestimonialBackgroundProps) => {
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [fadingId, setFadingId] = useState<number | null>(null);
 
@@ -45,18 +46,20 @@ export const TestimonialBackground = ({ testimonials, onSelectPerson }: Testimon
     setTooltip(null);
     setFadingId(id);
     window.setTimeout(() => {
+      setFadingId(null);
       onSelectPerson(id);
     }, FADE_OUT_MS);
   };
 
+  const isFadingOut = fadingId !== null;
+
   return (
     <div
-      className={`relative h-screen w-full overflow-hidden transition-opacity ease-in-out ${
-        fadingId !== null ? "opacity-0" : "opacity-100"
+      className={`absolute inset-0 h-full w-full overflow-hidden transition-opacity ease-in-out ${
+        isFadingOut || hidden ? "opacity-0" : "opacity-100"
       }`}
       style={{ transitionDuration: `${FADE_OUT_MS}ms` }}
     >
-      {/* Background */}
       <img
         src={TESTIMONIAL_BACKGROUND_MOBILE}
         alt="Testimonios"
