@@ -5,7 +5,6 @@ export const PebltSection = () => {
       id="peblt"
       style={{
         background: "#2e3440",
-        fontFamily: "'Barlow Condensed', sans-serif",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -42,7 +41,6 @@ export const PebltSection = () => {
         <span
           style={{
             display: "inline-block",
-            fontFamily: "'Barlow Condensed',sans-serif",
             fontSize: "clamp(10px,1.4vw,13px)",
             fontWeight: 700,
             letterSpacing: "0.36em",
@@ -69,9 +67,7 @@ export const PebltSection = () => {
         </div>
 
         <p
-          className="font-medium md:font-light"
           style={{
-            fontFamily: "'Barlow',sans-serif",
             fontSize: "clamp(17px,1.6vw,22px)",
             lineHeight: 1.85,
             color: "#c8cfd8",

@@ -24,7 +24,7 @@ export const CoverMessage = ({ at, children }: CoverMessageProps) => {
 };
 
 CoverMessage.Paragraph = ({ children }: ChildrenProps) => (
-    <p className="text-pretty text-xs font-medium md:font-light leading-snug tracking-[0.01em] sm:text-xl sm:leading-normal md:text-2xl">
+    <p className="text-pretty text-xs leading-snug tracking-[0.01em] sm:text-xl sm:leading-normal md:text-2xl">
         {children}
     </p>
 );
@@ -36,7 +36,7 @@ CoverMessage.Title = ({ children }: ChildrenProps) => (
 );
 
 CoverMessage.Subtitle = ({ children }: ChildrenProps) => (
-    <p className="mt-4 text-sm font-medium md:font-light leading-[1.4] tracking-[0.01em] sm:text-2xl md:text-3xl">
+    <p className="mt-4 text-sm leading-[1.4] tracking-[0.01em] sm:text-2xl md:text-3xl">
         {children}
     </p>
 );

@@ -30,10 +30,8 @@ export const Message = ({ start, end, children }: MessageProps) => {
             <div className="relative mx-4 max-w-65 md:max-w-140 lg:max-w-210">
                 <div className="bg-black/60 px-6 py-10 text-center md:px-12 md:py-16">
                     <p
-                        className="text-sm font-medium md:font-light text-white md:text-lg lg:text-[22px]"
+                        className="text-sm text-white md:text-lg lg:text-[22px]"
                         style={{
-                            fontFamily:
-                                'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
                             lineHeight: "130%",
                             letterSpacing: "0.02em",
                             textAlign: "center",

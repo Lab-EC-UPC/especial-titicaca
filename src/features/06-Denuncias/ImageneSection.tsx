@@ -91,9 +91,9 @@ function InstitutionModal({
           <h3 className="text-white text-lg sm:text-2xl font-bold leading-tight pr-8">
             {card.title}
           </h3>
-          <p className="text-white/50 text-xs sm:text-sm mt-1">
+          <h4 className="text-white/50 text-xs sm:text-sm mt-1">
             {card.subtitle}
-          </p>
+          </h4>
 
           <div className="h-px w-full bg-white/10 my-5 sm:my-6" />
 

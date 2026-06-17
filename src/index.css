@@ -25,3 +25,26 @@
   font-weight: 400;
   font-style: normal;
 }
+
+body {
+  font-family: "Elza", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Citizen", sans-serif;
+}
+
+/* Cuerpos de texto / párrafos: en escritorio se mantienen ligeros (light, 300)
+   y en móvil se ven un poco más gruesos (medium, 500) para mejorar la
+   legibilidad. Centralizado aquí para no repetir `font-medium md:font-light`
+   en cada componente. El breakpoint (768px) coincide con `md` de Tailwind.
+   Cualquier <p> con su propio peso (clase font-* o style inline) lo sobreescribe. */
+p {
+  font-weight: 300;
+}
+
+@media (max-width: 767px) {
+  p {
+    font-weight: 500;
+  }
+}

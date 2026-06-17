@@ -47,9 +47,8 @@ ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => {
 
     return (
         <p
-            className="text-sm md:text-lg font-medium md:font-light"
+            className="text-sm md:text-lg"
             style={{
-                fontFamily: '"Elza", sans-serif',
                 lineHeight: "130%",
                 letterSpacing: "0.02em",
                 textAlign: "center",
@@ -69,7 +68,6 @@ type ScrollChapterProps = {
 ScrollMessage.Chapter = ({ children }: ScrollChapterProps) => (
     <p
         style={{
-            fontFamily: '"Elza", sans-serif',
             fontSize: 13,
             lineHeight: "1.6",
             letterSpacing: "0.25em",

@@ -31,7 +31,7 @@ export const FloraFaunaSection = () => (
   <>
     <Fauna />
     <SocialCarousel
-      title="¿Qué no muestran las redes sociales?"
+      title="Lo que no muestra las redes sociales"
       images={SOCIAL_IMAGES}
     />
   </>

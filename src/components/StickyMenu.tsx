@@ -362,7 +362,6 @@ function LakeMap({
                 fontSize={isActive || isHov ? "6" : "5"}
                 fill={isActive ? C.totoraPale : C.nieve}
                 textAnchor="middle"
-                fontFamily="monospace"
                 opacity={isActive ? 1 : isHov ? 0.95 : 0.7}
                 style={{ textShadow: "0 1px 3px #000" }}
               >
@@ -392,7 +391,6 @@ function LakeMap({
                         fontSize="5.8"
                         fill={isActive ? C.noche : C.nieve}
                         textAnchor="middle"
-                        fontFamily="Georgia, serif"
                         fontWeight={isActive ? "bold" : "normal"}
                       >
                         {sec.label}
@@ -429,7 +427,6 @@ function LakeMap({
             fontSize="5"
             fill={C.totoraPale}
             textAnchor="middle"
-            fontFamily="monospace"
           >
             N
           </text>
@@ -535,7 +532,6 @@ function DesktopMenu({
             style={{
               color: C.totoraPale,
               fontSize: "8px",
-              fontFamily: "monospace",
               letterSpacing: "0.2em",
               textTransform: "uppercase",
               opacity: 0.75,
@@ -547,7 +543,6 @@ function DesktopMenu({
             style={{
               color: C.nieve,
               fontSize: "11px",
-              fontFamily: "Georgia, serif",
               whiteSpace: "nowrap",
             }}
           >
@@ -588,7 +583,6 @@ function DesktopMenu({
                 style={{
                   color: C.totoraPale,
                   fontSize: "9px",
-                  fontFamily: "monospace",
                   letterSpacing: "0.35em",
                   textTransform: "uppercase",
                   opacity: 0.85,
@@ -600,7 +594,6 @@ function DesktopMenu({
                 style={{
                   color: C.nieve,
                   fontSize: "16px",
-                  fontFamily: "Georgia, serif",
                   fontStyle: "italic",
                 }}
               >
@@ -612,7 +605,6 @@ function DesktopMenu({
                 style={{
                   color: C.cielo,
                   fontSize: "8px",
-                  fontFamily: "monospace",
                   opacity: 0.65,
                 }}
               >
@@ -622,7 +614,6 @@ function DesktopMenu({
                 style={{
                   color: C.totora,
                   fontSize: "8px",
-                  fontFamily: "monospace",
                   opacity: 0.75,
                 }}
               >
@@ -724,7 +715,6 @@ function MobileMenu({
               style={{
                 color: C.nieve,
                 fontSize: "14px",
-                fontFamily: "Georgia, serif",
                 fontStyle: "italic",
               }}
             >
@@ -734,7 +724,6 @@ function MobileMenu({
               style={{
                 color: C.totora,
                 fontSize: "9px",
-                fontFamily: "monospace",
                 opacity: 0.7,
                 alignSelf: "center",
               }}

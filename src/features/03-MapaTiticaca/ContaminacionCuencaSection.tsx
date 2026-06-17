@@ -93,7 +93,6 @@ export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
         >
           <h2
             className="text-white uppercase tracking-[0.18em] md:tracking-[0.22em] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
-            style={{ fontFamily: "'Citizen OT', sans-serif" }}
           >
             El rastro de los vertimientos
           </h2>
@@ -153,7 +152,6 @@ export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
         >
           <h2
             className="text-white uppercase tracking-[0.18em] md:tracking-[0.22em] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
-            style={{ fontFamily: "'Citizen OT', sans-serif" }}
           >
             El rastro de los vertimientos
           </h2>

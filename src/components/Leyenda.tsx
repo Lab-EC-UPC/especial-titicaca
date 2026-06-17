@@ -95,7 +95,7 @@ export default function Leyenda({ activeTab, onTabChange, collapsible = false }:
               )}
               <div>
                 <p className="text-white font-bold text-xs sm:text-sm tracking-widest font-citizen">{label}</p>
-                {subtitle && <p className="text-white/60 text-[10px] sm:text-xs font-elza mt-0.5">{subtitle}</p>}
+                {subtitle && <h5 className="text-white/60 text-[10px] sm:text-xs font-elza mt-0.5">{subtitle}</h5>}
               </div>
             </div>
           ))}

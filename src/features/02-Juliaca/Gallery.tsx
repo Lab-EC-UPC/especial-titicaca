@@ -49,9 +49,8 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                                 className="flex flex-col items-start gap-1 text-left md:ml-5 ml-0 opacity-0"
                             >
                                 <p
-                                    className="text-xs md:text-lg font-medium md:font-light"
+                                    className="text-xs md:text-lg"
                                     style={{
-                                        fontFamily: '"Elza", sans-serif',
                                         lineHeight: "130%",
                                         letterSpacing: "0.02em",
                                         color: "white",
@@ -61,10 +60,9 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                                 >
                                     {img.description}
                                 </p>
-                                <p
+                                <h5
                                     className="text-[11px] md:text-sm"
                                     style={{
-                                        fontFamily: '"Citizen", sans-serif',
                                         lineHeight: "130%",
                                         letterSpacing: "0.1em",
                                         color: "rgba(255,255,255,0.6)",
@@ -75,7 +73,7 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                                     }}
                                 >
                                     {img.subtext}
-                                </p>
+                                </h5>
                             </div>
                         </div>
                     </div>

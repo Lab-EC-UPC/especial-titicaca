@@ -7,14 +7,15 @@ import { TestimonialAudioButton } from "./TestimonialAudioButton";
 import { TestimonialCard } from "./TestimonialCard";
 import { useState, useEffect } from "react";
 
-const FADE_IN_MS = 900;
+const FADE_MS = 900;
 
 interface TestimonialPersonViewProps {
   testimonial: Testimonial;
   onClose: () => void;
+  isClosing: boolean;
 }
 
-export const TestimonialPersonView = ({ testimonial, onClose }: TestimonialPersonViewProps) => {
+export const TestimonialPersonView = ({ testimonial, onClose, isClosing }: TestimonialPersonViewProps) => {
   const { currentIndex, isPlaying, goNext, toggleAudio } = useTestimonialAudioPlayer(
     testimonial.testimony
   );
@@ -28,10 +29,10 @@ export const TestimonialPersonView = ({ testimonial, onClose }: TestimonialPerso
 
   return (
     <div
-      className={`relative h-screen w-full overflow-hidden transition-opacity ease-in-out ${
-        isVisible ? "opacity-100" : "opacity-0"
+      className={`relative h-full w-full overflow-hidden transition-opacity ease-in-out ${
+        isVisible && !isClosing ? "opacity-100" : "opacity-0"
       }`}
-      style={{ transitionDuration: `${FADE_IN_MS}ms` }}
+      style={{ transitionDuration: `${FADE_MS}ms` }}
     >
       <img
         src={testimonial.backgroundImageMobile}

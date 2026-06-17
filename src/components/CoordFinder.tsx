@@ -59,7 +59,7 @@ export function CoordFinder() {
       background: "rgba(4,12,24,0.97)",
       display: "flex", flexDirection: "column",
       alignItems: "center", justifyContent: "center",
-      fontFamily: "monospace", gap: "16px", padding: "20px",
+      gap: "16px", padding: "20px",
     }}>
       <div style={{ color: "#E0B040", fontSize: "18px", letterSpacing: "0.2em", textTransform: "uppercase" }}>
         Buscador de Coordenadas
@@ -106,7 +106,7 @@ export function CoordFinder() {
                 fill="#040F1A"/>
               <text x={p.x} y={p.y - 10}
                 fontSize="9" fill="#FFD060"
-                textAnchor="middle" fontFamily="monospace">
+                textAnchor="middle">
                 {SECTION_NAMES[i].split(" ")[0]}
               </text>
             </g>
@@ -125,8 +125,7 @@ export function CoordFinder() {
                 width="52" height="14" rx="3"
                 fill="rgba(4,12,24,0.9)"/>
               <text x={hoverPos.x + 32} y={hoverPos.y - 6}
-                fontSize="8" fill="#EEF6FB" textAnchor="middle"
-                fontFamily="monospace">
+                fontSize="8" fill="#EEF6FB" textAnchor="middle">
                 {hoverPos.x}, {hoverPos.y}
               </text>
             </g>
@@ -179,7 +178,6 @@ export function CoordFinder() {
               background:"#1A5580", border:"1px solid #3E9AC4",
               borderRadius:"6px", color:"#EEF6FB",
               fontSize:"11px", cursor:"pointer",
-              fontFamily:"monospace",
             }}
           >
            Copiar coordenadas
@@ -193,20 +191,20 @@ export function CoordFinder() {
           <button onClick={() => { setPoints(p => p.slice(0,-1)); setCurrent(c => c-1); }}
             style={{ padding:"6px 16px", background:"rgba(107,64,32,0.5)",
               border:"1px solid #C49028", borderRadius:"6px",
-              color:"#E0B040", fontSize:"11px", cursor:"pointer", fontFamily:"monospace" }}>
+              color:"#E0B040", fontSize:"11px", cursor:"pointer"}}>
             ← Deshacer último
           </button>
         )}
         <button onClick={reset}
           style={{ padding:"6px 16px", background:"rgba(26,85,128,0.3)",
             border:"1px solid #3E9AC4", borderRadius:"6px",
-            color:"#A8D4EE", fontSize:"11px", cursor:"pointer", fontFamily:"monospace" }}>
+            color:"#A8D4EE", fontSize:"11px", cursor:"pointer" }}>
           🔄 Reiniciar
         </button>
         <button onClick={() => document.querySelector<HTMLElement>('[data-coord-finder]')?.remove()}
           style={{ padding:"6px 16px", background:"rgba(6,30,48,0.8)",
             border:"1px solid #6CC0DE", borderRadius:"6px",
-            color:"#EEF6FB", fontSize:"11px", cursor:"pointer", fontFamily:"monospace" }}>
+            color:"#EEF6FB", fontSize:"11px", cursor:"pointer"}}>
           ✕ Cerrar
         </button>
       </div>
