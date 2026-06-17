@@ -149,4 +149,16 @@ export const CREDITS: CreditDepartment[] = [
       },
     ],
   },
+  {
+    title: "Agradecimientos especiales",
+    groups: [
+      {
+        role: "Revisión visual",
+        names: [
+          "Nuevas Narrativas",
+        ],
+        columns: 4,
+      },
+    ],
+  },
 ];
