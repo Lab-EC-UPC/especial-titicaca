@@ -88,7 +88,7 @@ export const VideoSection = ({
     );
 
     return (
-        <div ref={sectionRef} className="relative isolate h-[100dvh] w-full overflow-hidden bg-black">
+        <div ref={sectionRef} className="relative isolate h-[100dvh] w-full overflow-hidden bg-[#21292C]">
             <video
                 ref={videoRef}
                 className="absolute inset-0 h-full w-full object-cover"

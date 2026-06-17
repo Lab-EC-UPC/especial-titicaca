@@ -28,6 +28,21 @@ gsap.registerPlugin(useGSAP);
 const PC_SEGMENTS = [pcVid01, pcVid02, pcVid03, pcVid04];
 const CEL_SEGMENTS = [celVid01, celVid02, celVid03, celVid04];
 
+// Basenames de cada segmento (para resolver su poster por nombre).
+const PC_NAMES = ["capachica_pc_01", "capachica_pc_02", "capachica_pc_03", "capachica_pc_04"];
+const CEL_NAMES = ["capachica_cel_01", "capachica_cel_02", "capachica_cel_03", "capachica_cel_04"];
+
+// Posters (1er frame) generados por scripts/optimize-videos.ps1 en
+// Capachica/posters/<nombre>.webp. Build-safe: si no existen aún, el mapa queda
+// vacío y `posterFor()` devuelve undefined. Al correr el script, se auto-activan.
+const POSTERS = import.meta.glob("../Capachica/posters/*.webp", {
+    eager: true,
+    query: "?url",
+    import: "default",
+}) as Record<string, string>;
+const posterFor = (name: string): string | undefined =>
+    POSTERS[`../Capachica/posters/${name}.webp`];
+
 export const CapachicaSection = () => {
     const sectionRef = useRef<HTMLDivElement>(null);
     const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
@@ -107,6 +122,7 @@ export const CapachicaSection = () => {
                     }}
                     className="absolute inset-0 h-full w-full object-cover"
                     style={{ opacity: i === 0 ? 1 : 0 }}
+                    poster={posterFor((isMobile ? CEL_NAMES : PC_NAMES)[i])}
                     muted
                     playsInline
                     preload={i === 0 ? "auto" : "metadata"}

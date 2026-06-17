@@ -1152,7 +1152,7 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                     </div>
                 )}
 
-                {/* ── Título ── */}
+                {/* ── Título — solo en la primera imagen; desaparece al hacer zoom ── */}
                 <div
                     style={{
                         position: "absolute",
@@ -1163,6 +1163,8 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                         zIndex: 30,
                         pointerEvents: "none",
                         whiteSpace: "nowrap",
+                        opacity: active ? 0 : 1,
+                        transition: "opacity 0.4s ease",
                     }}
                 >
                     <h2
