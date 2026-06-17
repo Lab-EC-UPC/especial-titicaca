@@ -95,7 +95,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
 
           <div className="mt-4 self-start text-left">
             <p
-              className="font-light text-white"
+              className="font-medium md:font-light text-white"
               style={{ fontSize: "clamp(14px, 1.6vw, 18px)", margin: 0 }}
             >
               {current.description}

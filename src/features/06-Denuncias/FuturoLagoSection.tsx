@@ -55,9 +55,9 @@ export const FuturoLagoSection = () => {
         </h2>
 
         <p
+          className="font-medium md:font-light"
           style={{
             fontFamily: "'Barlow',sans-serif",
-            fontWeight: 300,
             fontSize: "clamp(16px,1.6vw,21px)",
             lineHeight: 1.7,
             color: "#c8cfd8",

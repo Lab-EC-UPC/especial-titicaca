@@ -69,9 +69,9 @@ export const PebltSection = () => {
         </div>
 
         <p
+          className="font-medium md:font-light"
           style={{
             fontFamily: "'Barlow',sans-serif",
-            fontWeight: 300,
             fontSize: "clamp(17px,1.6vw,22px)",
             lineHeight: 1.85,
             color: "#c8cfd8",

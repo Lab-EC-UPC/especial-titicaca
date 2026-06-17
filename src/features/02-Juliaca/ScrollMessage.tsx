@@ -47,13 +47,12 @@ ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => {
 
     return (
         <p
-            className="text-sm md:text-lg"
+            className="text-sm md:text-lg font-medium md:font-light"
             style={{
                 fontFamily: '"Elza", sans-serif',
                 lineHeight: "130%",
                 letterSpacing: "0.02em",
                 textAlign: "center",
-                fontWeight: 300,
                 margin: 0,
                 textWrap: "pretty",
             }}

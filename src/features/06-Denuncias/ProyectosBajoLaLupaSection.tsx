@@ -685,9 +685,9 @@ export const ProyectosBajoLaLupaSection = () => {
             style={getPopupStyle(selected)}
           >
             <p
+              className="font-medium md:font-light"
               style={{
                 fontFamily: "'Barlow',sans-serif",
-                fontWeight: 300,
                 fontSize: "clamp(10px,1.2vw,12px)",
                 color: "#9aa3b0",
                 lineHeight: 1.65,

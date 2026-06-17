@@ -27,7 +27,7 @@ export default function StoryPopup({ onShowRoute }: StoryPopupProps) {
         </p>
 
         {/* Body */}
-        <div className="font-elza font-light text-sm md:text-xl flex flex-col gap-4 md:gap-5 px-4 lg:px-45 pb-16 md:pb-20 text-center text-white max-h-[35vh] overflow-y-auto md:max-h-none md:overflow-visible">
+        <div className="font-elza font-medium md:font-light text-sm md:text-xl flex flex-col gap-4 md:gap-5 px-4 lg:px-45 pb-16 md:pb-20 text-center text-white max-h-[35vh] overflow-y-auto md:max-h-none md:overflow-visible">
           <p>
             Para Arturo Ticona, el agua del río Coata dejó de ser fuente de vida para convertirse en el origen de una enfermedad renal irreversible. "Los doctores me dijeron que no tiene cura", lamenta. Sin recursos para un trasplante, sobrevive con tratamientos para controlar síntomas que antes lo paralizaban por completo. La enfermedad lo llevó a gastar más de mil soles semanales, una crisis que solo se alivió al acceder al SIS. Aunque hoy su medicación es gratuita, acudir a atenderse le sigue exigiendo un enorme desgaste físico.
           </p>

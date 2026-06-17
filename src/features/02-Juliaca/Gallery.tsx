@@ -49,13 +49,12 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                                 className="flex flex-col items-start gap-1 text-left md:ml-5 ml-0 opacity-0"
                             >
                                 <p
-                                    className="text-xs md:text-lg"
+                                    className="text-xs md:text-lg font-medium md:font-light"
                                     style={{
                                         fontFamily: '"Elza", sans-serif',
                                         lineHeight: "130%",
                                         letterSpacing: "0.02em",
                                         color: "white",
-                                        fontWeight: 300,
                                         margin: 0,
                                         textWrap: "pretty",
                                     }}

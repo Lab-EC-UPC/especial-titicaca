@@ -78,7 +78,7 @@ export const Fauna = () => {
           Alteración del ecosistema
         </h2>
         <p
-          className="mx-auto text-center text-white/65 leading-relaxed font-light"
+          className="mx-auto text-center text-white/65 leading-relaxed font-medium md:font-light"
           style={{
             marginTop: "clamp(96px, 16vh, 180px)",
             fontSize: "clamp(14px, 1.8vw, 18px)",
@@ -175,7 +175,7 @@ export const Fauna = () => {
         style={{ marginTop: "clamp(160px, 32vh, 320px)" }}
       >
         <p
-          className="mx-auto text-center text-white/65 leading-relaxed font-light"
+          className="mx-auto text-center text-white/65 leading-relaxed font-medium md:font-light"
           style={{
             fontSize: "clamp(14px, 1.8vw, 18px)",
             maxWidth: "min(680px, 92vw)",
