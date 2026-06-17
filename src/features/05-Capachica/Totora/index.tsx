@@ -129,23 +129,14 @@ export const TotoraSection = () => {
     <section className="relative w-full" style={{ height: "100vh" }}>
       <div className="w-full overflow-hidden" style={{ height: "100vh" }}>
 
-        <div
-          className="absolute z-30 w-full text-center"
-          style={{ top: "clamp(60px, 12vh, 120px)", left: 0, pointerEvents: "none" }}
-        >
-          <p
-            className="uppercase text-white font-semibold"
-            style={{
-              fontSize: "clamp(11px, 1.2vw, 15px)",
-              letterSpacing: "clamp(2px, 0.4vw, 5px)",
-            }}
-          >
+        <div className="absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-10 sm:pt-12 md:pt-14 lg:pt-16">
+          <h2 className="max-w-[90vw] font-[Citizen] text-center text-[24px] leading-[1.1] font-bold uppercase text-white drop-shadow-[0_8px_32px_rgba(0,0,0,0.95)] sm:max-w-[80vw] sm:text-[32px] md:max-w-[85vw] md:text-[36px] lg:text-[40px] lg:leading-10">
             EL DETERIORO DE LA TOTORA
-          </p>
+          </h2>
         </div>
 
         {/* Indicación de arrastre (se desvanece al interactuar) */}
-        <div
+       <div
           className="absolute z-30 w-full text-center"
           style={{
             bottom: "clamp(36px, 8vh, 90px)",
@@ -156,11 +147,7 @@ export const TotoraSection = () => {
           }}
         >
           <p
-            className="uppercase text-white/75 font-light"
-            style={{
-              fontSize: "clamp(9px, 1vw, 13px)",
-              letterSpacing: "clamp(1px, 0.3vw, 3px)",
-            }}
+            className="font-[Citizen] font-light text-white/75 text-[9px] md:text-[18px] lg:text-[20px]"
           >
             Desliza hacia la izquierda o derecha para más información
           </p>
@@ -179,10 +166,10 @@ export const TotoraSection = () => {
         </div>
 
         <div className="absolute z-20" style={{ top: "55%", right: "calc(50% + clamp(70px, 12vw, 130px))", transform: "translateY(-50%)", opacity: labelsOpacity, transition: "opacity 0.2s ease" }}>
-          <span className="font-bold" style={{ fontSize: "clamp(11px, 1.5vw, 20px)", color: "#fff", letterSpacing: "1px" }}>Totora sana</span>
+          <span className="font-bold font-[Citizen]" style={{ fontSize: "clamp(11px, 1.5vw, 20px)", color: "#fff", letterSpacing: "1px" }}>Totora sana</span>
         </div>
         <div className="absolute z-20" style={{ top: "55%", left: "calc(50% + clamp(70px, 12vw, 130px))", transform: "translateY(-50%)", opacity: labelsOpacity, transition: "opacity 0.2s ease" }}>
-          <span className="font-bold" style={{ fontSize: "clamp(11px, 1.5vw, 20px)", color: "#fff", letterSpacing: "1px" }}>Totora enferma</span>
+          <span className="font-bold font-[Citizen]" style={{ fontSize: "clamp(11px, 1.5vw, 20px)", color: "#fff", letterSpacing: "1px" }}>Totora enferma</span>
         </div>
 
         <div style={{ position: "absolute", top: "50%", left: "50%", marginTop: "-30vh", transform: "translateX(-50%)", zIndex: 10 }}>
