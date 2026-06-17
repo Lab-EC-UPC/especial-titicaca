@@ -5,7 +5,6 @@ export const FuturoLagoSection = () => {
       id="futuro-lago"
       style={{
         background: "#2e3440",
-        fontFamily: "'Barlow Condensed', sans-serif",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -41,7 +40,6 @@ export const FuturoLagoSection = () => {
       >
         <h2
           style={{
-            fontFamily: "'Barlow Condensed',sans-serif",
             fontWeight: 700,
             fontSize: "clamp(34px,6vw,68px)",
             lineHeight: 1.05,
@@ -56,7 +54,6 @@ export const FuturoLagoSection = () => {
 
         <p
           style={{
-            fontFamily: "'Barlow',sans-serif",
             fontWeight: 300,
             fontSize: "clamp(16px,1.6vw,21px)",
             lineHeight: 1.7,
@@ -72,7 +69,6 @@ export const FuturoLagoSection = () => {
         <button
           type="button"
           style={{
-            fontFamily: "'Barlow Condensed',sans-serif",
             fontWeight: 600,
             fontSize: "clamp(13px,1.4vw,16px)",
             letterSpacing: "0.18em",

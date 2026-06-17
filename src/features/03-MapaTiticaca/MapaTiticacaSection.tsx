@@ -117,7 +117,6 @@ const EditorPanel = ({
                 backdropFilter: "blur(20px)",
                 boxShadow: "0 12px 48px rgba(0,0,0,0.8)",
                 width: "min(620px,96vw)",
-                fontFamily: "monospace",
             }}
         >
             {/* Header */}
@@ -461,7 +460,6 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                                     <span
                                         className="text-white font-semibold whitespace-nowrap select-none tracking-wider"
                                         style={{
-                                            fontFamily: "'Citizen OT', 'CitizenOT', serif",
                                             fontSize: "clamp(9px,1.1vw,12px)",
                                             textShadow: "0 1px 6px rgba(0,0,0,0.95), 0 0 12px rgba(0,0,0,0.8)",
                                         }}
@@ -623,7 +621,6 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                         <h2
                             className="text-white font-extrabold tracking-widest uppercase m-0"
                             style={{
-                                fontFamily: "'Citizen OT', 'CitizenOT', serif",
                                 fontSize: isMobile ? "clamp(11px,3.5vw,14px)" : "clamp(13px,2vw,20px)",
                                 textShadow: "0 2px 16px rgba(0,0,0,0.9)",
                             }}
@@ -634,7 +631,6 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                             className="text-[#546E7A] m-0 mt-[3px] tracking-wider"
                             style={{
                                 fontSize: isMobile ? "clamp(8px,2.2vw,10px)" : "clamp(9px,1vw,11px)",
-                                fontFamily: "'Citizen OT', 'CitizenOT', serif",
                             }}
                         >
                             Monitoreo de contaminantes · 8 cuencas hidrográficas
@@ -924,7 +920,6 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                                     {/* Nombre cuenca */}
                                     <span
                                         style={{
-                                            fontFamily: "'Citizen OT', 'CitizenOT', serif",
                                             fontSize: labelSize,
                                             fontWeight: 600,
                                             color: "#fff",
@@ -1172,7 +1167,6 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                 >
                     <h2
                         style={{
-                            fontFamily: "'Citizen OT', 'CitizenOT', serif",
                             color: "#fff",
                             fontSize: isMobile ? "clamp(11px,3.5vw,14px)" : "clamp(13px,2vw,20px)",
                             fontWeight: 800,
@@ -1190,7 +1184,6 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                             fontSize: isMobile ? "clamp(8px,2.2vw,10px)" : "clamp(9px,1vw,11px)",
                             margin: "3px 0 0",
                             letterSpacing: "0.08em",
-                            fontFamily: "'Citizen OT', 'CitizenOT', serif",
                         }}
                     >
                         Monitoreo de contaminantes · 8 cuencas hidrográficas
@@ -1216,7 +1209,6 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                                 fontSize: "clamp(8px,1vw,11px)",
                                 letterSpacing: "0.12em",
                                 margin: "0 0 6px",
-                                fontFamily: "'Citizen OT','CitizenOT',serif",
                             }}
                         >
                             SCROLL PARA EXPLORAR

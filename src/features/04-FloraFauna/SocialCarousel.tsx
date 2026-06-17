@@ -35,7 +35,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
         paddingBottom: "clamp(80px, 16vh, 180px)",
       }}
     >
-      <p
+      <h3
         className="text-center uppercase font-semibold text-white"
         style={{
           fontSize: "clamp(14px, 1.9vw, 21px)",
@@ -44,7 +44,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
         }}
       >
         {title}
-      </p>
+      </h3>
 
       <div
         className="relative flex w-full justify-center"
@@ -100,7 +100,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
             >
               {current.description}
             </p>
-            <p
+            <h5
               className="uppercase font-light"
               style={{
                 fontSize: "clamp(11px, 1.2vw, 14px)",
@@ -110,7 +110,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
               }}
             >
               {current.subtext}
-            </p>
+            </h5>
             {count > 1 && (
               <p
                 className="font-light"

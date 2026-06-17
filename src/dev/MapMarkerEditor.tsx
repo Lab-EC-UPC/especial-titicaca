@@ -259,7 +259,7 @@ export function MapMarkerEditor({ onClose }: Props) {
   const selMineria = tab === "mineria" ? mineria.find(m => m.id === selected) ?? null : null;
 
   return (
-    <div style={{ position: "fixed", inset: 0, zIndex: 99999, background: "#080E11", display: "flex", fontFamily: "monospace" }}>
+    <div style={{ position: "fixed", inset: 0, zIndex: 99999, background: "#080E11", display: "flex"}}>
 
       {/* ── MAP ──────────────────────────────────────────────────────── */}
       <div style={{ flex: 1, position: "relative", overflow: "hidden" }}>
@@ -580,7 +580,6 @@ const S = {
     color: "#8AAABB",
     fontSize: 11,
     padding: "6px 8px",
-    fontFamily: "monospace",
     cursor: "pointer",
   } as React.CSSProperties,
   input: {
@@ -591,7 +590,6 @@ const S = {
     color: "#A8D4EE",
     fontSize: 11,
     padding: "5px 8px",
-    fontFamily: "monospace",
     boxSizing: "border-box" as const,
     outline: "none",
   } as React.CSSProperties,
@@ -604,7 +602,6 @@ const S = {
       fontSize: 10,
       padding: "5px 10px",
       cursor: "pointer",
-      fontFamily: "monospace",
       textAlign: "center",
     };
   },

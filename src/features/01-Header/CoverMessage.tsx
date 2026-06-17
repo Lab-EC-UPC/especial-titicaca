@@ -36,7 +36,7 @@ CoverMessage.Title = ({ children }: ChildrenProps) => (
 );
 
 CoverMessage.Subtitle = ({ children }: ChildrenProps) => (
-    <p className="mt-4 text-sm font-light leading-[1.4] tracking-[0.01em] sm:text-2xl md:text-3xl">
+    <h5 className="mt-4 text-sm font-light leading-[1.4] tracking-[0.01em] sm:text-2xl md:text-3xl">
         {children}
-    </p>
+    </h5>
 );

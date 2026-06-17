@@ -5,7 +5,6 @@ export const PtarTiticacaSection = () => {
       id="ptar-titicaca"
       style={{
         background: "#2e3440",
-        fontFamily: "'Barlow Condensed', sans-serif",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -42,7 +41,6 @@ export const PtarTiticacaSection = () => {
         <span
           style={{
             display: "inline-block",
-            fontFamily: "'Barlow Condensed',sans-serif",
             fontSize: "clamp(10px,1.4vw,13px)",
             fontWeight: 700,
             letterSpacing: "0.36em",
@@ -70,13 +68,12 @@ export const PtarTiticacaSection = () => {
 
         <p
           style={{
-            fontFamily: "'Barlow',sans-serif",
             fontWeight: 300,
             fontSize: "clamp(17px,1.6vw,22px)",
             lineHeight: 1.85,
             color: "#c8cfd8",
             margin: 0,
-            letterSpacing: "0.005em",
+            letterSpacing: "0.020em",
           }}
         >
           En{" "}

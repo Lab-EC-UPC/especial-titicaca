@@ -232,7 +232,6 @@ function Legend({ inline }: { inline: boolean }) {
       >
         <span
           style={{
-            fontFamily: "'Barlow Condensed',sans-serif",
             fontSize: 11,
             fontWeight: 700,
             letterSpacing: "0.14em",
@@ -268,9 +267,8 @@ function Legend({ inline }: { inline: boolean }) {
                   objectFit: "contain",
                 }}
               />
-              <span
+              <h3
                 style={{
-                  fontFamily: "'Barlow Condensed',sans-serif",
                   fontSize: 11,
                   fontWeight: 600,
                   letterSpacing: "0.1em",
@@ -279,7 +277,7 @@ function Legend({ inline }: { inline: boolean }) {
                 }}
               >
                 {TYPE_CFG[k].label}
-              </span>
+              </h3>
             </div>
           ))}
         </div>
@@ -305,9 +303,8 @@ function Legend({ inline }: { inline: boolean }) {
         padding: "3px 96px",
       }}
     >
-      <span
+      <h2
         style={{
-          fontFamily: "'Barlow Condensed',sans-serif",
           fontSize: "clamp(9px,1.1vw,11px)",
           fontWeight: 700,
           letterSpacing: "0.14em",
@@ -316,10 +313,10 @@ function Legend({ inline }: { inline: boolean }) {
         }}
       >
         Leyenda
-      </span>
+      </h2>
       {(["tecnica", "administrativa", "transparencia"] as ProjectType[]).map(
         (k) => (
-          <div
+          <h2
             key={k}
             style={{
               display: "flex",
@@ -330,7 +327,6 @@ function Legend({ inline }: { inline: boolean }) {
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               color: "#ffffff",
-              fontFamily: "'Barlow Condensed',sans-serif",
             }}
           >
             <img
@@ -345,7 +341,7 @@ function Legend({ inline }: { inline: boolean }) {
               }}
             />
             {TYPE_CFG[k].label}
-          </div>
+          </h2>
         ),
       )}
     </div>
@@ -471,7 +467,6 @@ export const ProyectosBajoLaLupaSection = () => {
         background: "#2e3440",
         position: "relative",
         overflow: "hidden",
-        fontFamily: "'Barlow Condensed', sans-serif",
       }}
     >
       {/* ── Scoped styles — only inside #proyectos-lupa ── */}
@@ -490,7 +485,7 @@ export const ProyectosBajoLaLupaSection = () => {
       `}</style>
 
       {/* ── Title ── */}
-      <div
+      <h2
         style={{
           textAlign: "center",
           padding: "28px 16px 12px",
@@ -502,13 +497,13 @@ export const ProyectosBajoLaLupaSection = () => {
         }}
       >
         Proyectos bajo la lupa
-      </div>
+      </h2>
 
       {/* ── Mobile legend── */}
       {isMobile && (
-        <div style={{ padding: "0 12px 10px" }}>
+        <h5 style={{ padding: "0 12px 10px" }}>
           <Legend inline={true} />
-        </div>
+        </h5>
       )}
 
       {/* ── Network canvas ── */}
@@ -646,7 +641,7 @@ export const ProyectosBajoLaLupaSection = () => {
                   }}
                 />
               </div>
-              <div
+              <h3
                 style={{
                   position: "absolute",
                   top: nodeSize * 0.72,
@@ -657,7 +652,6 @@ export const ProyectosBajoLaLupaSection = () => {
                   lineHeight: 1.25,
                   width: "max-content",
                   maxWidth: isMobile ? 130 : 180,
-                  fontFamily: "'Barlow Condensed',sans-serif",
                   fontSize: isMobile
                     ? "clamp(9px,3vw,12px)"
                     : `clamp(10px,${dims.w * 0.014}px,14px)`,
@@ -673,7 +667,7 @@ export const ProyectosBajoLaLupaSection = () => {
                 }}
               >
                 {p.label}
-              </div>
+              </h3>
             </div>
           );
         })}
@@ -686,22 +680,19 @@ export const ProyectosBajoLaLupaSection = () => {
           >
             <p
               style={{
-                fontFamily: "'Barlow',sans-serif",
                 fontWeight: 300,
                 fontSize: "clamp(10px,1.2vw,12px)",
                 color: "#9aa3b0",
-                lineHeight: 1.65,
                 margin: "0 0 12px",
                 textAlign: "center",
               }}
             >
               {selected.description}
             </p>
-            <p
+            <h4
               style={{
-                fontFamily: "'Barlow Condensed',sans-serif",
                 fontWeight: 700,
-                fontSize: "clamp(22px,3vw,32px)",
+                fontSize: "clamp(20px,3vw,25px)",
                 color: "#f0f2f5",
                 margin: 0,
                 textAlign: "center",
@@ -711,8 +702,7 @@ export const ProyectosBajoLaLupaSection = () => {
             >
               <em
                 style={{
-                  fontStyle: "italic",
-                  fontSize: "0.68em",
+                  fontSize: "0.60em",
                   color: "#8a96a6",
                   marginRight: 2,
                 }}
@@ -720,10 +710,9 @@ export const ProyectosBajoLaLupaSection = () => {
                 s/.
               </em>
               {selected.budget}
-            </p>
-            <p
+            </h4>
+            <h5
               style={{
-                fontFamily: "'Barlow Condensed',sans-serif",
                 fontSize: "clamp(8px,1vw,10px)",
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
@@ -733,7 +722,7 @@ export const ProyectosBajoLaLupaSection = () => {
               }}
             >
               Costo del proyecto
-            </p>
+            </h5>
             <button
               onClick={handleClose}
               style={{
@@ -769,7 +758,6 @@ export const ProyectosBajoLaLupaSection = () => {
       <p
         style={{
           textAlign: "center",
-          fontFamily: "'Barlow Condensed',sans-serif",
           fontSize: "clamp(9px,1.1vw,11px)",
           letterSpacing: "0.1em",
           textTransform: "uppercase",

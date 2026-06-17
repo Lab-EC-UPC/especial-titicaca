@@ -32,8 +32,6 @@ export const Message = ({ start, end, children }: MessageProps) => {
                     <p
                         className="text-sm font-light text-white md:text-lg lg:text-[22px]"
                         style={{
-                            fontFamily:
-                                'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
                             lineHeight: "130%",
                             letterSpacing: "0.02em",
                             textAlign: "center",
