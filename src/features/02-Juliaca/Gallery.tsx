@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 
 export type GalleryImage = {
     src: string;
-    alt: string;
     description: string;
     subtext: string;
 };
@@ -26,7 +25,7 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
             data-snap={snap}
             data-transition={trans}
         >
-            <h2 className="text-center text-xl md:text-2xl font-bold leading-[1.4] tracking-[0.2em] uppercase text-white max-w-[80%] md:max-w-full">
+            <h2 className="text-center text-2xl md:text-3xl font-bold leading-[1.4] tracking-[0.1em] uppercase text-white max-w-[80%] md:max-w-full font-[Citizen]">
                 {title}
             </h2>
 
@@ -41,16 +40,18 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                         <div className="flex flex-col items-start gap-4">
                             <img
                                 src={img.src}
-                                alt={img.alt}
+                                alt={img.description}
                                 className="max-h-[45vh] w-auto max-w-full object-contain"
                             />
 
-                            <div data-gallery-text className="flex flex-col items-start gap-1 text-left md:ml-5 ml-0 opacity-0">
+                            <div
+                                data-gallery-text
+                                className="flex flex-col items-start gap-1 text-left md:ml-5 ml-0 opacity-0"
+                            >
                                 <p
                                     className="text-xs md:text-lg"
                                     style={{
-                                        fontFamily:
-                                            'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                                        fontFamily: '"Elza", sans-serif',
                                         lineHeight: "130%",
                                         letterSpacing: "0.02em",
                                         color: "white",
@@ -64,8 +65,7 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
                                 <p
                                     className="text-[11px] md:text-sm"
                                     style={{
-                                        fontFamily:
-                                            'Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial',
+                                        fontFamily: '"Citizen", sans-serif',
                                         lineHeight: "130%",
                                         letterSpacing: "0.1em",
                                         color: "rgba(255,255,255,0.6)",

@@ -62,47 +62,35 @@ export const Fauna = () => {
       className="relative w-full overflow-x-hidden"
       style={{
         minHeight: "100vh",
-        background:
-          "linear-gradient(to bottom, #1B2D33 0%, #3A6470 38%, #4A7A88 65%, #1E3038 100%)",
+        background: "linear-gradient(to bottom, #2e3440 0%, #586A74 12%)",
         paddingTop: "clamp(120px, 26vh, 280px)",
         paddingBottom: "clamp(120px, 22vh, 260px)",
       }}
     >
       <div className="relative z-10 text-center px-4 sm:px-6">
-        <p
-          className="uppercase tracking-widest font-light"
-          style={{
-            fontSize: "clamp(10px, 1vw, 12px)",
-            color: "rgba(255,255,255,0.45)",
-            letterSpacing: "clamp(3px, 0.5vw, 6px)",
-            marginBottom: "clamp(6px, 1vw, 10px)",
-          }}
-        >
-          CAPÍTULO II
-        </p>
         <h2
           className="text-white uppercase font-black"
           style={{
-            fontSize: "clamp(18px, 3.4vw, 32px)",
+            fontSize: "clamp(22px, 4vw, 38px)",
             letterSpacing: "clamp(2px, 0.4vw, 4px)",
           }}
         >
-          ALTERACIÓN DEL ECOSISTEMA
+          Alteración del ecosistema
         </h2>
         <p
-          className="mx-auto text-white/65 leading-relaxed font-light"
+          className="mx-auto text-center text-white/65 leading-relaxed font-light"
           style={{
-            marginTop: "clamp(32px, 5vh, 56px)",
-            fontSize: "clamp(12px, 1.4vw, 15px)",
-            maxWidth: "min(420px, 92vw)",
+            marginTop: "clamp(96px, 16vh, 180px)",
+            fontSize: "clamp(14px, 1.8vw, 18px)",
+            maxWidth: "min(680px, 92vw)",
           }}
         >
-          Los reportes del Instituto del Mar del Perú (Imarpe) confirman una
-          alarmante desaparición de fauna: la cantidad de peces nativos en el
-          Titicaca cayó drásticamente, pasando de unas 6,000 toneladas en los
-          años 80 a apenas 1,500 toneladas en las mediciones recientes. Una
-          reducción del 75% que golpea directamente el sustento de los
-          pescadores locales.
+          Los peces nativos del Titicaca se han reducido en las últimas décadas
+          debido a la sobrepesca y a la preocupante calidad del agua que amenaza
+          su supervivencia. Este colapso ha transformado la actividad pesquera
+          tradicional, obligando a las comunidades a migrar hacia la acuicultura
+          mediante la crianza de trucha, una especie introducida que hoy domina
+          el mercado local.
         </p>
       </div>
 
@@ -113,7 +101,7 @@ export const Fauna = () => {
         <p
           className="uppercase tracking-widest font-semibold text-white"
           style={{
-            fontSize: "clamp(12px, 1.6vw, 18px)",
+            fontSize: "clamp(14px, 1.9vw, 21px)",
             letterSpacing: "clamp(2px, 0.5vw, 5px)",
           }}
         >
@@ -158,7 +146,7 @@ export const Fauna = () => {
       <div style={{ overflow: "hidden" }}>
         <motion.div
           key={animKey}
-          className="flex flex-row items-end w-full px-2 sm:px-8 md:px-16 lg:px-24"
+          className="flex flex-col items-center gap-16 sm:flex-row sm:items-end sm:gap-0 w-full px-2 sm:px-8 md:px-16 lg:px-24"
           style={{ marginTop: "clamp(60px, 16vh, 220px)" }}
           variants={containerVariants}
           initial="hidden"
@@ -174,6 +162,7 @@ export const Fauna = () => {
               isInView={isInView}
               onHoverStart={() => setHoveredIndex(i)}
               onHoverEnd={() => setHoveredIndex(null)}
+              onToggle={() => setHoveredIndex((prev) => (prev === i ? null : i))}
               onArrived={() => markArrived(i)}
               variants={animalVariants}
             />
@@ -186,17 +175,16 @@ export const Fauna = () => {
         style={{ marginTop: "clamp(160px, 32vh, 320px)" }}
       >
         <p
-          className="mx-auto leading-relaxed text-white/65"
+          className="mx-auto text-center text-white/65 leading-relaxed font-light"
           style={{
-            fontSize: "clamp(12px, 1.4vw, 15px)",
-            maxWidth: "min(460px, 92vw)",
+            fontSize: "clamp(14px, 1.8vw, 18px)",
+            maxWidth: "min(680px, 92vw)",
           }}
         >
-          El exceso de basura y aguas residuales provoca un fenómeno devastador:
-          el agua se llena de nutrientes que hacen crecer algas de forma
-          descontrolada, robándose todo el oxígeno. Esta falta de aire en el
-          agua ya causó una asfixia y mortandad masiva de peces en la bahía
-          interior de Puno, teniendo su punto más crítico en el año 2013.
+          El deterioro de los ecosistemas del lago también afecta a las aves. La
+          pérdida de áreas de anidación, la quema de totorales y la perturbación
+          constante de sus hábitats han comprometido la reproducción y
+          conservación de varias especies del Titicaca.
         </p>
       </div>
     </section>

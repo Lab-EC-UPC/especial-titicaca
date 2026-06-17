@@ -23,6 +23,8 @@ export function initCoverScroll(container: HTMLElement): () => void {
                     start: "top 80%",
                     end: "bottom 20%",
                     toggleActions: "play reverse play reverse",
+                    // Sección más alta de la página → se mide primero.
+                    refreshPriority: 10,
                 },
             },
         ),

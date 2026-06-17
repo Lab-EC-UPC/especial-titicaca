@@ -92,7 +92,7 @@ const PROJECTS: Project[] = [
     type: "transparencia",
     dx: 23,
     dy: 20,
-    mx: 26,
+    mx: 29,
     my: 9,
     description:
       "Se enfocó en conservar el ecosistema del Titicaca e impulsar turismo sostenible. Además, el documento no reporta resultados concretos ni detalla limitaciones durante su ejecución efectiva.",
@@ -104,8 +104,8 @@ const PROJECTS: Project[] = [
     type: "tecnica",
     dx: 47,
     dy: 29,
-    mx: 72,
-    my: 17,
+    mx: 21,
+    my: 33,
     description:
       "Se destinó a modernizar la recolección de residuos mediante maquinaria y equipamiento. Asimismo, se detectaron compras deficientes y fallas en los procesos administrativos.",
     budget: "936,358.60",
@@ -116,8 +116,8 @@ const PROJECTS: Project[] = [
     type: "transparencia",
     dx: 40,
     dy: 51,
-    mx: 30,
-    my: 40,
+    mx: 64,
+    my: 44,
     description:
       "Se propusó instalar captaciones, tuberías y sistemas de tratamiento para zonas rurales. No se aplicaron penalidades pese a retrasos en la ejecución.",
     budget: "1,534,632.25",
@@ -128,8 +128,8 @@ const PROJECTS: Project[] = [
     type: "administrativa",
     dx: 75,
     dy: 27,
-    mx: 76,
-    my: 31,
+    mx: 24,
+    my: 78,
     description:
       "Tuvo como objetivo renovar las electrobombas de la planta de agua potable de Puno. Se otorgaron ampliaciones de plazo injustificadas y no se aplicaron penalidades por retrasos.",
     budget: "1,214,950.00",
@@ -140,8 +140,8 @@ const PROJECTS: Project[] = [
     type: "tecnica",
     dx: 60,
     dy: 61,
-    mx: 66,
-    my: 56,
+    mx: 74,
+    my: 67,
     description:
       "Se tenía previsto implementar sistemas de bombeo y riego para fortalecer la agricultura. Además, se detectaron irregularidades, falta de transparencia y contrataciones que incumplían requisitos técnicos.",
     budget: "106,060,807.00",
@@ -152,8 +152,8 @@ const PROJECTS: Project[] = [
     type: "tecnica",
     dx: 18,
     dy: 48,
-    mx: 22,
-    my: 52,
+    mx: 73,
+    my: 21,
     description:
       "Se buscó construir y equipar un hospital moderno para reducir derivaciones. Además, el proyecto registró paralizaciones, problemas técnicos y cuestionamientos sobre la ubicación del terreno.",
     budget: "No se especifica",
@@ -164,8 +164,8 @@ const PROJECTS: Project[] = [
     type: "tecnica",
     dx: 27,
     dy: 70,
-    mx: 34,
-    my: 74,
+    mx: 33,
+    my: 57,
     description:
       "Tuvo como objetivo tratar aguas residuales antes de verterlas al río pero el plan fue abandonado. Se incumplió plazos y careció de seguimiento adecuado.",
     budget: "23,692.20",
@@ -176,8 +176,8 @@ const PROJECTS: Project[] = [
     type: "administrativa",
     dx: 82,
     dy: 72,
-    mx: 72,
-    my: 86,
+    mx: 60,
+    my: 89,
     description:
       "Se buscó construir y mejorar plantas de tratamiento de aguas residuales en Puno. El proyecto enfrentó abandono de obras, problemas técnicos y culminó con la resolución del contrato.",
     budget: "863,000,000",
@@ -215,35 +215,44 @@ const LEGEND_IMG: Record<ProjectType, string> = {
 // Legend
 function Legend({ inline }: { inline: boolean }) {
   if (inline) {
-    // Mobile: box top-left
+    // Mobile: box top, two columns — "LEYENDA" | items
     return (
       <div
         style={{
-          display: "inline-flex",
-          flexDirection: "column",
-          gap: 8,
-          background: "rgba(20,24,34,0.7)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          display: "flex",
+          flexDirection: "row",
+          alignItems: "center",
+          gap: 20,
+          background: "rgba(255,255,255,0.12)",
+          border: "1px solid rgba(255,255,255,0.22)",
           borderRadius: 8,
-          padding: "10px 14px",
-          margin: "0 0 0 12px",
+          padding: "12px 16px",
+          width: "100%",
         }}
       >
         <span
           style={{
             fontFamily: "'Barlow Condensed',sans-serif",
-            fontSize: 10,
+            fontSize: 11,
             fontWeight: 700,
             letterSpacing: "0.14em",
             textTransform: "uppercase",
-            color: "#5a6272",
-            marginBottom: 2,
+            color: "#ffffff",
+            flexShrink: 0,
           }}
         >
           Leyenda
         </span>
-        {(["tecnica", "administrativa", "transparencia"] as ProjectType[]).map(
-          (k) => (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
+          {(
+            ["tecnica", "administrativa", "transparencia"] as ProjectType[]
+          ).map((k) => (
             <div
               key={k}
               style={{ display: "flex", alignItems: "center", gap: 8 }}
@@ -252,8 +261,8 @@ function Legend({ inline }: { inline: boolean }) {
                 src={`/nodes/${LEGEND_IMG[k]}`}
                 alt=""
                 style={{
-                  width: 40,
-                  height: 40,
+                  width: 36,
+                  height: 36,
                   flexShrink: 0,
                   display: "inline-block",
                   objectFit: "contain",
@@ -266,14 +275,14 @@ function Legend({ inline }: { inline: boolean }) {
                   fontWeight: 600,
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "#9aa3b0",
+                  color: "#ffffff",
                 }}
               >
                 {TYPE_CFG[k].label}
               </span>
             </div>
-          ),
-        )}
+          ))}
+        </div>
       </div>
     );
   }
@@ -360,7 +369,7 @@ export const ProyectosBajoLaLupaSection = () => {
       setIsMobile(mobile);
       setDims({
         w,
-        h: mobile ? Math.max(w * 1.7, 540) : Math.max(w * 0.56, 420),
+        h: mobile ? Math.max(w * 2.0, 680) : Math.max(w * 0.56, 420),
       });
     };
     update();
@@ -370,8 +379,8 @@ export const ProyectosBajoLaLupaSection = () => {
   }, []);
 
   const nodeSize = Math.max(
-    76,
-    Math.min(150, dims.w * (isMobile ? 0.23 : 0.175)),
+    72,
+    Math.min(150, dims.w * (isMobile ? 0.2 : 0.175)),
   );
 
   const getPos = useCallback(
@@ -411,19 +420,9 @@ export const ProyectosBajoLaLupaSection = () => {
   // Popup positioning
   const getPopupStyle = (p: Project): React.CSSProperties => {
     const pos = getPos(p);
-    const pw = Math.max(180, Math.min(260, dims.w * (isMobile ? 0.55 : 0.29)));
-    const ph = 210;
-    let left = pos.x - pw - nodeSize * 0.7;
-    let top = pos.y - ph * 0.55;
-    if (left < 8) left = pos.x + nodeSize * 0.7;
-    if (left + pw > dims.w - 8) left = pos.x - pw - nodeSize * 0.7;
-    if (top < 8) top = 8;
-    if (top + ph > dims.h - 8) top = dims.h - ph - 8;
-    return {
+
+    const base: React.CSSProperties = {
       position: "absolute",
-      left,
-      top,
-      width: pw,
       background: "rgba(30,36,48,0.94)",
       backdropFilter: "blur(18px)",
       WebkitBackdropFilter: "blur(18px)",
@@ -433,6 +432,35 @@ export const ProyectosBajoLaLupaSection = () => {
       zIndex: 40,
       boxShadow: `0 10px 50px rgba(0,0,0,0.6), 0 0 24px ${TYPE_CFG[p.type].glow}`,
     };
+
+    // Mobile: centered overlay card — siempre visible, nunca recortada
+    if (isMobile) {
+      const pw = Math.min(320, dims.w - 24);
+      const ph = 300; // estimación para acotar; maxHeight evita desborde real
+      const left = (dims.w - pw) / 2;
+      let top = pos.y - ph * 0.5;
+      if (top < 12) top = 12;
+      if (top + ph > dims.h - 12) top = dims.h - ph - 12;
+      return {
+        ...base,
+        left,
+        top,
+        width: pw,
+        maxHeight: dims.h - 24,
+        overflowY: "auto",
+      };
+    }
+
+    // Desktop: card al lado del nodo, acotada al canvas
+    const pw = Math.max(180, Math.min(260, dims.w * 0.29));
+    const ph = 210;
+    let left = pos.x - pw - nodeSize * 0.7;
+    let top = pos.y - ph * 0.55;
+    if (left < 8) left = pos.x + nodeSize * 0.7;
+    if (left + pw > dims.w - 8) left = pos.x - pw - nodeSize * 0.7;
+    if (top < 8) top = 8;
+    if (top + ph > dims.h - 8) top = dims.h - ph - 8;
+    return { ...base, left, top, width: pw };
   };
 
   return (
@@ -628,9 +656,11 @@ export const ProyectosBajoLaLupaSection = () => {
                   textAlign: "center",
                   lineHeight: 1.25,
                   width: "max-content",
-                  maxWidth: 180,
+                  maxWidth: isMobile ? 130 : 180,
                   fontFamily: "'Barlow Condensed',sans-serif",
-                  fontSize: `clamp(10px,${dims.w * 0.014}px,14px)`,
+                  fontSize: isMobile
+                    ? "clamp(9px,3vw,12px)"
+                    : `clamp(10px,${dims.w * 0.014}px,14px)`,
                   fontWeight: isSel ? 700 : 600,
                   letterSpacing: "0.07em",
                   textTransform: "uppercase",
@@ -744,7 +774,7 @@ export const ProyectosBajoLaLupaSection = () => {
           letterSpacing: "0.1em",
           textTransform: "uppercase",
           color: "#8a94a4",
-          margin: "-72px 0 0",
+          margin: isMobile ? "16px 0 0" : "-72px 0 0",
           padding: "6px 0 8px",
           opacity: selected ? 0 : 1,
           transition: "opacity 0.3s",

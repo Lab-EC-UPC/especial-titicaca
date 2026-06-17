@@ -15,12 +15,8 @@ export const CoverMessage = ({ at, children }: CoverMessageProps) => {
         >
             <div
                 data-cover-message
-                className="relative mx-auto flex w-full max-w-[min(70ch,90vw)] flex-col items-center text-center text-white opacity-0"
+                className="relative mx-auto flex w-full max-w-[min(680px,90vw)] flex-col items-center text-center text-white opacity-0"
             >
-                <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -inset-14 -z-10 rounded-[999px] bg-black/25 blur-[60px] opacity-70"
-                />
                 {children}
             </div>
         </div>
@@ -28,19 +24,19 @@ export const CoverMessage = ({ at, children }: CoverMessageProps) => {
 };
 
 CoverMessage.Paragraph = ({ children }: ChildrenProps) => (
-    <p className="text-pretty text-sm font-light leading-snug tracking-[0.01em] drop-shadow-[0_4px_16px_rgba(0,0,0,0.5)] sm:text-xl sm:leading-normal md:text-2xl">
+    <p className="text-pretty text-xs font-light leading-snug tracking-[0.01em] sm:text-xl sm:leading-normal md:text-2xl">
         {children}
     </p>
 );
 
 CoverMessage.Title = ({ children }: ChildrenProps) => (
-    <h1 className="text-3xl font-extrabold leading-[1.05] tracking-tight drop-shadow-[0_6px_20px_rgba(0,0,0,0.6)] sm:text-6xl md:text-7xl">
+    <h1 className="text-2xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
         {children}
     </h1>
 );
 
 CoverMessage.Subtitle = ({ children }: ChildrenProps) => (
-    <p className="mt-4 text-lg font-light leading-[1.4] tracking-[0.01em] drop-shadow-[0_4px_16px_rgba(0,0,0,0.45)] sm:text-2xl md:text-3xl">
+    <p className="mt-4 text-sm font-light leading-[1.4] tracking-[0.01em] sm:text-2xl md:text-3xl">
         {children}
     </p>
 );

@@ -1,16 +1,16 @@
 /**
  * Centralized testimonial content, assets and interactive area definitions.
  */
-import bg from "../assets/testimonials/images/testimonials-background.png";
-import bgPersonView from "../assets/testimonials/images/capachica-landscape-background.png";
-import bgMobile from "../assets/testimonials/images/testimonials-background-mobile.png";
-import bgPersonViewMobile from "../assets/testimonials/images/capachica-landscape-background-mobile.png";
-import feliciana from "../assets/testimonials/images/feliciana-character.png";
-import juliana from "../assets/testimonials/images/juliana-character.png";
-import victor from "../assets/testimonials/images/victor-character.png";
-import julianaSeated from "../assets/testimonials/images/juliana-seated.png";
-import felicianaSeated from "../assets/testimonials/images/feliciana-seated.png";
-import victorStand from "../assets/testimonials/images/victor-stand.png";
+import bg from "../assets/testimonials/images/testimonials-background.webp";
+import bgPersonView from "../assets/testimonials/images/capachica-landscape-background.webp";
+import bgMobile from "../assets/testimonials/images/testimonials-background-mobile.webp";
+import bgPersonViewMobile from "../assets/testimonials/images/capachica-landscape-background-mobile.webp";
+import feliciana from "../assets/testimonials/images/feliciana-character.webp";
+import juliana from "../assets/testimonials/images/juliana-character.webp";
+import victor from "../assets/testimonials/images/victor-character.webp";
+import julianaSeated from "../assets/testimonials/images/juliana-seated.webp";
+import felicianaSeated from "../assets/testimonials/images/feliciana-seated.webp";
+import victorStand from "../assets/testimonials/images/victor-stand.webp";
 import type { Testimonial } from "../types/TestimonialType";
 import feliciana_1_audio from "../assets/audios/feliciana_1.mp3";
 import feliciana_2_audio from "../assets/audios/feliciana_2.mp3";

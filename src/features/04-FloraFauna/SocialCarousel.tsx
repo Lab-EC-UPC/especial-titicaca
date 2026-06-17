@@ -20,8 +20,8 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
   const [index, setIndex] = useState(0);
   const count = images.length;
 
-  const goTo = (i: number) => setIndex((i + count) % count);
-  const next = () => goTo(index + 1);
+  const goTo = (i: number) => setIndex(((i % count) + count) % count);
+  const next = () => setIndex((prev) => (prev + 1) % count);
 
   const current = images[index];
   const upcoming = images[(index + 1) % count];
@@ -30,7 +30,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
     <section
       className="relative flex w-full flex-col items-center overflow-x-hidden px-4 sm:px-6"
       style={{
-        background: "linear-gradient(to bottom, #1E3038 0%, #1B2D33 100%)",
+        background: "linear-gradient(to bottom, #586A74 50%, #2e3440 100%)",
         paddingTop: "clamp(80px, 16vh, 180px)",
         paddingBottom: "clamp(80px, 16vh, 180px)",
       }}
@@ -38,7 +38,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
       <p
         className="text-center uppercase font-semibold text-white"
         style={{
-          fontSize: "clamp(12px, 1.6vw, 18px)",
+          fontSize: "clamp(14px, 1.9vw, 21px)",
           letterSpacing: "clamp(2px, 0.5vw, 5px)",
           marginBottom: "clamp(28px, 5vh, 56px)",
         }}
@@ -56,7 +56,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
             type="button"
             onClick={next}
             aria-label="Siguiente imagen"
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-[55%] cursor-pointer border-0 bg-transparent p-0 transition-opacity hover:opacity-60"
+            className="absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-[55%] cursor-pointer border-0 bg-transparent p-0 transition-opacity hover:opacity-60 sm:block"
             style={{ width: "clamp(120px, 22vw, 260px)", opacity: 0.35 }}
           >
             <img
@@ -71,9 +71,9 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
         {/* Imagen actual + descripción (click = avanzar) */}
         <div
           className="relative flex w-full flex-col items-center"
-          style={{ maxWidth: "min(620px, 88vw)" }}
+          style={{ maxWidth: "min(620px, 92vw)" }}
         >
-          <AnimatePresence mode="wait">
+          <AnimatePresence mode="popLayout" initial={false}>
             <motion.button
               type="button"
               key={index}
@@ -83,7 +83,7 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
               initial={{ opacity: 0, x: 40 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+              transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] as const }}
             >
               <img
                 src={current.src}
@@ -96,14 +96,14 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
           <div className="mt-4 self-start text-left">
             <p
               className="font-light text-white"
-              style={{ fontSize: "clamp(12px, 1.3vw, 15px)", margin: 0 }}
+              style={{ fontSize: "clamp(14px, 1.6vw, 18px)", margin: 0 }}
             >
               {current.description}
             </p>
             <p
               className="uppercase font-light"
               style={{
-                fontSize: "clamp(10px, 1vw, 12px)",
+                fontSize: "clamp(11px, 1.2vw, 14px)",
                 letterSpacing: "0.1em",
                 color: "rgba(255,255,255,0.55)",
                 margin: "4px 0 0",
@@ -111,6 +111,18 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
             >
               {current.subtext}
             </p>
+            {count > 1 && (
+              <p
+                className="font-light"
+                style={{
+                  fontSize: "clamp(11px, 1.2vw, 14px)",
+                  color: "rgba(255,255,255,0.4)",
+                  margin: "10px 0 0",
+                }}
+              >
+                Haz clic para ver la siguiente →
+              </p>
+            )}
           </div>
         </div>
       </div>

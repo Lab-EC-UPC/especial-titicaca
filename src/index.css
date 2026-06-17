@@ -6,11 +6,11 @@
   --font-inter: 'Inter', sans-serif;
   --font-citizen: "Citizen", sans-serif;
   --font-elza: "Elza", sans-serif;
+  --font-elza-text: "elza-text", sans-serif;
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* El scroll suave lo gestiona Lenis (useSmoothScroll); scroll-behavior: smooth
+   en CSS pelea con Lenis/GSAP ScrollTrigger y provoca jitter, por eso se quitó. */
 
 @font-face {
   font-family: "Citizen";

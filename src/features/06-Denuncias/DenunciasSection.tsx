@@ -3,7 +3,7 @@ import { PtarTiticacaSection } from "./PtarTiticacaSection";
 import { ImageneSection } from "./ImageneSection";
 import { PebltSection } from "./PebltSection";
 import { ProyeccionSection } from "./ProyeccionSection";
-import { FuturoLagoSection } from "./FuturoLagoSection";
+// import { FuturoLagoSection } from "./FuturoLagoSection"; // Oculto por el momento, se hará visible más adelante
 
 // Sección principal de Denuncias: agrupa las sub-secciones.
 export const DenunciasSection = () => {
@@ -14,7 +14,7 @@ export const DenunciasSection = () => {
       <ImageneSection />
       <PebltSection />
       <ProyeccionSection />
-      <FuturoLagoSection />
+      {/* <FuturoLagoSection /> Oculto por el momento, se hará visible más adelante */}
     </div>
   );
 };

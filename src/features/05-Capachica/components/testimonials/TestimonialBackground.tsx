@@ -107,7 +107,7 @@ export const TestimonialBackground = ({ testimonials, onSelectPerson }: Testimon
 
       {/* Subtitle */}
       <p
-        className="absolute bottom-10 left-1/2 z-20 w-full -translate-x-1/2 px-4 text-center font-[Citizen] text-[18px] font-normal leading-snug text-white sm:bottom-6 sm:text-[18px] md:bottom-8 md:text-[22px] lg:bottom-10 lg:text-[26px]"
+        className="absolute bottom-[calc(4.5rem+env(safe-area-inset-bottom))] left-1/2 z-20 w-full -translate-x-1/2 px-4 text-center font-[Citizen] text-[18px] font-normal leading-snug text-white sm:bottom-6 sm:text-[18px] md:bottom-8 md:text-[22px] lg:bottom-10 lg:text-[26px]"
         style={{ WebkitTextStroke: "2px #151B1B", paintOrder: "stroke fill" }}
       >
         {TESTIMONIAL_SUBTITLE}

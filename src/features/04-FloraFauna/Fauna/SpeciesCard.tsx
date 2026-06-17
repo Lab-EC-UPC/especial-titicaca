@@ -11,6 +11,7 @@ type Props = {
   isInView: boolean;
   onHoverStart: () => void;
   onHoverEnd: () => void;
+  onToggle: () => void;
   onArrived: () => void;
   variants: Variants;
 };
@@ -19,18 +20,22 @@ const SIDE_VIEW_STYLE = { height: "100%", width: "auto", maxWidth: "100%", displ
 
 export const SpeciesCard = ({
   item, index, isHovered, arrived, isInView,
-  onHoverStart, onHoverEnd, onArrived, variants,
+  onHoverStart, onHoverEnd, onToggle, onArrived, variants,
 }: Props) => {
   const hasFrontal = Boolean(item.FrontalComponent);
 
   return (
     <motion.div
-      className="relative flex flex-col items-center"
+      className="relative flex w-full flex-col items-center sm:w-auto sm:flex-1 sm:min-w-0"
       variants={variants}
       onAnimationComplete={(def) => { if (def === "visible") onArrived(); }}
       onHoverStart={onHoverStart}
       onHoverEnd={onHoverEnd}
-      style={{ flex: "1 1 0", minWidth: 0, cursor: "default" }}
+      onTap={onToggle}
+      role="button"
+      tabIndex={0}
+      aria-pressed={isHovered}
+      style={{ cursor: "pointer" }}
     >
       <motion.span
         aria-hidden
@@ -62,10 +67,10 @@ export const SpeciesCard = ({
         animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 1.4 + index * 0.1 }}
       >
-        <h3 className="text-white font-bold" style={{ fontSize: "clamp(11px, 1.3vw, 16px)" }}>
+        <h3 className="text-white font-bold" style={{ fontSize: "clamp(13px, 1.6vw, 19px)" }}>
           {item.nombre}
         </h3>
-        <p className="italic" style={{ fontSize: "clamp(9px, 1vw, 13px)", color: "rgba(255,255,255,0.45)" }}>
+        <p className="italic" style={{ fontSize: "clamp(11px, 1.2vw, 15px)", color: "rgba(255,255,255,0.45)" }}>
           {item.cientifico}
         </p>
       </motion.div>
