@@ -6,7 +6,6 @@ import { useScrollOrchestration } from "./hooks/useScrollOrchestration";
 import { HeaderSection } from "./features/01-Header/HeaderSection";
 import { JuliacaSection } from "./features/02-Juliaca/JuliacaSection";
 
-
 import { FloraFaunaSection } from "./features/04-FloraFauna/FloraFaunaSection";
 import { CapachicaSection } from "./features/05-Capachica/pages/CapachicaSection";
 import { DenunciasSection } from "./features/06-Denuncias/DenunciasSection";
