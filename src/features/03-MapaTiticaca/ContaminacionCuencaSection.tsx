@@ -92,7 +92,7 @@ export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
           style={{ opacity: 0 }}
         >
           <h2
-            className="text-white uppercase tracking-[0.18em] md:tracking-[0.22em] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
+            className="text-white uppercase tracking-[0.02em] text-2xl sm:text-3xl md:text-[40px] font-bold leading-normal"
           >
             El rastro de los vertimientos
           </h2>
@@ -151,7 +151,7 @@ export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
           className={`absolute top-[6%] md:top-[8%] left-1/2 -translate-x-1/2 z-10 text-center pointer-events-none w-full px-4 transition-opacity duration-500 ${currentFrame === 1 ? "opacity-100" : "opacity-0"}`}
         >
           <h2
-            className="text-white uppercase tracking-[0.18em] md:tracking-[0.22em] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold leading-tight"
+            className="text-white uppercase tracking-[0.02em] text-2xl sm:text-3xl md:text-[40px] font-bold leading-normal"
           >
             El rastro de los vertimientos
           </h2>

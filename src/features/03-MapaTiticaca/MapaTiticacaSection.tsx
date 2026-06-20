@@ -619,9 +619,9 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                         }}
                     >
                         <h2
-                            className="text-white font-extrabold tracking-widest uppercase m-0"
+                            className="text-white font-bold tracking-[0.02em] uppercase m-0"
                             style={{
-                                fontSize: isMobile ? "clamp(11px,3.5vw,14px)" : "clamp(13px,2vw,20px)",
+                                fontSize: isMobile ? "clamp(11px,3.5vw,14px)" : "clamp(24px,3vw,40px)",
                                 textShadow: "0 2px 16px rgba(0,0,0,0.9)",
                             }}
                         >
@@ -1170,9 +1170,9 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                     <h2
                         style={{
                             color: "#fff",
-                            fontSize: isMobile ? "clamp(11px,3.5vw,14px)" : "clamp(13px,2vw,20px)",
-                            fontWeight: 800,
-                            letterSpacing: "0.15em",
+                            fontSize: isMobile ? "clamp(11px,3.5vw,14px)" : "clamp(24px,3vw,40px)",
+                            fontWeight: 700,
+                            letterSpacing: "0.02em",
                             textTransform: "uppercase",
                             margin: 0,
                             textShadow: "0 2px 16px rgba(0,0,0,0.9)",
