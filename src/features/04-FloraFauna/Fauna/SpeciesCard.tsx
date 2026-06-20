@@ -67,10 +67,11 @@ export const SpeciesCard = ({
         animate={isInView ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 1.4 + index * 0.1 }}
       >
-        <h3 className="text-white font-bold" style={{ fontSize: "clamp(13px, 1.6vw, 19px)" }}>
+        <h3 className="text-white font-bold" style={{ fontSize: "clamp(20px, 2.6vw, 32px)", letterSpacing: "0.02em" }}>
           {item.nombre}
         </h3>
-        <p className="italic" style={{ fontSize: "clamp(11px, 1.2vw, 15px)", color: "rgba(255,255,255,0.45)" }}>
+        {/* Figma: Elza Italic 29px / weight 400 / tracking 0.02em (rol "nombre científico") */}
+        <p className="italic" style={{ fontSize: "clamp(13px, 2.4vw, 29px)", fontWeight: 400, letterSpacing: "0.02em", color: "rgba(255,255,255,0.45)" }}>
           {item.cientifico}
         </p>
       </motion.div>

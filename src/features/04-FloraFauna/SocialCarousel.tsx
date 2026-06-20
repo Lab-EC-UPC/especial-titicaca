@@ -36,10 +36,11 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
       }}
     >
       <h3
-        className="text-center uppercase font-semibold text-white"
+        className="text-center uppercase font-bold text-white"
         style={{
-          fontSize: "clamp(14px, 1.9vw, 21px)",
-          letterSpacing: "clamp(2px, 0.5vw, 5px)",
+          fontSize: "clamp(24px, 3.2vw, 40px)",
+          lineHeight: 1.2,
+          letterSpacing: "0.02em",
           marginBottom: "clamp(28px, 5vh, 56px)",
         }}
       >

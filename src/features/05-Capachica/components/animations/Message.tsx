@@ -30,9 +30,9 @@ export const Message = ({ start, end, children }: MessageProps) => {
             <div className="relative mx-4 max-w-65 md:max-w-140 lg:max-w-210">
                 <div className="bg-black/60 px-6 py-10 text-center md:px-12 md:py-16">
                     <p
-                        className="text-sm text-white md:text-lg lg:text-[22px]"
+                        className="text-[16px] text-white md:text-[22px] lg:text-[26px]"
                         style={{
-                            lineHeight: "130%",
+                            lineHeight: "140%",
                             letterSpacing: "0.02em",
                             textAlign: "center",
                             margin: 0,

@@ -100,7 +100,8 @@ export const HeaderSection = () => {
       </CoverMessage>
 
       <CoverMessage at={92}>
-        <h2 className="text-base font-normal leading-[1.15] tracking-tight sm:text-3xl md:text-4xl">
+        {/* Figma: Citizen Light 40px / lh 1.2 / tracking 0.02em (rol "pregunta-lead ligera") */}
+        <h2 className="text-xl font-light leading-[1.2] tracking-[0.02em] sm:text-3xl md:text-[40px]">
           ¿Cómo llegó el Titicaca a esta situación si sus problemas eran
           conocidos desde hace mucho?
         </h2>

@@ -46,10 +46,11 @@ ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => {
         :   children;
 
     return (
+        // Figma: Elza Regular 26px / lh 1.4 / tracking 0.02em (rol "cuerpo")
         <p
-            className="text-sm md:text-lg"
+            className="text-base md:text-[26px]"
             style={{
-                lineHeight: "130%",
+                lineHeight: "140%",
                 letterSpacing: "0.02em",
                 textAlign: "center",
                 margin: 0,
@@ -86,7 +87,8 @@ type ScrollHeadingProps = {
 };
 
 ScrollMessage.Heading = ({ children }: ScrollHeadingProps) => (
-    <h2 className="mb-2 text-center text-2xl md:text-4xl font-bold leading-[1.1] tracking-[0.06em] font-[Citizen]">
+    // Figma: Citizen Bold 64px / lh 1.2 / tracking 0.02em (rol "título de sección grande")
+    <h2 className="mb-2 text-center text-3xl md:text-[64px] font-bold leading-[1.2] tracking-[0.02em] font-[Citizen]">
         {children}
     </h2>
 );

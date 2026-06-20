@@ -41,9 +41,9 @@ export const FuturoLagoSection = () => {
         <h2
           style={{
             fontWeight: 700,
-            fontSize: "clamp(34px,6vw,68px)",
-            lineHeight: 1.05,
-            letterSpacing: "0.01em",
+            fontSize: "clamp(24px,5vw,40px)",
+            lineHeight: 1.2,
+            letterSpacing: "0.02em",
             textTransform: "uppercase",
             color: "#f0f2f5",
             margin: "0 0 clamp(18px,3vh,28px)",
@@ -54,8 +54,9 @@ export const FuturoLagoSection = () => {
 
         <p
           style={{
-            fontSize: "clamp(16px,1.6vw,21px)",
-            lineHeight: 1.7,
+            fontSize: "clamp(17px,2vw,26px)",
+            lineHeight: 1.4,
+            letterSpacing: "0.02em",
             color: "#c8cfd8",
             margin: "0 auto clamp(36px,6vh,52px)",
             maxWidth: 520,
@@ -68,9 +69,11 @@ export const FuturoLagoSection = () => {
         <button
           type="button"
           style={{
-            fontWeight: 600,
-            fontSize: "clamp(13px,1.4vw,16px)",
-            letterSpacing: "0.18em",
+            fontFamily: "var(--font-citizen)",
+            fontWeight: 700,
+            fontSize: "clamp(20px,2.4vw,32px)",
+            lineHeight: "normal",
+            letterSpacing: "0.02em",
             textTransform: "uppercase",
             color: "#ffffff",
             background: "#151B1B",

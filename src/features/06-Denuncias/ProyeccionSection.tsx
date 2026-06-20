@@ -68,11 +68,11 @@ export const ProyeccionSection = () => {
 
         <p
           style={{
-            fontSize: "clamp(17px,1.6vw,22px)",
-            lineHeight: 1.85,
+            fontSize: "clamp(17px,2vw,26px)",
+            lineHeight: 1.4,
             color: "#c8cfd8",
             margin: 0,
-            letterSpacing: "0.005em",
+            letterSpacing: "0.02em",
           }}
         >
           Los modelos de proyección ambiental advierten que la{" "}

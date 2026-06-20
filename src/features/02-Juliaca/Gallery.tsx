@@ -25,7 +25,8 @@ export const Gallery = ({ title, images, start, snap, transition }: GalleryProps
             data-snap={snap}
             data-transition={trans}
         >
-            <h2 className="text-center text-2xl md:text-3xl font-bold leading-[1.4] tracking-[0.1em] uppercase text-white max-w-[80%] md:max-w-full font-[Citizen]">
+            {/* Figma: Citizen Bold 40px / lh 1.2 / tracking 0.02em / uppercase (rol "título de sección medio") */}
+            <h2 className="text-center text-2xl md:text-[40px] font-bold leading-[1.2] tracking-[0.02em] uppercase text-white max-w-[80%] md:max-w-full font-[Citizen]">
                 {title}
             </h2>
 

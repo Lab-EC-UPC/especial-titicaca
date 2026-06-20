@@ -104,13 +104,13 @@ export const TestimonialBackground = ({ testimonials, onSelectPerson, hidden = f
       </div>
 
       {/* Title */}
-      <p className="absolute left-1/2 top-[26%] z-20 w-full -translate-x-1/2 -translate-y-1/2 px-4 text-center font-[Citizen] text-[22px] font-bold uppercase leading-tight tracking-[0.02em] text-[#F5F5F5] sm:top-6 sm:translate-y-0 sm:text-[28px] md:top-8 md:text-[34px] lg:top-10 lg:text-[40px]">
+      <p className="absolute left-1/2 top-[26%] z-20 w-full -translate-x-1/2 -translate-y-1/2 px-4 text-center font-[Citizen] text-[32px] font-bold uppercase leading-[1.2] tracking-[0.02em] text-[#F5F5F5] sm:top-6 sm:translate-y-0 sm:text-[44px] md:top-8 md:text-[54px] lg:top-10 lg:text-[64px]">
         {TESTIMONIAL_TITLE}
       </p>
 
       {/* Subtitle */}
       <p
-        className="absolute bottom-[calc(4.5rem+env(safe-area-inset-bottom))] left-1/2 z-20 w-full -translate-x-1/2 px-4 text-center font-[Citizen] text-[18px] font-normal leading-snug text-white sm:bottom-6 sm:text-[18px] md:bottom-8 md:text-[22px] lg:bottom-10 lg:text-[26px]"
+        className="absolute bottom-[calc(4.5rem+env(safe-area-inset-bottom))] left-1/2 z-20 w-full -translate-x-1/2 px-4 text-center font-[Citizen] text-[16px] font-light leading-normal tracking-[0.02em] text-white sm:bottom-6 sm:text-[18px] md:bottom-8 md:text-[22px] lg:bottom-10 lg:text-[26px]"
         style={{ WebkitTextStroke: "2px #151B1B", paintOrder: "stroke fill" }}
       >
         {TESTIMONIAL_SUBTITLE}

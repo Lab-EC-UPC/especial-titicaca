@@ -130,7 +130,7 @@ export const TotoraSection = () => {
       <div className="w-full overflow-hidden" style={{ height: "100vh" }}>
 
         <div className="absolute inset-x-0 top-0 z-20 flex justify-center px-4 pt-10 sm:pt-12 md:pt-14 lg:pt-16">
-          <h2 className="max-w-[90vw] font-[Citizen] text-center text-[24px] leading-[1.1] font-bold uppercase text-white drop-shadow-[0_8px_32px_rgba(0,0,0,0.95)] sm:max-w-[80vw] sm:text-[32px] md:max-w-[85vw] md:text-[36px] lg:text-[40px] lg:leading-10">
+          <h2 className="max-w-[90vw] font-[Citizen] text-center text-[32px] leading-[1.2] tracking-[0.02em] font-bold uppercase text-white drop-shadow-[0_8px_32px_rgba(0,0,0,0.95)] sm:max-w-[80vw] sm:text-[44px] md:max-w-[85vw] md:text-[54px] lg:text-[64px]">
             EL DETERIORO DE LA TOTORA
           </h2>
         </div>
@@ -147,7 +147,7 @@ export const TotoraSection = () => {
           }}
         >
           <p
-            className="font-[Citizen] font-light text-white/75 text-[9px] md:text-[18px] lg:text-[20px]"
+            className="font-[Citizen] font-light tracking-[0.02em] text-white/75 text-[16px] md:text-[22px] lg:text-[26px]"
           >
             Desliza hacia la izquierda o derecha para más información
           </p>
@@ -165,11 +165,13 @@ export const TotoraSection = () => {
           ))}
         </div>
 
+        {/* Figma: Citizen Light 32px (texto a 1 línea) / tracking 0.02em (rol "label").
+            // verificar en Figma cuando resetee (confianza baja: 24px si calzara a 2 líneas) */}
         <div className="absolute z-20" style={{ top: "55%", right: "calc(50% + clamp(70px, 12vw, 130px))", transform: "translateY(-50%)", opacity: labelsOpacity, transition: "opacity 0.2s ease" }}>
-          <span className="font-bold font-[Citizen]" style={{ fontSize: "clamp(11px, 1.5vw, 20px)", color: "#fff", letterSpacing: "1px" }}>Totora sana</span>
+          <span className="font-light font-[Citizen]" style={{ fontSize: "clamp(14px, 2.4vw, 32px)", color: "#fff", letterSpacing: "0.02em" }}>Totora sana</span>
         </div>
         <div className="absolute z-20" style={{ top: "55%", left: "calc(50% + clamp(70px, 12vw, 130px))", transform: "translateY(-50%)", opacity: labelsOpacity, transition: "opacity 0.2s ease" }}>
-          <span className="font-bold font-[Citizen]" style={{ fontSize: "clamp(11px, 1.5vw, 20px)", color: "#fff", letterSpacing: "1px" }}>Totora enferma</span>
+          <span className="font-light font-[Citizen]" style={{ fontSize: "clamp(14px, 2.4vw, 32px)", color: "#fff", letterSpacing: "0.02em" }}>Totora enferma</span>
         </div>
 
         <div style={{ position: "absolute", top: "50%", left: "50%", marginTop: "-30vh", transform: "translateX(-50%)", zIndex: 10 }}>

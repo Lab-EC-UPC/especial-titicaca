@@ -25,7 +25,7 @@ export const TestimonialCard = ({ name, testimony, currentIndex, onNext, onClose
           </span>
         </div>
         <div className="flex h-full items-center justify-center">
-          <p className="whitespace-pre-line mx-auto max-w-full text-center font-[Elza] text-[15px] font-normal leading-6 text-white sm:max-w-[90%] sm:text-[19px] sm:leading-7 md:max-w-[698.4px] md:text-[26px] md:leading-7.75">
+          <p className="whitespace-pre-line mx-auto max-w-full text-center font-[Elza] text-[16px] font-normal leading-[1.4] tracking-[0.02em] text-white sm:max-w-[90%] sm:text-[20px] md:max-w-[698.4px] md:text-[26px]">
             {testimony[currentIndex].text}
           </p>
         </div>

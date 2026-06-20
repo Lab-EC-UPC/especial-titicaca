@@ -24,19 +24,22 @@ export const CoverMessage = ({ at, children }: CoverMessageProps) => {
 };
 
 CoverMessage.Paragraph = ({ children }: ChildrenProps) => (
-    <p className="text-pretty text-xs leading-snug tracking-[0.01em] sm:text-xl sm:leading-normal md:text-2xl">
+    // Figma: Elza Regular 26px / lh 1.4 / tracking 0.02em (rol "cuerpo")
+    <p className="text-pretty text-sm leading-[1.4] tracking-[0.02em] sm:text-xl md:text-[26px]">
         {children}
     </p>
 );
 
 CoverMessage.Title = ({ children }: ChildrenProps) => (
-    <h1 className="text-2xl font-extrabold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl">
+    // Figma: Citizen Bold 150px / lh 0.9 / tracking 0.02em / uppercase (rol "hero display")
+    <h1 className="text-5xl font-bold leading-[0.9] tracking-[0.02em] sm:text-8xl md:text-[150px]">
         {children}
     </h1>
 );
 
 CoverMessage.Subtitle = ({ children }: ChildrenProps) => (
-    <p className="mt-4 text-sm leading-[1.4] tracking-[0.01em] sm:text-2xl md:text-3xl">
+    // Figma: Elza Regular 42px / lh 1.4 / tracking 0.02em (rol "subtítulo hero")
+    <p className="mt-4 text-base leading-[1.4] tracking-[0.02em] sm:text-2xl md:text-[42px]">
         {children}
     </p>
 );

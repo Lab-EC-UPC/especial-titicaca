@@ -135,7 +135,7 @@ export const TriangulacionSection = () => {
         )}
 
         {view === "story" && (
-          <p className="absolute top-14 left-1/2 -translate-x-1/2 z-10 font-citizen font-bold text-white text-base sm:text-3xl text-center whitespace-nowrap">
+          <p className="absolute top-14 left-1/2 -translate-x-1/2 z-10 font-citizen font-bold text-white text-[22px] sm:text-[30px] md:text-[40px] leading-[1.2] tracking-[0.02em] text-center whitespace-nowrap">
             MINERÍA Y COBERTURA
             <br /> DE SALUD EN PUNO
           </p>

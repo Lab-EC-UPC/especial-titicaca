@@ -69,19 +69,22 @@ export const Fauna = () => {
     >
       <div className="relative z-10 text-center px-4 sm:px-6">
         <h2
-          className="text-white uppercase font-black"
+          className="text-white uppercase font-bold"
           style={{
-            fontSize: "clamp(22px, 4vw, 38px)",
-            letterSpacing: "clamp(2px, 0.4vw, 4px)",
+            fontSize: "clamp(32px, 5vw, 64px)",
+            lineHeight: 1.2,
+            letterSpacing: "0.02em",
           }}
         >
           Alteración del ecosistema
         </h2>
         <p
-          className="mx-auto text-center text-white/65 leading-relaxed"
+          className="mx-auto text-center text-white/65"
           style={{
             marginTop: "clamp(96px, 16vh, 180px)",
-            fontSize: "clamp(14px, 1.8vw, 18px)",
+            fontSize: "clamp(16px, 2.4vw, 26px)",
+            lineHeight: 1.4,
+            letterSpacing: "0.02em",
             maxWidth: "min(680px, 92vw)",
           }}
         >
@@ -99,10 +102,11 @@ export const Fauna = () => {
         style={{ marginTop: "clamp(160px, 34vh, 340px)" }}
       >
         <h3
-          className="uppercase tracking-widest font-semibold text-white"
+          className="uppercase font-bold text-white"
           style={{
-            fontSize: "clamp(14px, 1.9vw, 21px)",
-            letterSpacing: "clamp(2px, 0.5vw, 5px)",
+            fontSize: "clamp(24px, 3.2vw, 40px)",
+            lineHeight: 1.2,
+            letterSpacing: "0.02em",
           }}
         >
           ¿CUÁNTAS ESPECIES QUEDAN?
@@ -175,9 +179,11 @@ export const Fauna = () => {
         style={{ marginTop: "clamp(160px, 32vh, 320px)" }}
       >
         <p
-          className="mx-auto text-center text-white/65 leading-relaxed"
+          className="mx-auto text-center text-white/65"
           style={{
-            fontSize: "clamp(14px, 1.8vw, 18px)",
+            fontSize: "clamp(16px, 2.4vw, 26px)",
+            lineHeight: 1.4,
+            letterSpacing: "0.02em",
             maxWidth: "min(680px, 92vw)",
           }}
         >
