@@ -650,6 +650,7 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
 
     // ── Standalone mode (original scroll-driven) ──
     const sectionRef = useRef<HTMLDivElement>(null);
+    const fadeRef = useRef<HTMLDivElement>(null);
     const imgDesktopRef = useRef<HTMLImageElement>(null);
     const imgMobileRef = useRef<HTMLImageElement>(null);
 
@@ -708,6 +709,12 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
             if (!el) return;
             const { top, height } = el.getBoundingClientRect();
             const progress = Math.max(0, Math.min(1, -top / (height - window.innerHeight)));
+            // Cross-dissolve de entrada: la capa aparece (opacity 0→1) por encima
+            // del último frame del video que queda quieto debajo. Sin negro.
+            const FADE = 0.07;
+            const op = progress >= FADE ? 1 : progress / FADE;
+            if (fadeRef.current)
+                fadeRef.current.style.opacity = String(Math.max(0, Math.min(1, op)));
             const idx = Math.floor(progress * SCREENS) - 1;
             if (idx < 0) {
                 if (last.idx !== -1) {
@@ -759,8 +766,13 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
     const progressPct = active ? ((activeIdx + 1) / CUENCAS.length) * 100 : 0;
 
     return (
-        <div id="mapatiti" ref={sectionRef} style={{ position: "relative", height: "900vh" }}>
+        <div
+            id="mapatiti"
+            ref={sectionRef}
+            style={{ position: "relative", height: "960vh", marginTop: "-60vh" }}
+        >
             <div
+                ref={fadeRef}
                 data-map-section
                 data-start={0.48}
                 data-images={8}
@@ -772,6 +784,7 @@ export const MapaTiticacaSection = ({ start }: { start?: number }) => {
                     height: "100vh",
                     overflow: "hidden",
                     background: "#151B1B",
+                    opacity: 0,
                 }}
             >
                 {/* ── Barra de progreso (top) ── */}

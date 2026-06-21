@@ -4,7 +4,7 @@ export const PtarTiticacaSection = () => {
     <section
       id="ptar-titicaca"
       style={{
-        background: "#2e3440",
+        background: "#2E343C",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -38,34 +38,6 @@ export const PtarTiticacaSection = () => {
           textAlign: "center",
         }}
       >
-        <span
-          style={{
-            display: "inline-block",
-            fontSize: "clamp(10px,1.4vw,13px)",
-            fontWeight: 700,
-            letterSpacing: "0.36em",
-            textTransform: "uppercase",
-            color: "#5a6272",
-            marginBottom: 22,
-          }}
-        >
-          Proyecto PTAR Titicaca
-        </span>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            marginBottom: "clamp(32px,5vh,52px)",
-          }}
-        >
-          <div style={{ height: 1, width: 48, background: "rgba(255,255,255,0.15)" }} />
-          <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,0.3)" }} />
-          <div style={{ height: 1, width: 48, background: "rgba(255,255,255,0.15)" }} />
-        </div>
-
         <p
           style={{
             fontSize: "clamp(17px,1.6vw,22px)",
@@ -75,17 +47,23 @@ export const PtarTiticacaSection = () => {
             letterSpacing: "0.020em",
           }}
         >
-          En{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>2019</strong>, el proyecto{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>PTAR Titicaca</strong>{" "}
+          En <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>2019</strong>
+          , el proyecto{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
+            PTAR Titicaca
+          </strong>{" "}
           (Plantas de Tratamiento de Aguas Residuales) prometía tratar los
           desagües de Puno y Juliaca mediante una inversión de{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>más de S/ 860 millones</strong>.
-          No obstante, las obras iniciadas en{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
+            más de S/ 860 millones
+          </strong>
+          . No obstante, las obras iniciadas en{" "}
           <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>2021</strong>{" "}
           acumularon retrasos y observaciones de la Contraloría, y el contrato
           terminó siendo{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>anulado en 2023</strong>{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
+            anulado en 2023
+          </strong>{" "}
           tras la paralización de los trabajos.
         </p>
       </div>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import logoLab from "./assets/logo-lab.png";
+import logoEcData from "./assets/logo-ECDATA.png";
 import { CreditGroupItem } from "./CreditGroupItem";
 import { CREDITS } from "./credits.data";
 
@@ -105,15 +106,24 @@ export const FooterSection = () => {
           })}
         </div>
 
-        <img
-          src={logoLab}
-          alt="Laboratorio EC UPC"
+        <div
+          className="flex flex-wrap items-center justify-center"
           style={{
-            width: "clamp(220px, 60vw, 640px)",
-            height: "auto",
+            gap: "clamp(20px, 4vw, 56px)",
             marginTop: "clamp(72px, 14vh, 140px)",
           }}
-        />
+        >
+          <img
+            src={logoLab}
+            alt="Laboratorio EC UPC"
+            style={{ height: "clamp(30px, 8vw, 100px)", width: "auto" }}
+          />
+          <img
+            src={logoEcData}
+            alt="EC Data"
+            style={{ height: "clamp(18px, 4.5vw, 56px)", width: "auto" }}
+          />
+        </div>
 
         <p
           className="uppercase font-light"

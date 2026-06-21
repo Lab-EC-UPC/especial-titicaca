@@ -15,6 +15,9 @@ interface Project {
   my: number;
   description: string;
   budget: string;
+  // Etiqueta bajo el monto (ej: "Costo del proyecto" | "Perjuicio económico").
+  // Opcional: si se omite, usa "Costo del proyecto".
+  budgetLabel?: string;
 }
 
 interface TypeConfig {
@@ -95,7 +98,7 @@ const PROJECTS: Project[] = [
     mx: 29,
     my: 9,
     description:
-      "Se enfocó en conservar el ecosistema del Titicaca e impulsar turismo sostenible. Además, el documento no reporta resultados concretos ni detalla limitaciones durante su ejecución efectiva.",
+      "La propuesta priorizó la conservación del ecosistema del Titicaca y el impulso al turismo sostenible; sin embargo, no consigna resultados concretos ni detalla las limitaciones encontradas en su ejecución",
     budget: "6,900,000",
   },
   {
@@ -109,6 +112,7 @@ const PROJECTS: Project[] = [
     description:
       "Se destinó a modernizar la recolección de residuos mediante maquinaria y equipamiento. Asimismo, se detectaron compras deficientes y fallas en los procesos administrativos.",
     budget: "936,358.60",
+    budgetLabel: "Monto Auditado",
   },
   {
     id: 3,
@@ -121,6 +125,7 @@ const PROJECTS: Project[] = [
     description:
       "Se propusó instalar captaciones, tuberías y sistemas de tratamiento para zonas rurales. No se aplicaron penalidades pese a retrasos en la ejecución.",
     budget: "1,534,632.25",
+    budgetLabel: "Perjuicio económico",
   },
   {
     id: 4,
@@ -131,7 +136,7 @@ const PROJECTS: Project[] = [
     mx: 24,
     my: 78,
     description:
-      "Tuvo como objetivo renovar las electrobombas de la planta de agua potable de Puno. Se otorgaron ampliaciones de plazo injustificadas y no se aplicaron penalidades por retrasos.",
+      "Buscó renovar las electrobombas de la planta de agua potable de Puno; sin embargo, se otorgaron ampliaciones de plazo injustificadas y se omitió aplicar penalidades por los retrasos.",
     budget: "1,214,950.00",
   },
   {
@@ -143,7 +148,7 @@ const PROJECTS: Project[] = [
     mx: 74,
     my: 67,
     description:
-      "Se tenía previsto implementar sistemas de bombeo y riego para fortalecer la agricultura. Además, se detectaron irregularidades, falta de transparencia y contrataciones que incumplían requisitos técnicos.",
+      "Contempló la implementación de sistemas de bombeo y riego para fortalecer la agricultura; sin embargo, se detectaron irregularidades, falta de transparencia y contrataciones sin los requisitos técnicos exigidos.",
     budget: "106,060,807.00",
   },
   {
@@ -167,8 +172,9 @@ const PROJECTS: Project[] = [
     mx: 33,
     my: 57,
     description:
-      "Tuvo como objetivo tratar aguas residuales antes de verterlas al río pero el plan fue abandonado. Se incumplió plazos y careció de seguimiento adecuado.",
+      "Diseñado para tratar las aguas residuales antes de verterlas al río, este proyecto fue abandonado. obra incumplió los plazos establecidos y careció de un seguimiento técnico adecuado.",
     budget: "23,692.20",
+    budgetLabel: "Perjuicio económico",
   },
   {
     id: 8,
@@ -179,7 +185,7 @@ const PROJECTS: Project[] = [
     mx: 60,
     my: 89,
     description:
-      "Se buscó construir y mejorar plantas de tratamiento de aguas residuales en Puno. El proyecto enfrentó abandono de obras, problemas técnicos y culminó con la resolución del contrato.",
+      "Se diseñó para construir y mejorar plantas de tratamiento de aguas residuales (PTAR) en Puno, pero fue paralizado por abandono de obra, fallas técnicas y la posterior resolución del contrato.",
     budget: "863,000,000",
   },
 ];
@@ -365,7 +371,7 @@ export const ProyectosBajoLaLupaSection = () => {
       setIsMobile(mobile);
       setDims({
         w,
-        h: mobile ? Math.max(w * 2.0, 680) : Math.max(w * 0.56, 420),
+        h: mobile ? Math.max(w * 1.4, 520) : Math.max(w * 0.56, 420),
       });
     };
     update();
@@ -419,44 +425,37 @@ export const ProyectosBajoLaLupaSection = () => {
 
     const base: React.CSSProperties = {
       position: "absolute",
-      background: "rgba(30,36,48,0.94)",
+      background: "rgba(255,255,255,0.08)",
       backdropFilter: "blur(18px)",
       WebkitBackdropFilter: "blur(18px)",
-      border: "1px solid rgba(255,255,255,0.1)",
+      border: "1px solid rgba(255,255,255,0.16)",
       borderRadius: 12,
-      padding: "16px 16px 14px",
+      padding: "26px 22px 20px",
       zIndex: 40,
       boxShadow: `0 10px 50px rgba(0,0,0,0.6), 0 0 24px ${TYPE_CFG[p.type].glow}`,
     };
 
-    // Mobile: centered overlay card — siempre visible, nunca recortada
-    if (isMobile) {
-      const pw = Math.min(320, dims.w - 24);
-      const ph = 300; // estimación para acotar; maxHeight evita desborde real
-      const left = (dims.w - pw) / 2;
-      let top = pos.y - ph * 0.5;
-      if (top < 12) top = 12;
-      if (top + ph > dims.h - 12) top = dims.h - ph - 12;
-      return {
-        ...base,
-        left,
-        top,
-        width: pw,
-        maxHeight: dims.h - 24,
-        overflowY: "auto",
-      };
-    }
-
-    // Desktop: card al lado del nodo, acotada al canvas
-    const pw = Math.max(180, Math.min(260, dims.w * 0.29));
-    const ph = 210;
-    let left = pos.x - pw - nodeSize * 0.7;
-    let top = pos.y - ph * 0.55;
-    if (left < 8) left = pos.x + nodeSize * 0.7;
-    if (left + pw > dims.w - 8) left = pos.x - pw - nodeSize * 0.7;
-    if (top < 8) top = 8;
-    if (top + ph > dims.h - 8) top = dims.h - ph - 8;
-    return { ...base, left, top, width: pw };
+    // Card centrada — mismo diseño en móvil y desktop (vidrio blanco),
+    // siempre visible y acotada al canvas.
+    // El canvas está desplazado hacia arriba (marginTop negativo), así que el
+    // tope mínimo compensa ese offset para no solaparse con la leyenda/título.
+    const shiftUp = isMobile ? dims.h * 0.05 : dims.h * 0.1;
+    const topGuard = shiftUp + (isMobile ? 16 : 12);
+    const pw = Math.min(440, dims.w - 28);
+    const ph = 340; // estimación para acotar; maxHeight evita desborde real
+    const left = (dims.w - pw) / 2;
+    let top = pos.y - ph * 0.5;
+    if (top < topGuard) top = topGuard;
+    if (top + ph > dims.h - 12) top = dims.h - ph - 12;
+    if (top < topGuard) top = topGuard;
+    return {
+      ...base,
+      left,
+      top,
+      width: pw,
+      maxHeight: dims.h - topGuard - 12,
+      overflowY: "auto",
+    };
   };
 
   return (
@@ -464,7 +463,7 @@ export const ProyectosBajoLaLupaSection = () => {
       id="proyectos-lupa"
       ref={wrapRef}
       style={{
-        background: "#2e3440",
+        background: "#2E343C",
         position: "relative",
         overflow: "hidden",
       }}
@@ -488,7 +487,7 @@ export const ProyectosBajoLaLupaSection = () => {
       <h2
         style={{
           textAlign: "center",
-          padding: "28px 16px 12px",
+          padding: "clamp(56px, 9vh, 110px) 16px 14px",
           letterSpacing: "0.18em",
           fontSize: "clamp(14px,2.5vw,22px)",
           fontWeight: 700,
@@ -496,7 +495,7 @@ export const ProyectosBajoLaLupaSection = () => {
           textTransform: "uppercase",
         }}
       >
-        Proyectos bajo la lupa
+        DENUNCIAS DE PROYECTOS
       </h2>
 
       {/* ── Mobile legend── */}
@@ -509,7 +508,13 @@ export const ProyectosBajoLaLupaSection = () => {
       {/* ── Network canvas ── */}
       <div
         ref={canvasRef}
-        style={{ position: "relative", width: "100%", height: dims.h }}
+        style={{
+          position: "relative",
+          width: "100%",
+          height: dims.h,
+          // Sube el bloque de nodos hacia el título (sin alterar su distribución)
+          marginTop: isMobile ? -dims.h * 0.05 : -dims.h * 0.1,
+        }}
       >
         {/* SVG lines */}
         <svg
@@ -680,9 +685,10 @@ export const ProyectosBajoLaLupaSection = () => {
           >
             <p
               style={{
-                fontSize: "clamp(10px,1.2vw,12px)",
-                color: "#9aa3b0",
-                margin: "0 0 12px",
+                fontSize: "15px",
+                color: "#e6e9ee",
+                margin: "0 0 18px",
+                lineHeight: 1.5,
                 textAlign: "center",
               }}
             >
@@ -691,7 +697,7 @@ export const ProyectosBajoLaLupaSection = () => {
             <h4
               style={{
                 fontWeight: 700,
-                fontSize: "clamp(20px,3vw,25px)",
+                fontSize: "30px",
                 color: "#f0f2f5",
                 margin: 0,
                 textAlign: "center",
@@ -699,28 +705,30 @@ export const ProyectosBajoLaLupaSection = () => {
                 lineHeight: 1.1,
               }}
             >
-              <em
-                style={{
-                  fontSize: "0.60em",
-                  color: "#8a96a6",
-                  marginRight: 2,
-                }}
-              >
-                s/.
-              </em>
+              {/\d/.test(selected.budget) && (
+                <em
+                  style={{
+                    fontSize: "0.60em",
+                    color: "#8a96a6",
+                    marginRight: 2,
+                  }}
+                >
+                  s/.
+                </em>
+              )}
               {selected.budget}
             </h4>
             <h5
               style={{
-                fontSize: "clamp(8px,1vw,10px)",
+                fontSize: "11px",
                 letterSpacing: "0.15em",
                 textTransform: "uppercase",
-                color: "#5a6272",
+                color: "#8a96a6",
                 textAlign: "center",
-                margin: "3px 0 14px",
+                margin: "5px 0 20px",
               }}
             >
-              Costo del proyecto
+              {selected.budgetLabel ?? "Costo del proyecto"}
             </h5>
             <button
               onClick={handleClose}
@@ -728,15 +736,15 @@ export const ProyectosBajoLaLupaSection = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                width: 30,
-                height: 30,
+                width: 38,
+                height: 38,
                 borderRadius: "50%",
                 background: "#c8cfd8",
                 color: "#2e3440",
                 border: "none",
                 cursor: "pointer",
-                fontSize: 13,
-                fontWeight: 700,
+                fontSize: 20,
+                fontWeight: 900,
                 margin: "0 auto",
                 transition: "background 0.2s",
               }}

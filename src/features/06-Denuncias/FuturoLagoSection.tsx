@@ -4,7 +4,7 @@ export const FuturoLagoSection = () => {
     <section
       id="futuro-lago"
       style={{
-        background: "#2e3440",
+        background: "#2E343C",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",

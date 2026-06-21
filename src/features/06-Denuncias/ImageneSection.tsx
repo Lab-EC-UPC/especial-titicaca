@@ -76,7 +76,7 @@ function InstitutionModal({
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto rounded-2xl bg-[#2e3440] border border-white/10 shadow-2xl"
+        className="relative w-full max-w-2xl max-h-[90vh] sm:max-h-[85vh] overflow-y-auto rounded-2xl bg-[rgba(255,255,255,0.08)] backdrop-blur-xl border border-white/10 shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <button
@@ -202,22 +202,14 @@ export const ImageneSection = () => {
   const [selectedCard, setSelectedCard] = useState<CardData | null>(null);
 
   return (
-    <div id="imas" className="bg-[#2e3440]">
+    <div id="imas" className="bg-[#2E343C]">
       <div className="mx-auto container w-full min-h-screen py-16 px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center min-h-full">
           <div className="text-center mb-10 sm:mb-14">
-            <p className="text-white/35 text-xs tracking-[0.35em] uppercase mb-3">
-              Rendición de cuentas
-            </p>
             <h2 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold tracking-wide leading-tight">
               ¿QUÉ DICEN LAS INSTITUCIONES
               <br className="hidden sm:block" /> RESPONSABLES?
             </h2>
-            <div className="flex items-center justify-center gap-2 mt-5">
-              <div className="h-px w-10 bg-white/15" />
-              <div className="w-1 h-1 rounded-full bg-white/30" />
-              <div className="h-px w-10 bg-white/15" />
-            </div>
             <p className="text-white/50 text-sm sm:text-base mt-5">
               Haz clic en cada institución para conocer su respuesta
             </p>

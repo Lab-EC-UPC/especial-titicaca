@@ -216,5 +216,41 @@ export function createVideoTimeline(
         });
     }
 
+    // ── Fundido desde/hacia negro (transición tipo documental) ─────────
+    const fadeCover = container.querySelector<HTMLElement>("[data-fade-cover]");
+    if (fadeCover) {
+        const fadeFrom = fadeCover.dataset.fadeFrom === "1";
+        const fadeTo = fadeCover.dataset.fadeTo === "1";
+        const D = 0.09;
+        if (fadeFrom) {
+            tl.fromTo(
+                fadeCover,
+                { autoAlpha: 1 },
+                { autoAlpha: 0, ease: "power1.out", duration: D },
+                0,
+            );
+        } else {
+            gsap.set(fadeCover, { autoAlpha: 0 });
+        }
+        if (fadeTo) {
+            tl.to(
+                fadeCover,
+                { autoAlpha: 1, ease: "power1.in", duration: D },
+                1 - D,
+            );
+        }
+    }
+
+    // ── Cross-dissolve de entrada: el contenedor se funde (0→1) por encima de
+    //    la sección anterior, que queda visible debajo durante el solape. ────
+    if (container.dataset.crossfadeIn === "1") {
+        tl.fromTo(
+            container,
+            { autoAlpha: 0 },
+            { autoAlpha: 1, ease: "power1.out", duration: 0.16 },
+            0,
+        );
+    }
+
     return tl;
 }

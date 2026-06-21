@@ -1,5 +1,9 @@
-import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 export type SocialImage = {
   src: string;
@@ -11,28 +15,110 @@ export type SocialImage = {
 type SocialCarouselProps = {
   title: string;
   images: SocialImage[];
+  /** Píxeles de scroll que la imagen permanece centrada (hold). */
+  hold?: number;
+  /** Píxeles de scroll de la transición entre una imagen y la siguiente. */
+  transition?: number;
 };
 
-// Carrusel por click: muestra la imagen actual con su descripción y la siguiente
-// asomando a la derecha. Al hacer click (en la imagen, en la que asoma o en un
-// punto) avanza con una transición.
-export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
-  const [index, setIndex] = useState(0);
-  const count = images.length;
+// Carrusel guiado por scroll (mismo lenguaje que la galería de Juliaca):
+// la sección se "pinea" y, al hacer scroll, las imágenes se deslizan en
+// horizontal una a una con escala/opacidad, dando sensación de documental.
+export const SocialCarousel = ({
+  title,
+  images,
+  hold = 420,
+  transition = 200,
+}: SocialCarouselProps) => {
+  const sectionRef = useRef<HTMLDivElement>(null);
 
-  const goTo = (i: number) => setIndex(((i % count) + count) % count);
-  const next = () => setIndex((prev) => (prev + 1) % count);
+  useGSAP(
+    () => {
+      const section = sectionRef.current;
+      if (!section) return;
 
-  const current = images[index];
-  const upcoming = images[(index + 1) % count];
+      const imageEls = gsap.utils.toArray<HTMLElement>(
+        section.querySelectorAll("[data-social-image]"),
+      );
+      const count = imageEls.length;
+      if (count === 0) return;
+
+      // Una sola imagen no necesita scroll horizontal.
+      const perImage = hold + transition;
+      const totalScroll = count > 1 ? (count - 1) * perImage + hold : 0;
+
+      const state = { pos: 0 };
+
+      const render = () => {
+        const vw = window.innerWidth;
+        const spread = vw < 768 ? 0.5 : 0.42;
+
+        imageEls.forEach((el, i) => {
+          const dist = i - state.pos;
+          const absDist = Math.abs(dist);
+
+          if (absDist >= 1.5) {
+            el.style.opacity = "0";
+            return;
+          }
+
+          const x = dist * vw * spread;
+          const scale = 1 - absDist * 0.4;
+          const opacity = 1 - absDist * 0.65;
+
+          el.style.opacity = String(opacity);
+          el.style.transform = `translateX(calc(-50% + ${x}px)) translateY(-50%) scale(${scale})`;
+          el.style.zIndex = String(Math.round((1.5 - absDist) * 10));
+
+          const textEl = el.querySelector<HTMLElement>("[data-social-text]");
+          if (textEl) {
+            textEl.style.opacity = absDist < 0.3 ? "1" : "0";
+          }
+        });
+      };
+
+      render();
+
+      if (count < 2) return;
+
+      const tl = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: section,
+          pin: true,
+          scrub: 0.45,
+          anticipatePin: 1,
+          start: "top top",
+          end: `+=${totalScroll}`,
+          onUpdate: render,
+        },
+      });
+
+      const holdDur = hold / totalScroll;
+      const transDur = transition / totalScroll;
+
+      for (let i = 0; i < count; i++) {
+        const cycleStart = i * (holdDur + transDur);
+        tl.to(state, { pos: i, duration: holdDur }, cycleStart);
+        if (i < count - 1) {
+          tl.to(state, { pos: i + 1, duration: transDur }, cycleStart + holdDur);
+        }
+      }
+
+      return () => {
+        tl.scrollTrigger?.kill();
+        tl.kill();
+      };
+    },
+    { scope: sectionRef, dependencies: [images.length, hold, transition] },
+  );
 
   return (
     <section
-      className="relative flex w-full flex-col items-center overflow-x-hidden px-4 sm:px-6"
+      ref={sectionRef}
+      className="relative isolate flex h-[100dvh] w-full flex-col items-center overflow-hidden pt-[14vh] md:justify-center md:pt-0"
       style={{
         background: "linear-gradient(to bottom, #586A74 50%, #2e3440 100%)",
-        paddingTop: "clamp(80px, 16vh, 180px)",
-        paddingBottom: "clamp(80px, 16vh, 180px)",
       }}
     >
       <h3
@@ -40,119 +126,52 @@ export const SocialCarousel = ({ title, images }: SocialCarouselProps) => {
         style={{
           fontSize: "clamp(14px, 1.9vw, 21px)",
           letterSpacing: "clamp(2px, 0.5vw, 5px)",
-          marginBottom: "clamp(28px, 5vh, 56px)",
+          marginBottom: "clamp(16px, 3vh, 40px)",
+          maxWidth: "80%",
         }}
       >
         {title}
       </h3>
 
-      <div
-        className="relative flex w-full justify-center"
-        style={{ maxWidth: "min(900px, 96vw)" }}
-      >
-        {/* Imagen siguiente asomando a la derecha (click = avanzar) */}
-        {count > 1 && (
-          <button
-            type="button"
-            onClick={next}
-            aria-label="Siguiente imagen"
-            className="absolute right-0 top-1/2 hidden -translate-y-1/2 translate-x-[55%] cursor-pointer border-0 bg-transparent p-0 transition-opacity hover:opacity-60 sm:block"
-            style={{ width: "clamp(120px, 22vw, 260px)", opacity: 0.35 }}
+      <div className="relative w-screen overflow-hidden" style={{ height: "60vh" }}>
+        {images.map((img, i) => (
+          <div
+            key={i}
+            data-social-image={i}
+            className="absolute left-1/2 top-1/2 flex flex-col items-center will-change-transform"
+            style={{ width: "min(620px, 88vw)", opacity: 0 }}
           >
             <img
-              src={upcoming.src}
-              alt=""
-              aria-hidden="true"
-              className="h-auto w-full rounded-md object-cover"
+              src={img.src}
+              alt={img.alt}
+              className="max-h-[52vh] w-full rounded-md object-cover shadow-[0_20px_60px_rgba(0,0,0,0.45)]"
             />
-          </button>
-        )}
 
-        {/* Imagen actual + descripción (click = avanzar) */}
-        <div
-          className="relative flex w-full flex-col items-center"
-          style={{ maxWidth: "min(620px, 92vw)" }}
-        >
-          <AnimatePresence mode="popLayout" initial={false}>
-            <motion.button
-              type="button"
-              key={index}
-              onClick={next}
-              aria-label={`Imagen ${index + 1} de ${count}: ${current.description}`}
-              className="block w-full cursor-pointer border-0 bg-transparent p-0"
-              initial={{ opacity: 0, x: 40 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -40 }}
-              transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+            <div
+              data-social-text
+              className="mt-4 flex w-full flex-col items-start text-left opacity-0"
             >
-              <img
-                src={current.src}
-                alt={current.alt}
-                className="h-auto w-full rounded-md object-cover shadow-[0_20px_60px_rgba(0,0,0,0.45)]"
-              />
-            </motion.button>
-          </AnimatePresence>
-
-          <div className="mt-4 self-start text-left">
-            <p
-              className="text-white"
-              style={{ fontSize: "clamp(14px, 1.6vw, 18px)", margin: 0 }}
-            >
-              {current.description}
-            </p>
-            <h5
-              className="uppercase font-light"
-              style={{
-                fontSize: "clamp(11px, 1.2vw, 14px)",
-                letterSpacing: "0.1em",
-                color: "rgba(255,255,255,0.55)",
-                margin: "4px 0 0",
-              }}
-            >
-              {current.subtext}
-            </h5>
-            {count > 1 && (
               <p
-                className="font-light"
+                className="text-white"
+                style={{ fontSize: "clamp(14px, 1.6vw, 18px)", margin: 0 }}
+              >
+                {img.description}
+              </p>
+              <h5
+                className="uppercase font-light"
                 style={{
                   fontSize: "clamp(11px, 1.2vw, 14px)",
-                  color: "rgba(255,255,255,0.4)",
-                  margin: "10px 0 0",
+                  letterSpacing: "0.1em",
+                  color: "rgba(255,255,255,0.55)",
+                  margin: "4px 0 0",
                 }}
               >
-                Haz clic para ver la siguiente →
-              </p>
-            )}
+                {img.subtext}
+              </h5>
+            </div>
           </div>
-        </div>
+        ))}
       </div>
-
-      {/* Indicadores (click = ir a esa imagen) */}
-      {count > 1 && (
-        <div
-          className="flex items-center gap-2"
-          style={{ marginTop: "clamp(20px, 4vh, 36px)" }}
-        >
-          {images.map((_, i) => (
-            <button
-              key={i}
-              type="button"
-              onClick={() => goTo(i)}
-              aria-label={`Ir a la imagen ${i + 1}`}
-              className="rounded-full transition-all"
-              style={{
-                width: i === index ? "24px" : "8px",
-                height: "8px",
-                background:
-                  i === index ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.3)",
-                border: 0,
-                padding: 0,
-                cursor: "pointer",
-              }}
-            />
-          ))}
-        </div>
-      )}
     </section>
   );
 };

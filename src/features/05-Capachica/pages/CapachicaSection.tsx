@@ -116,6 +116,29 @@ export const CapachicaSection = () => {
             {/* ── Gradiente sutil ──────────────────────────────────────────── */}
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.15),rgba(0,0,0,0.04)_45%,rgba(0,0,0,0.2))]" />
 
+            {/* ── Blend superior con la sección previa (carrusel FloraFauna,
+                #2e3440) para que el empalme no muestre línea ─────────────── */}
+            <div
+                className="pointer-events-none absolute inset-x-0 top-0 z-[1]"
+                style={{
+                    height: "20vh",
+                    background:
+                        "linear-gradient(to bottom, #2e3440 0%, rgba(46,52,64,0) 100%)",
+                }}
+            />
+
+            {/* ── Blend inferior persistente hacia #2E343C (= Denuncias), para
+                que el borde de reposo no muestre línea con la sección que sigue
+                (el EndingGradientOverlay es transitorio y se desvanece). ──── */}
+            <div
+                className="pointer-events-none absolute inset-x-0 bottom-0 z-[1]"
+                style={{
+                    height: "24vh",
+                    background:
+                        "linear-gradient(to top, #2E343C 0%, rgba(46,52,60,0) 100%)",
+                }}
+            />
+
             {/* ── Overlays ─────────────────────────────────────────────────── */}
 
             {/* 1. Párrafo introductorio totora */}

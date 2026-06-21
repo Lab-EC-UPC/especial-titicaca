@@ -14,6 +14,15 @@ type VideoSectionProps = {
     refreshPriority?: number;
     /** Empezar a descargar el video de inmediato (1ª sección, above-the-fold). */
     eager?: boolean;
+    /** Fundido desde negro al entrar (transición tipo documental). */
+    fadeFromBlack?: boolean;
+    /** Fundido a negro al salir (transición tipo documental). */
+    fadeToBlack?: boolean;
+    /** Color de la cortina de fundido (por defecto el teal de sección). */
+    fadeColor?: string;
+    /** Cross-dissolve: el video se funde (opacity 0→1) por encima de la sección
+     *  anterior, que queda visible debajo durante el solapamiento. */
+    crossfadeIn?: boolean;
     children: ReactNode;
 };
 
@@ -23,6 +32,10 @@ export const VideoSection = ({
     scrollDistance = 2000,
     refreshPriority = 0,
     eager = false,
+    fadeFromBlack = false,
+    fadeToBlack = false,
+    fadeColor = "#151B1B",
+    crossfadeIn = false,
     children,
 }: VideoSectionProps) => {
     const sectionRef = useRef<HTMLDivElement>(null);
@@ -83,7 +96,20 @@ export const VideoSection = ({
     );
 
     return (
-        <div ref={sectionRef} className="relative isolate h-[100dvh] w-full overflow-hidden bg-black">
+        <div
+            ref={sectionRef}
+            data-crossfade-in={crossfadeIn ? "1" : undefined}
+            className="relative isolate h-[100dvh] w-full overflow-hidden bg-black"
+            // Cross-dissolve: solapa con la sección previa y parte invisible
+            // (la timeline lo funde opacity 0→1). pointer-events:none para no
+            // bloquear el contenido interactivo de abajo (p.ej. el iframe del
+            // Header) durante el solapamiento.
+            style={
+                crossfadeIn
+                    ? { marginTop: "-50vh", opacity: 0, pointerEvents: "none" }
+                    : undefined
+            }
+        >
             <video
                 ref={videoRef}
                 className="absolute inset-0 h-full w-full object-cover"
@@ -93,6 +119,19 @@ export const VideoSection = ({
             />
 
             {children}
+
+            {/* Cortina negra que se disuelve/aparece con el scroll para fundir
+                con las secciones contiguas (la anima la timeline si existe). */}
+            {(fadeFromBlack || fadeToBlack) && (
+                <div
+                    data-fade-cover
+                    data-fade-from={fadeFromBlack ? "1" : undefined}
+                    data-fade-to={fadeToBlack ? "1" : undefined}
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-0 z-[15]"
+                    style={{ opacity: fadeFromBlack ? 1 : 0, background: fadeColor }}
+                />
+            )}
         </div>
     );
 };

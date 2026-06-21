@@ -4,7 +4,7 @@ export const ProyeccionSection = () => {
     <section
       id="proyeccion"
       style={{
-        background: "#2e3440",
+        background: "#2E343C",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -38,34 +38,6 @@ export const ProyeccionSection = () => {
           textAlign: "center",
         }}
       >
-        <span
-          style={{
-            display: "inline-block",
-            fontSize: "clamp(10px,1.4vw,13px)",
-            fontWeight: 700,
-            letterSpacing: "0.36em",
-            textTransform: "uppercase",
-            color: "#5a6272",
-            marginBottom: 22,
-          }}
-        >
-          Proyección ambiental
-        </span>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            marginBottom: "clamp(32px,5vh,52px)",
-          }}
-        >
-          <div style={{ height: 1, width: 48, background: "rgba(255,255,255,0.15)" }} />
-          <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,0.3)" }} />
-          <div style={{ height: 1, width: 48, background: "rgba(255,255,255,0.15)" }} />
-        </div>
-
         <p
           style={{
             fontSize: "clamp(17px,1.6vw,22px)",
@@ -76,7 +48,9 @@ export const ProyeccionSection = () => {
           }}
         >
           Los modelos de proyección ambiental advierten que la{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>inacción estructural</strong>{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
+            inacción estructural
+          </strong>{" "}
           acelerará el ritmo de degradación de la cuenca.
         </p>
       </div>

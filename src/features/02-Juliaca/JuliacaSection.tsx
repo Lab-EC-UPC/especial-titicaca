@@ -50,6 +50,7 @@ export const JuliacaSection = () => {
                 scrollDistance={2080}
                 refreshPriority={5}
                 eager
+                crossfadeIn
             >
                 <ScrollMessage start={0.058} end={0.25}>
                     <ScrollMessage.Paragraph>
@@ -102,6 +103,7 @@ export const JuliacaSection = () => {
                 videoMob={mobVid02}
                 scrollDistance={720}
                 refreshPriority={3}
+                crossfadeIn
             >
                 <ScrollMessage start={0.167} end={0.722}>
                     <ScrollMessage.Paragraph>
@@ -127,6 +129,9 @@ export const JuliacaSection = () => {
                 videoMob={mobVid03}
                 scrollDistance={1200}
                 refreshPriority={2}
+                crossfadeIn
+                fadeToBlack
+                fadeColor="#2e3440"
             >
                 <ScrollMessage start={0.167} end={0.5}>
                     <ScrollMessage.Paragraph>

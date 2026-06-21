@@ -4,7 +4,7 @@ export const PebltSection = () => {
     <section
       id="peblt"
       style={{
-        background: "#2e3440",
+        background: "#2E343C",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -38,34 +38,6 @@ export const PebltSection = () => {
           textAlign: "center",
         }}
       >
-        <span
-          style={{
-            display: "inline-block",
-            fontSize: "clamp(10px,1.4vw,13px)",
-            fontWeight: 700,
-            letterSpacing: "0.36em",
-            textTransform: "uppercase",
-            color: "#5a6272",
-            marginBottom: 22,
-          }}
-        >
-          Asignaciones financieras
-        </span>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            marginBottom: "clamp(32px,5vh,52px)",
-          }}
-        >
-          <div style={{ height: 1, width: 48, background: "rgba(255,255,255,0.15)" }} />
-          <div style={{ width: 5, height: 5, borderRadius: "50%", background: "rgba(255,255,255,0.3)" }} />
-          <div style={{ height: 1, width: 48, background: "rgba(255,255,255,0.15)" }} />
-        </div>
-
         <p
           style={{
             fontSize: "clamp(17px,1.6vw,22px)",
@@ -80,16 +52,20 @@ export const PebltSection = () => {
             Proyecto Especial Binacional Lago Titicaca (PEBLT)
           </strong>{" "}
           incrementó su presupuesto de{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>S/ 14,5 millones en 2017</strong>{" "}
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
+            S/ 14,5 millones en 2017
+          </strong>{" "}
           a{" "}
-          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>S/ 28,9 millones en 2026</strong>,
-          el aumento de recursos no se ha traducido en mayores avances en la
+          <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
+            S/ 28,9 millones en 2026
+          </strong>
+          , el aumento de recursos no se ha traducido en mayores avances en la
           cuenca. Contraloría reporta{" "}
           <strong style={{ fontWeight: 600, color: "#f0f2f5" }}>
             obras paralizadas desde 2014
           </strong>
-          , proyectos inconclusos, deficiencias constructivas e indicios de pagos
-          por trabajos que no habrían sido ejecutados.
+          , proyectos inconclusos, deficiencias constructivas e indicios de
+          pagos por trabajos que no habrían sido ejecutados.
         </p>
       </div>
     </section>

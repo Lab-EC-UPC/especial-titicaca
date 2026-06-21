@@ -5,6 +5,7 @@ const MOBILE_BREAKPOINT = 768;
 
 export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const fadeRef = useRef<HTMLDivElement>(null);
   const isStandalone = start === undefined;
   const [currentFrame, setCurrentFrame] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
@@ -30,6 +31,12 @@ export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
       if (totalScrollable <= 0) return;
       const scrolled = Math.max(0, -rect.top);
       const progress = Math.min(1, scrolled / totalScrollable);
+      // Cross-dissolve de entrada: la capa aparece (opacity 0→1) sobre el último
+      // frame del video que queda quieto debajo. Sin negro.
+      const FADE = 0.075;
+      const op = progress >= FADE ? 1 : progress / FADE;
+      if (fadeRef.current)
+        fadeRef.current.style.opacity = String(Math.max(0, Math.min(1, op)));
       const frame = Math.min(Math.floor(progress * TOTAL_FRAMES) + 1, TOTAL_FRAMES);
       setCurrentFrame(frame); // React descarta el update si el frame no cambió
     };
@@ -120,15 +127,17 @@ export const ContaminacionCuencaSection = ({ start }: { start?: number }) => {
     <div
       id="cuencas"
       ref={sectionRef}
-      style={{ height: `${TOTAL_FRAMES * 100}vh` }}
+      style={{ height: `${TOTAL_FRAMES * 100 + 60}vh`, marginTop: "-60vh" }}
     >
       <div
+        ref={fadeRef}
         data-vertimientos-section
         data-start={start ?? 0.67}
         data-images={TOTAL_FRAMES}
         data-snap={140}
         data-transition={50}
         className="sticky top-0 w-full h-screen bg-[#151B1B] overflow-hidden"
+        style={{ opacity: 0 }}
       >
         {Array.from({ length: TOTAL_FRAMES }, (_, i) => i + 1).map((frame) => (
           <img
