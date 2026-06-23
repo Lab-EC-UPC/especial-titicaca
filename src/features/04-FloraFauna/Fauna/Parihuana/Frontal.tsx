@@ -67,4 +67,4 @@ export const ParihuanaFrontal = ({ style }: { style?: CSSProperties }) => (
   </svg>
 );
 
-export default ParihuanaFrontal;
+

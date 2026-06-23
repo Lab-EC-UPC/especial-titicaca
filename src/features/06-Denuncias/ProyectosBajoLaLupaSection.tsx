@@ -785,4 +785,4 @@ export const ProyectosBajoLaLupaSection = () => {
   );
 };
 
-export default ProyectosBajoLaLupaSection;
+

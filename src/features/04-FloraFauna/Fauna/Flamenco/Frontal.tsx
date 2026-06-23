@@ -86,4 +86,4 @@ export const FlamencoFrontal = ({ style }: { style?: CSSProperties }) => (
   </svg>
 );
 
-export default FlamencoFrontal;
+

@@ -74,4 +74,4 @@ export const ParihuanaWalk = ({ style }: { style?: CSSProperties }) => {
   );
 };
 
-export default ParihuanaWalk;
+

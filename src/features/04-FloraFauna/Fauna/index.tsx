@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { motion, useInView } from "motion/react";
 
+import { useCrossfadeIn } from "../../../hooks/useCrossfadeIn";
 import PajaroIcon from "../assets/pato.png";
 import PescadoIcon from "../assets/pescado.png";
 
@@ -40,6 +41,13 @@ export const Fauna = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
 
+  // Cross-dissolve de entrada sobre el último video de Juliaca (que sigue
+  // pineado debajo durante el solape). Requiere el marginTop/opacity/z-index
+  // que se aplican en el <section> de abajo. El fin adelantado ("top 60%")
+  // deja a Fauna opaca antes de que el video se despinee, cubriendo su tramo
+  // final oscuro con margen de seguridad.
+  useCrossfadeIn(sectionRef, { end: "top 60%" });
+
   const handleTabChange = (tab: TabKey) => {
     if (tab === activeTab) return;
     setHoveredIndex(null);
@@ -65,6 +73,12 @@ export const Fauna = () => {
         background: "linear-gradient(to bottom, #2e3440 0%, #586A74 12%)",
         paddingTop: "clamp(120px, 26vh, 280px)",
         paddingBottom: "clamp(120px, 22vh, 260px)",
+        // Cross-dissolve de entrada (useCrossfadeIn): solapa 50vh con el video
+        // saliente de Juliaca y parte invisible; z-index para pintar por encima
+        // del elemento pineado (position:fixed) que queda debajo.
+        marginTop: "-50vh",
+        opacity: 0,
+        zIndex: 1,
       }}
     >
       <div className="relative z-10 text-center px-4 sm:px-6">
@@ -191,4 +205,4 @@ export const Fauna = () => {
   );
 };
 
-export default Fauna;
+

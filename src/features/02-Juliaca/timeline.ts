@@ -77,6 +77,7 @@ function setupGallery(
     gallery: GalleryBlock,
     galleryStartRatio: number,
     totalScroll: number,
+    getViewportWidth: () => number,
 ) {
     const galleryDur = gallery.width / totalScroll;
     const perImage = galleryDur / gallery.images;
@@ -105,7 +106,9 @@ function setupGallery(
 
     gallery.update = () => {
         const pos = state.pos;
-        const vw = window.innerWidth;
+        // Cacheado: lo refresca ScrollTrigger en resize (ver onRefresh), no se
+        // lee en cada frame del scrub.
+        const vw = getViewportWidth();
 
         imageEls.forEach((el) => {
             const i = Number(el.dataset.galleryImage);
@@ -161,16 +164,26 @@ export function createVideoTimeline(
 
     gsap.set(scenes.map((s) => s.element), { autoAlpha: 0, y: 10 });
 
+    // Ancho de viewport cacheado: lo refresca ScrollTrigger en cada resize
+    // (onRefresh, abajo), evitando leer window.innerWidth en cada frame.
+    let viewportW = window.innerWidth;
+
     const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
             trigger: container,
             pin: true,
-            scrub: 0.45,
+            // Arrastre del playhead tras el scroll: más bajo = más pegado al
+            // gesto (menos "sigue moviéndose al soltar"). Súbelo si lo notas
+            // brusco; bájalo si "se pasa".
+            scrub: 0.3,
             anticipatePin: 1,
             start: "top top",
             end: `+=${totalScroll}`,
             refreshPriority,
+            onRefresh: () => {
+                viewportW = window.innerWidth;
+            },
         },
     });
 
@@ -205,7 +218,7 @@ export function createVideoTimeline(
         tl.to(gallery.element, { autoAlpha: 1, duration: fadeDuration, ease: "power2.out" }, galleryStartRatio);
         tl.to(gallery.element, { autoAlpha: 0, duration: fadeDuration, ease: "power2.in" }, galleryEndRatio);
 
-        setupGallery(tl, gallery, galleryStartRatio, totalScroll);
+        setupGallery(tl, gallery, galleryStartRatio, totalScroll, () => viewportW);
 
         tl.eventCallback("onUpdate", () => {
             if (!gallery.update) return;
@@ -221,12 +234,18 @@ export function createVideoTimeline(
     if (fadeCover) {
         const fadeFrom = fadeCover.dataset.fadeFrom === "1";
         const fadeTo = fadeCover.dataset.fadeTo === "1";
-        const D = 0.09;
+        const FADE_FROM_D = 0.09;
+        // La cortina de salida usa una ventana AMPLIA y ADELANTADA: así el
+        // teal queda puesto como "suelo" antes/mientras la siguiente sección
+        // hace su propio cross-dissolve por encima, evitando que su final
+        // oscuro asome (negro) a través del fundido. `power2.out` lo sube
+        // pronto para que lidere al contenido entrante.
+        const FADE_TO_D = 0.4;
         if (fadeFrom) {
             tl.fromTo(
                 fadeCover,
                 { autoAlpha: 1 },
-                { autoAlpha: 0, ease: "power1.out", duration: D },
+                { autoAlpha: 0, ease: "power1.out", duration: FADE_FROM_D },
                 0,
             );
         } else {
@@ -235,8 +254,8 @@ export function createVideoTimeline(
         if (fadeTo) {
             tl.to(
                 fadeCover,
-                { autoAlpha: 1, ease: "power1.in", duration: D },
-                1 - D,
+                { autoAlpha: 1, ease: "power2.out", duration: FADE_TO_D },
+                1 - FADE_TO_D,
             );
         }
     }

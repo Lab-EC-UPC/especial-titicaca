@@ -22,21 +22,32 @@ ScrollTrigger.config({ ignoreMobileResize: true });
 export function useScrollOrchestration() {
   useEffect(() => {
     let cancelled = false;
-    const refresh = () => {
-      if (!cancelled) ScrollTrigger.refresh();
+    let pending: number | undefined;
+
+    // Coalescemos todos los disparadores (fuentes, load, settle) en UN solo
+    // refresh: cada evento reprograma un timer corto, de modo que los que
+    // llegan juntos producen un único ScrollTrigger.refresh() —un solo reflow—
+    // en vez de 2-3 seguidos (cada refresh recalcula todos los pins).
+    const scheduleRefresh = () => {
+      if (cancelled) return;
+      window.clearTimeout(pending);
+      pending = window.setTimeout(() => {
+        if (!cancelled) ScrollTrigger.refresh();
+      }, 120);
     };
 
     // Las fuentes custom (Citizen/Elza) cambian la altura del texto → re-medir.
-    document.fonts?.ready.then(refresh);
+    document.fonts?.ready.then(scheduleRefresh);
     // Imágenes/videos terminan de cargar.
-    window.addEventListener("load", refresh);
+    window.addEventListener("load", scheduleRefresh);
     // Red de seguridad tras el primer settle del layout.
-    const settle = window.setTimeout(refresh, 600);
+    const settle = window.setTimeout(scheduleRefresh, 600);
 
     return () => {
       cancelled = true;
-      window.removeEventListener("load", refresh);
+      window.removeEventListener("load", scheduleRefresh);
       window.clearTimeout(settle);
+      window.clearTimeout(pending);
     };
   }, []);
 }

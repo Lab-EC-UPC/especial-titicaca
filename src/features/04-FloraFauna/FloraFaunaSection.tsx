@@ -37,4 +37,4 @@ export const FloraFaunaSection = () => (
   </>
 );
 
-export default FloraFaunaSection;
+

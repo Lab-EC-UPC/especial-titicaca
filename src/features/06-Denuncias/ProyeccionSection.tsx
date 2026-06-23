@@ -58,4 +58,4 @@ export const ProyeccionSection = () => {
   );
 };
 
-export default ProyeccionSection;
+

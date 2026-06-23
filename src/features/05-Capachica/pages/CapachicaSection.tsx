@@ -50,8 +50,8 @@ export const CapachicaSection = () => {
             const sources = isMobile ? CEL_SEGMENTS : PC_SEGMENTS;
 
             // Asigna la fuente (pc/cel) sobre los MISMOS elementos <video>, sin
-            // remontarlos. Tras load(), readyState vuelve a 0 y la timeline se
-            // (re)construye cuando los 4 clips tienen su metadata.
+            // remontarlos. load() arranca la carga de metadata; el video se
+            // engancha al scrub en cuanto conoce su duración.
             videos.forEach((v, i) => {
                 if (v.getAttribute("src") !== sources[i]) {
                     v.setAttribute("src", sources[i]);
@@ -59,21 +59,10 @@ export const CapachicaSection = () => {
                 }
             });
 
-            let timeline: ReturnType<typeof createScrollTimeline> | null = null;
-
-            const setupTimeline = contextSafe!(() => {
-                if (timeline) return;
-                // Necesitamos la duración de los 4 para mapear el scroll.
-                if (videos.some((v) => !v.duration || Number.isNaN(v.duration)))
-                    return;
-                timeline = createScrollTimeline(section, videos);
-            });
-
-            videos.forEach((v) =>
-                v.addEventListener("loadedmetadata", setupTimeline),
-            );
-            // Intento inmediato por si ya estaban cacheados.
-            setupTimeline();
+            // P1: el timeline (pin + textos) se construye YA, sin esperar al
+            // video. Así los textos nunca quedan rehenes de la carga de los
+            // clips; el scrub del video se incorpora solo cuando hay duración.
+            const timeline = createScrollTimeline(section, videos);
 
             const onVisibility = contextSafe!(() => {
                 if (document.hidden) videos.forEach((v) => v.pause());
@@ -82,10 +71,9 @@ export const CapachicaSection = () => {
             document.addEventListener("visibilitychange", onVisibility);
 
             return () => {
-                videos.forEach((v) =>
-                    v.removeEventListener("loadedmetadata", setupTimeline),
-                );
                 document.removeEventListener("visibilitychange", onVisibility);
+                timeline.scrollTrigger?.kill();
+                timeline.kill();
             };
         },
         { scope: sectionRef, dependencies: [isMobile] },
@@ -95,7 +83,13 @@ export const CapachicaSection = () => {
         <section
             ref={sectionRef}
             id="capachica-animation1"
+            data-crossfade-in="1"
             className="relative isolate h-[100dvh] w-full overflow-hidden bg-black"
+            // Cross-dissolve de entrada: solapa 50vh con el carrusel previo y
+            // parte invisible; la timeline la funde (autoAlpha 0→1). Con
+            // visibility:hidden inicial los overlays interactivos no capturan
+            // eventos hasta que la sección es visible.
+            style={{ marginTop: "-50vh", opacity: 0 }}
         >
             {/* ── Fondo de video: 4 segmentos apilados; solo el activo es ──
                 visible. La fuente (pc/cel) se asigna por JS según isMobile. */}
@@ -282,6 +276,17 @@ export const CapachicaSection = () => {
                 end={1.00}
                 title={"Promesas sin respuestas"}
                 description={"Durante la última década, el Estado peruano diseñó e implementó mecanismos de inversión pública orientados a la mitigación ambiental y optimización del tratamiento de aguas residuales en la región Puno."}
+            />
+
+            {/* ── Cortina de salida: la timeline la disuelve a #2E343C (= tope de
+                Denuncias) al final del scroll, para que el empalme con la
+                siguiente sección sea un cross-dissolve y no una línea. ──────── */}
+            <div
+                data-fade-cover
+                data-fade-to="1"
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 z-[40]"
+                style={{ opacity: 0, background: "#2E343C" }}
             />
         </section>
     );

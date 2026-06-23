@@ -19,4 +19,4 @@ export const DenunciasSection = () => {
   );
 };
 
-export default DenunciasSection;
+

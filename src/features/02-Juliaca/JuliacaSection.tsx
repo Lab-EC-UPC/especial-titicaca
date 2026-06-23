@@ -47,7 +47,8 @@ export const JuliacaSection = () => {
             <VideoSection
                 videoCom={comVid01}
                 videoMob={mobVid01}
-                scrollDistance={2080}
+                scrollDistance={3000}
+                scrollDistanceMobile={3000}
                 refreshPriority={5}
                 eager
                 crossfadeIn
@@ -101,7 +102,8 @@ export const JuliacaSection = () => {
             <VideoSection
                 videoCom={comVid02}
                 videoMob={mobVid02}
-                scrollDistance={720}
+                scrollDistance={1300}
+                scrollDistanceMobile={1300}
                 refreshPriority={3}
                 crossfadeIn
             >
@@ -124,10 +126,15 @@ export const JuliacaSection = () => {
             <ContaminacionCuencaSection />
 
             {/* ── Video 3: bahía interior + impacto biológico ── */}
+            {/* Salida hacia FloraFauna: Fauna hace un cross-dissolve real por
+                encima de este video (ver Fauna + useCrossfadeIn). La cortina
+                teal hace de SUELO por debajo de ese dissolve para que el final
+                oscuro del clip no asome como negro a través del fundido. */}
             <VideoSection
                 videoCom={comVid03}
                 videoMob={mobVid03}
-                scrollDistance={1200}
+                scrollDistance={2600}
+                scrollDistanceMobile={2600}
                 refreshPriority={2}
                 crossfadeIn
                 fadeToBlack

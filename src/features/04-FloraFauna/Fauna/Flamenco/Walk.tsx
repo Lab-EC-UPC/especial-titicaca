@@ -117,4 +117,4 @@ export const FlamencoWalk = ({ style }: { style?: CSSProperties }) => {
   );
 };
 
-export default FlamencoWalk;
+

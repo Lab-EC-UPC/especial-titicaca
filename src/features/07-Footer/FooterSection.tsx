@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import logoLab from "./assets/logo-lab.png";
-import logoEcData from "./assets/logo-ECDATA.png";
+import logoMesa from "./assets/logo-mesa.png";
 import { CreditGroupItem } from "./CreditGroupItem";
 import { CREDITS } from "./credits.data";
 
@@ -61,7 +61,9 @@ export const FooterSection = () => {
                     background: "transparent",
                   }}
                 >
-                  <span style={{ whiteSpace: "nowrap" }}>{department.title}</span>
+                  <span style={{ whiteSpace: "nowrap" }}>
+                    {department.title}
+                  </span>
                   <ChevronDown
                     aria-hidden
                     style={{
@@ -119,8 +121,8 @@ export const FooterSection = () => {
             style={{ height: "clamp(30px, 8vw, 100px)", width: "auto" }}
           />
           <img
-            src={logoEcData}
-            alt="EC Data"
+            src={logoMesa}
+            alt="Mesa de Trabajo"
             style={{ height: "clamp(18px, 4.5vw, 56px)", width: "auto" }}
           />
         </div>
@@ -141,4 +143,4 @@ export const FooterSection = () => {
   );
 };
 
-export default FooterSection;
+

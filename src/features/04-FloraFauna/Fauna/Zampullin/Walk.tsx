@@ -71,4 +71,4 @@ export const ZampullinWalk = ({ style }: { style?: CSSProperties }) => {
   );
 };
 
-export default ZampullinWalk;
+

@@ -11,6 +11,10 @@ type VideoSectionProps = {
     videoCom: string;
     videoMob: string;
     scrollDistance?: number;
+    /** Distancia de scroll (px) específica para móvil. Si se omite, usa
+     *  scrollDistance. Permite afinar el ritmo táctil (flick + viewport corto)
+     *  sin tocar el de desktop. */
+    scrollDistanceMobile?: number;
     refreshPriority?: number;
     /** Empezar a descargar el video de inmediato (1ª sección, above-the-fold). */
     eager?: boolean;
@@ -30,6 +34,7 @@ export const VideoSection = ({
     videoCom,
     videoMob,
     scrollDistance = 2000,
+    scrollDistanceMobile,
     refreshPriority = 0,
     eager = false,
     fadeFromBlack = false,
@@ -49,6 +54,11 @@ export const VideoSection = ({
     }, []);
 
     const videoSrc = isMobile ? videoMob : videoCom;
+    // Distancia de pin efectiva: en móvil usa el override si existe.
+    const effectiveScrollDistance =
+        isMobile && scrollDistanceMobile !== undefined
+            ? scrollDistanceMobile
+            : scrollDistance;
 
     // Sube de metadata→auto y bufferiza el video al acercarse la sección.
     // `eager` lo precarga desde el montaje (útil para la 1ª sección).
@@ -64,7 +74,7 @@ export const VideoSection = ({
 
             const setupTimeline = contextSafe!(() => {
                 if (timeline) return;
-                timeline = createVideoTimeline(section, video, scrollDistance, refreshPriority);
+                timeline = createVideoTimeline(section, video, effectiveScrollDistance, refreshPriority);
             });
 
             // Asigna la fuente (com/mob) sobre el MISMO elemento <video>, sin

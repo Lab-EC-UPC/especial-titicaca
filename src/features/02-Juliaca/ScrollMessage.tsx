@@ -31,7 +31,7 @@ type ScrollParagraphProps = {
     children: ReactNode;
 };
 
-ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => {
+const ScrollParagraph = ({ children }: ScrollParagraphProps) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     useEffect(() => {
@@ -60,6 +60,8 @@ ScrollMessage.Paragraph = ({ children }: ScrollParagraphProps) => {
         </p>
     );
 };
+
+ScrollMessage.Paragraph = ScrollParagraph;
 
 type ScrollChapterProps = {
     children: ReactNode;

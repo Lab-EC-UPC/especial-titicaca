@@ -224,4 +224,4 @@ export const TotoraSection = () => {
   );
 };
 
-export default TotoraSection;
+

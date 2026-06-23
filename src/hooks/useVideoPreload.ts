@@ -77,5 +77,5 @@ export function useVideoPreload(
     io.observe(section);
 
     return () => io.disconnect();
-  }, [sectionRef, rootMargin]);
+  }, [sectionRef, rootMargin, eager]);
 }

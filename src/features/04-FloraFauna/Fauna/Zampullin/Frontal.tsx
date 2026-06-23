@@ -65,4 +65,4 @@ export const ZampullinFrontal = ({ style }: { style?: CSSProperties }) => (
   </svg>
 );
 
-export default ZampullinFrontal;
+

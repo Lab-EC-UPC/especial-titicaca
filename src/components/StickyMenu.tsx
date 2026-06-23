@@ -1,5 +1,19 @@
 import { useState, useEffect, useRef } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { lenisScrollTo } from "../hooks/useSmoothScroll";
+
+type Ripple = { x: number; y: number; id: number };
+
+type DesktopMenuProps = {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  active: number;
+  hovered: number | null;
+  setHovered: (i: number | null) => void;
+  ripple: Ripple | null;
+  goTo: (id: string, x: number, y: number) => void;
+  triggerRipple: (x: number, y: number) => void;
+};
 
 const SECTIONS = [
   { id: "juliaca", label: "Juliaca", short: "01" },
@@ -13,9 +27,7 @@ const SECTIONS = [
   Imagen base: 280 x 200 px (ancho x alto)
   
   Ajusta estos valores según donde quieras cada punto.
-  Para encontrar coordenadas exactas, usa el componente
-  CoordFinder que está al final de este archivo.
-  
+
   x = posición horizontal (0=izquierda, 280=derecha)
   y = posición vertical   (0=arriba,   200=abajo)
 */
@@ -446,7 +458,7 @@ function DesktopMenu({
   ripple,
   goTo,
   triggerRipple,
-}: any) {
+}: DesktopMenuProps) {
   return (
     <>
       <style>{`
@@ -646,157 +658,4 @@ function DesktopMenu({
   );
 }
 
-/* MOBILE — desactivado por el momento (el menú solo se muestra en desktop) */
-/*
-function MobileMenu({
-  open,
-  setOpen,
-  active,
-  hovered,
-  setHovered,
-  ripple,
-  goTo,
-  triggerRipple,
-}: any) {
-  return (
-    <>
-      <style>{`
-        @keyframes mob-rise {
-          from { opacity:0; transform:translateX(-50%) translateY(30px); }
-          to   { opacity:1; transform:translateX(-50%) translateY(0);    }
-        }
-      `}</style>
-
-      {open && (
-        <div
-          onClick={() => setOpen(false)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 2147483645,
-            background: "rgba(4,12,24,0.88)",
-            backdropFilter: "blur(6px)",
-          }}
-        />
-      )}
-
-      {open && (
-        <div
-          style={{
-            position: "fixed",
-            bottom: "82px",
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 2147483646,
-            animation: "mob-rise 0.4s cubic-bezier(0.34,1.1,0.64,1) forwards",
-            background: `linear-gradient(160deg,${C.noche},#0c2236)`,
-            borderRadius: "16px",
-            border: `1px solid ${C.aguaMedia}55`,
-            boxShadow: `0 -12px 60px rgba(4,12,24,0.9)`,
-            overflow: "hidden",
-            width: "min(92vw, 340px)",
-          }}
-        >
-          <div
-            style={{
-              height: "3px",
-              background: `repeating-linear-gradient(90deg,${C.tierra} 0,${C.tierra} 8px,${C.totora} 8px,${C.totora} 16px,${C.aguaMedia} 16px,${C.aguaMedia} 24px,${C.totora} 24px,${C.totora} 32px)`,
-            }}
-          />
-          <div
-            style={{
-              padding: "10px 16px 6px",
-              borderBottom: `1px solid ${C.aguaMedia}30`,
-              display: "flex",
-              justifyContent: "space-between",
-            }}
-          >
-            <div
-              style={{
-                color: C.nieve,
-                fontSize: "14px",
-                fontStyle: "italic",
-              }}
-            >
-              Lago Titicaca
-            </div>
-            <div
-              style={{
-                color: C.totora,
-                fontSize: "9px",
-                opacity: 0.7,
-                alignSelf: "center",
-              }}
-            >
-              3.812 m.s.n.m.
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              padding: "10px 14px 8px",
-            }}
-          >
-            <LakeMap
-              active={active}
-              hovered={hovered}
-              setHovered={setHovered}
-              ripple={ripple}
-              goTo={goTo}
-              scale={0.88}
-            />
-          </div>
-          <div
-            style={{
-              height: "3px",
-              background: `repeating-linear-gradient(90deg,${C.aguaMedia} 0,${C.aguaMedia} 8px,${C.totora} 8px,${C.totora} 16px,${C.tierra} 16px,${C.tierra} 24px,${C.totora} 24px,${C.totora} 32px)`,
-            }}
-          />
-        </div>
-      )}
-
-      <button
-        onClick={() => {
-          triggerRipple(20, 20);
-          setOpen((v: boolean) => !v);
-        }}
-        style={{
-          position: "fixed",
-          bottom: "18px",
-          right: "18px",
-          zIndex: 2147483647,
-          width: "54px",
-          height: "54px",
-          borderRadius: "50%",
-          background: `linear-gradient(135deg,${C.aguaMedia},${C.profundo})`,
-          border: `2px solid ${C.reflejo}70`,
-          boxShadow: `0 6px 28px rgba(4,12,24,0.8)`,
-          cursor: "pointer",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 0,
-          overflow: "hidden",
-        }}
-      >
-        {open ? (
-          <span style={{ color: C.totoraPale, fontSize: "20px" }}>✕</span>
-        ) : (
-          <img
-            src={LAKE_IMAGE_URL}
-            alt="lago"
-            style={{
-              width: "40px",
-              height: "40px",
-              objectFit: "cover",
-              borderRadius: "50%",
-              filter: "saturate(1.3) brightness(0.9)",
-            }}
-          />
-        )}
-      </button>
-    </>
-  );
-}
-*/
+/* MOBILE — el menú solo se muestra en desktop (StickyMenu retorna null en móvil) */
