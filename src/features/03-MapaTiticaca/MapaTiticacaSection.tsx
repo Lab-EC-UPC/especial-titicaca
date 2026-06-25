@@ -548,7 +548,7 @@ const MapaEmbedded = ({ start }: { start: number }) => {
                 data-map-card={i}
                 className="absolute z-30 pointer-events-none"
                 style={{
-                  bottom: "clamp(16px,3vw,28px)",
+                  top: "clamp(100px,13vw,160px)",
                   left: "clamp(12px,2vw,28px)",
                   width: "clamp(200px,22vw,260px)",
                   opacity: 0,
@@ -636,7 +636,7 @@ const MapaEmbedded = ({ start }: { start: number }) => {
         <div
           className="absolute z-30 text-center pointer-events-none"
           style={{
-            top: isMobile ? 34 : 44,
+            top: isMobile ? 60 : 80,
             left: "50%",
             transform: "translateX(-50%)",
             whiteSpace: "nowrap",
@@ -651,7 +651,7 @@ const MapaEmbedded = ({ start }: { start: number }) => {
               textShadow: "0 2px 16px rgba(0,0,0,0.9)",
             }}
           >
-            CONCENTRACIN DE <br /> METALES POR CUENCA
+            CONCENTRACIÓN DE METALES POR CUENCA
           </h2>
         </div>
       </div>
@@ -1217,7 +1217,7 @@ const MapaStandalone = () => {
         <div
           style={{
             position: "absolute",
-            top: isMobile ? 34 : 44,
+            top: isMobile ? 60 : 80,
             left: "50%",
             transform: "translateX(-50%)",
             textAlign: "center",
@@ -1241,7 +1241,7 @@ const MapaStandalone = () => {
               textShadow: "0 2px 16px rgba(0,0,0,0.9)",
             }}
           >
-            CONCENTRACIÓN DE <br /> METALES POR CUENCA
+            CONCENTRACIÓN DE METALES POR CUENCA
           </h2>
         </div>
 
