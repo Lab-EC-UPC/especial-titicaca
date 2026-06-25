@@ -110,7 +110,7 @@ const PROJECTS: Project[] = [
     mx: 21,
     my: 33,
     description:
-      "Se destinó a modernizar la recolección de residuos mediante maquinaria y equipamiento. Asimismo, se detectaron compras deficientes y fallas en los procesos administrativos.",
+      "Se destinó presupuesto para modernizar la recolección de residuos con nueva maquinaria, pero se detectaron compras deficientes y fallas en la gestión administrativa.",
     budget: "936,358.60",
     budgetLabel: "Monto Auditado",
   },
@@ -123,7 +123,7 @@ const PROJECTS: Project[] = [
     mx: 64,
     my: 44,
     description:
-      "Se propusó instalar captaciones, tuberías y sistemas de tratamiento para zonas rurales. No se aplicaron penalidades pese a retrasos en la ejecución.",
+      "Se propuso instalar captaciones, tuberías y sistemas de tratamiento para zonas rurales, pero no se aplicaron penalidades pese a los constantes retrasos de la obra.",
     budget: "1,534,632.25",
     budgetLabel: "Perjuicio económico",
   },
@@ -172,7 +172,7 @@ const PROJECTS: Project[] = [
     mx: 33,
     my: 57,
     description:
-      "Diseñado para tratar las aguas residuales antes de verterlas al río, este proyecto fue abandonado. obra incumplió los plazos establecidos y careció de un seguimiento técnico adecuado.",
+      "Diseñado para tratar las aguas residuales antes de verterlas al río, este proyecto fue abandonado. La obra incumplió los plazos establecidos y careció de un seguimiento técnico adecuado.",
     budget: "23,692.20",
     budgetLabel: "Perjuicio económico",
   },
@@ -198,7 +198,7 @@ const TYPE_CFG: Record<ProjectType, TypeConfig> = {
     gem: ["#14443a", "#226d5b", "#3a9580", "#0e3029", "#2c7b67", "#4fa88e"],
   },
   administrativa: {
-    label: "Neglicencia administrativa",
+    label: "Negligencia administrativa",
     color: "#3a6e8a",
     glow: "rgba(58,110,138,0.6)",
     gem: ["#1e4555", "#2d6070", "#4a8090", "#163545", "#3a7080", "#5a96a4"],
