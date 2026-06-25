@@ -5,6 +5,7 @@ import { initCoverScroll } from "./timeline";
 import { CoverMessage } from "./CoverMessage";
 import { getYouTubeId } from "./youtube";
 import { COVER_BANDS } from "./cover-data";
+import { ArrowDown } from "lucide-react";
 
 gsap.registerPlugin(useGSAP);
 
@@ -77,6 +78,14 @@ export const HeaderSection = () => {
         <CoverMessage.Subtitle>
           La crisis que esconde el Lago Titicaca
         </CoverMessage.Subtitle>
+      </CoverMessage>
+
+      <CoverMessage at={50}>
+        <CoverMessage.Hint>Desliza para interactuar</CoverMessage.Hint>
+        <ArrowDown
+          aria-hidden="true"
+          className="mt-4 h-6 w-6 animate-bounce text-white/70 sm:mt-8 sm:h-10 sm:w-10"
+        />
       </CoverMessage>
 
       <CoverMessage at={59}>

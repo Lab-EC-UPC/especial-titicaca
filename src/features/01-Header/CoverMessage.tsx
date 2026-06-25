@@ -40,3 +40,9 @@ CoverMessage.Subtitle = ({ children }: ChildrenProps) => (
         {children}
     </p>
 );
+
+CoverMessage.Hint = ({ children }: ChildrenProps) => (
+    <span className="text-base font-normal leading-[1.15] tracking-tight sm:text-2xl md:text-3xl">
+        {children}
+    </span>
+);
