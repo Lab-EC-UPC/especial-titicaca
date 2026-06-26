@@ -47,12 +47,13 @@ export const SpeciesCard = ({
           left: "50%",
           top: "50%",
           transform: "translate(-50%, -50%)",
-          fontSize: "clamp(70px, 18vw, 280px)",
+          fontSize: "clamp(110px, 26vw, 280px)",
           fontWeight: 900,
           lineHeight: 1,
           letterSpacing: "clamp(-3px, -0.4vw, -6px)",
           whiteSpace: "nowrap",
-          color: "rgba(207,234,243,0.18)",
+          color: "rgba(207,234,243,0.42)",
+          textShadow: "0 2px 14px rgba(0,0,0,0.45)",
           zIndex: 0,
           userSelect: "none",
           pointerEvents: "none",
@@ -79,6 +80,7 @@ export const SpeciesCard = ({
         className="relative z-10"
         animate={{
           scale: isHovered ? 1.35 : 1,
+          opacity: isHovered ? 0.55 : 1,
           filter: isHovered
             ? "brightness(0.45) drop-shadow(4px 8px 18px rgba(0,0,0,0.55))"
             : "brightness(1) drop-shadow(0px 0px 0px rgba(0,0,0,0))",
