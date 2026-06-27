@@ -5,3 +5,11 @@ body,
   min-height: 100%;
   background: #000;
 }
+
+strong {
+  font-weight: 600;
+}
+
+p {
+  font-weight: 400;
+}

@@ -57,7 +57,7 @@ export const JuliacaSection = () => {
                     <ScrollMessage.Paragraph>
                         Lo que observas aquí es solo una parte de la historia.
                         <br />
-                        Para entender lo que ocurre en el Titicaca, primero hay que mirar al río Coata.
+                        Para entender lo que ocurre en el <strong>Titicaca</strong>, primero hay que mirar al río <strong>Coata</strong>.
                     </ScrollMessage.Paragraph>
                 </ScrollMessage>
 
@@ -70,9 +70,9 @@ export const JuliacaSection = () => {
                     <ScrollMessage.Paragraph>
                         Es el principal receptor de basura de la región, arrastrando cada año
                         <br />
-                        más de 4,000 toneladas de residuos sólidos y vertiendo un volumen de aguas
+                        más de <strong>4,000 toneladas</strong> de residuos sólidos y vertiendo un volumen de aguas
                         <br />
-                        residuales equivalente a llenar más de 300 piscinas olímpicas cada año.
+                        residuales equivalente a llenar más de <strong>300 piscinas olímpicas</strong> cada año.
                     </ScrollMessage.Paragraph>
                 </ScrollMessage>
 
@@ -86,11 +86,11 @@ export const JuliacaSection = () => {
 
                 <ScrollMessage start={0.769} end={0.962}>
                     <ScrollMessage.Paragraph>
-                        Los registros de la Autoridad Nacional del Agua (ANA) muestran un deterioro
+                        Los registros de la <strong>Autoridad Nacional del Agua</strong> (ANA) muestran un deterioro
                         <br />
-                        sostenido en la cuenca. En 2015 se identificaron 8 puntos críticos por
+                        sostenido en la cuenca. En 2015 se identificaron <strong>8 puntos críticos</strong> por
                         <br />
-                        vertimientos; para 2025 la cifra aumentó a 11 zonas en estado de alerta máxima.
+                        vertimientos; para 2025 la cifra aumentó a <strong>11 zonas</strong> en estado de alerta máxima.
                     </ScrollMessage.Paragraph>
                 </ScrollMessage>
             </VideoSection>
@@ -109,11 +109,11 @@ export const JuliacaSection = () => {
             >
                 <ScrollMessage start={0.167} end={0.722}>
                     <ScrollMessage.Paragraph>
-                        En el río Coata, el arsénico llegó a triplicar el límite establecido por
+                        En el <strong>río Coata</strong>, el arsénico llegó a triplicar el límite establecido por
                         <br />
                         los Estándares de Calidad Ambiental (ECA) en 2022. También se detectaron
                         <br />
-                        niveles elevados de plomo, cobre y zinc. En la cuenca del Ramis, el aluminio
+                        niveles elevados de plomo, cobre y zinc. En la <strong>cuenca del Ramis</strong>, el aluminio
                         <br />
                         alcanzó concentraciones de hasta 478,644 mg/L, más de 95 veces por encima
                         <br />
@@ -142,9 +142,9 @@ export const JuliacaSection = () => {
             >
                 <ScrollMessage start={0.167} end={0.5}>
                     <ScrollMessage.Paragraph>
-                        La bahía interior de Puno recibe gran parte de los vertimientos que llegan
+                        La <strong>bahía interior</strong> de Puno recibe gran parte de los vertimientos que llegan
                         <br />
-                        al Titicaca. Allí se han identificado al menos 15 descargas de aguas servidas
+                        al Titicaca. Allí se han identificado al menos <strong>15 descargas de aguas servidas</strong>
                         <br />
                         y los monitoreos registran altas concentraciones de coliformes fecales,
                         <br />
@@ -154,11 +154,11 @@ export const JuliacaSection = () => {
 
                 <ScrollMessage start={0.667} end={0.933} background={false}>
                     <ScrollMessage.Paragraph>
-                        El impacto ya no se limita al agua. La alteración de sus condiciones
+                        El impacto ya <strong>no se limita al agua</strong>. La alteración de sus condiciones
                         <br />
                         naturales reduce el oxígeno disponible y favorece la proliferación de
                         <br />
-                        plantas flotantes, afectando el equilibrio biológico del lago y las
+                        plantas flotantes, <strong>afectando el equilibrio biológico del lago</strong> y las
                         <br />
                         especies que dependen de este ecosistema.
                     </ScrollMessage.Paragraph>
