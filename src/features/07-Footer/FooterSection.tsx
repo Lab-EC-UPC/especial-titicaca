@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import logoLab from "./assets/logo-lab.png";
 import logoMesa from "./assets/logo-mesa.png";
 import { CreditGroupItem } from "./CreditGroupItem";
 import { CREDITS } from "./credits.data";
@@ -109,21 +108,22 @@ export const FooterSection = () => {
         </div>
 
         <div
-          className="flex flex-wrap items-center justify-center"
+          className="flex items-center justify-center"
           style={{
-            gap: "clamp(20px, 4vw, 56px)",
             marginTop: "clamp(72px, 14vh, 140px)",
           }}
         >
           <img
-            src={logoLab}
-            alt="Laboratorio EC UPC"
-            style={{ height: "clamp(30px, 8vw, 100px)", width: "auto" }}
-          />
-          <img
             src={logoMesa}
             alt="Mesa de Trabajo"
-            style={{ height: "clamp(18px, 4.5vw, 56px)", width: "auto" }}
+            style={{
+              height: "clamp(40px, 8vw, 100px)",
+              width: "auto",
+              opacity: 0.95,
+              transition: "opacity 0.3s ease",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+            onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.95")}
           />
         </div>
 
